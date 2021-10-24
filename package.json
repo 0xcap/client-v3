@@ -1,0 +1,38 @@
+{
+  "name": "client-v3",
+  "version": "1.0.0",
+  "description": "Cap client UI v3",
+  "main": "index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "sirv build --single",
+    "deploy-ipfs": "npm run build && npx ipfs-deploy build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0xcap/client-v3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/0xcap/client-v3/issues"
+  },
+  "homepage": "https://github.com/0xcap/client-v3#readme",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "ethers": "^5.5.1",
+    "rollup": "^2.58.0",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-gzip": "^2.5.0",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-svelte": "^7.1.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "svelte": "^3.44.0"
+  },
+  "dependencies": {
+    "sirv-cli": "^1.0.14"
+  }
+}
