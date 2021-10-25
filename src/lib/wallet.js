@@ -1,5 +1,6 @@
 // Client side wallet interactions
 import { ethers } from 'ethers'
+import { hydrateData } from './data'
 import { CHAINDATA } from '../utils/constants'
 import { showToast, hideModal } from '../utils/helpers'
 import { chainId, signer, provider } from '../stores/wallet'
@@ -26,17 +27,18 @@ export async function connectMetamask(resume) {
 		hideModal();
 	}
 
-	console.log('accounts', accounts);
-
-	if (accounts.length) handleAccountsChanged();
-	metamask.on('accountsChanged', handleAccountsChanged);
-
-	chainId.set(await _provider.getNetwork());
+	const network = await _provider.getNetwork();
+	chainId.set(network.chainId);
 	metamask.on('chainChanged', (_chainId) => {
 		window.location.reload();
 	});
 
 	provider.set(_provider);
+
+	console.log('accounts', accounts);
+
+	if (accounts.length) handleAccountsChanged();
+	metamask.on('accountsChanged', handleAccountsChanged);
 
 }
 
@@ -63,7 +65,8 @@ export async function connectWalletConnect() {
 		_provider = new ethers.providers.Web3Provider(_walletConnect);
 
 		provider.set(_provider);
-		chainId.set(await _provider.getNetwork());
+		const network = await _provider.getNetwork();
+		chainId.set(network.chainId);
 
 		handleAccountsChanged();
 
@@ -92,6 +95,7 @@ export async function disconnectWallet(force) {
 
 function handleAccountsChanged() {
 	signer.set(_provider.getSigner());
+	hydrateData();
 }
 
 function handleDisconnect() {

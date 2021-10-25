@@ -1,3 +1,13 @@
+<script>
 
+	import Order from '../components/order/Order.svelte'
 
-<div class='trade'>Trade</div>
+</script>
+
+<div class='trade'>
+
+	<div>Trade</div>
+
+	<Order />
+
+</div>

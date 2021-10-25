@@ -1,5 +1,5 @@
 // helpers and utility functions
-
+import { ethers } from 'ethers'
 import { PRODUCTS } from './constants'
 
 // Pages
@@ -8,6 +8,8 @@ import Trade from '../pages/Trade.svelte'
 import Pool from '../pages/Pool.svelte'
 import Stake from '../pages/Stake.svelte'
 import Refer from '../pages/Refer.svelte'
+
+import { hydrateData } from '../lib/data'
 
 import { component, currentPage } from '../stores/router'
 import { activeModal } from '../stores/ui'
@@ -36,6 +38,7 @@ export function hideModal() {
 
 // Routing
 export function loadRoute(path) {
+	console.log('loadRoute', path);
 	if (!path || path == '/') {
 		component.set(Home);
 		currentPage.set('home');
@@ -43,6 +46,7 @@ export function loadRoute(path) {
 		component.set(Trade);
 		currentPage.set('trade');
 	}
+	hydrateData();
 }
 export function navigateTo(path) {
     window.history.pushState(null, null, path);
@@ -50,6 +54,9 @@ export function navigateTo(path) {
 }
 
 // Data formatters
+export function formatUnits(number, units) {
+  return ethers.utils.formatUnits(number || 0, units || 8);
+}
 export function formatProduct(id, product) {
 	return {
 		id: id,
