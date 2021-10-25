@@ -1,10 +1,11 @@
 <script>
 
 /* TODO
-- stream and reference price
+-- stream and reference price
+- track user => positions in contract so there is no need to rely on events. graph for position history, tx monitoring for submission, and contract data monitoring (position price, close order existence) for settling
 - modals for product, leverage, currency
 - order details: margin (includes 0.1% fee), size in USD
-- order submission through contract
+-- order submission through contract
 - positions
 - history
 - pools: deposit, withdraw, claim

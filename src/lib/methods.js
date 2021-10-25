@@ -1,11 +1,14 @@
 // Contract interaction
 import { get } from 'svelte/store'
 
+import { monitorTx } from './monitor'
+
 import { getContract } from './contracts'
 import { ADDRESS_ZERO } from '../utils/constants'
-import { formatProduct, getChainData, parseUnits, formatUnits } from '../utils/helpers'
+import { formatProduct, getChainData, parseUnits, formatUnits, formatPositions } from '../utils/helpers'
 
 import { productId, product, currencyLabel, currency, amount, leverage } from '../stores/order'
+import { userPositionIds } from '../stores/positions'
 import { address, allowances } from '../stores/wallet'
 
 export async function selectProduct(_productId) {
@@ -56,6 +59,16 @@ export async function getAllowance(_currencyLabel, spenderName) {
 
 }
 
+export async function getUserPositions() {
+	const contract = await getContract('trading');
+	if (!contract) return;
+	const _address = get(address);
+	if (!_address) return;
+	positions.set(formatPositions(_userPositionIds, await contract.getUserPositions(_address)));
+}
+
+// Setters
+
 export async function approveCurrency(_currencyLabel, spenderName) {
 	
 	const contract = await getContract(_currencyLabel, true);
@@ -90,9 +103,9 @@ export async function submitNewPosition(isLong) {
 	if (_currencyLabel == 'weth') {
 
 		// Add fee to margin
-		const product = get(product);
-		const fee = product.fee * 1;
-		margin += margin * _leverage * fee / 100;
+		const _product = get(product);
+		const fee = _product.fee * 1;
+		margin += _amount * fee / 100;
 
 		tx = await contract.submitNewPosition(
 			_currency,
@@ -114,5 +127,7 @@ export async function submitNewPosition(isLong) {
 			ADDRESS_ZERO // referrer
 		);
 	}
+
+	monitorTx(tx.hash, 'submit-new-position');
 
 }

@@ -23,6 +23,8 @@ export const ABIS = {
 	],
 	trading: [
 		"function getProduct(uint256 productId) view returns(tuple(address feed, uint32 maxLeverage, uint16 oracleMaxDeviation, uint16 liquidationThreshold, uint16 fee, uint16 interest))",
+		"function submitNewPosition(address currency,uint256 productId,uint256 margin,uint256 leverage,bool isLong,address referrer) payable",
+		"function getUserPositions(address user) view returns(tuple(uint32 closeOrderId, uint16 productId, uint64 leverage, uint64 price, uint64 margin, address owner, uint88 timestamp, bool isLong, address currency, uint96 fee)[] _positions)"
 	],
 	poolETH: [],
 	poolUSDC: [],
@@ -30,11 +32,11 @@ export const ABIS = {
 	rewardsETH: [],
 	rewardsUSDC: [],
 	erc20: [
-		"function totalSupply() external view returns (uint256)",
-		"function balanceOf(address account) external view returns (uint256)",
-		"function transfer(address recipient, uint256 amount) external returns (bool)",
-		"function allowance(address owner, address spender) external view returns (uint256)",
-		"function approve(address spender, uint256 amount) external returns (bool)"
+		"function totalSupply() view returns (uint256)",
+		"function balanceOf(address account) view returns (uint256)",
+		"function transfer(address recipient, uint256 amount) returns (bool)",
+		"function allowance(address owner, address spender) view returns (uint256)",
+		"function approve(address spender, uint256 amount) returns (bool)"
 	]
 };
 

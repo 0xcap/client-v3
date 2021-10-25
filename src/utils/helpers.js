@@ -101,7 +101,7 @@ export function parseUnits(number, units) {
 }
 export function formatProduct(id, product) {
 	return {
-		id: id,
+		productId: id,
 		symbol: PRODUCTS[id].symbol,
 		maxLeverage: product.maxLeverage,
 		liquidationThreshold: formatUnits(product.liquidationThreshold, 2),
@@ -109,7 +109,33 @@ export function formatProduct(id, product) {
 		interest: formatUnits(product.fee, 2)
 	};
 }
-
+export function formatPositions(positionIds, positions) {
+	let formattedPositions = [];
+	let i = 0;
+	for (const p of positions) {
+		if (!p.productId) {
+			i++;
+			continue;
+		}
+		formattedPositions.push({
+			positionId: positionIds[i],
+			product: PRODUCTS[p.productId].symbol,
+			timestamp: p.timestamp,
+			isLong: p.isLong,
+			margin: formatUnits(p.margin),
+			leverage: formatUnits(p.leverage),
+			amount: formatUnits(p.margin) * formatUnits(p.leverage),
+			price: formatUnits(p.price),
+			productId: p.productId,
+			closeOrderId: p.closeOrderId,
+			currency: p.currency,
+			fee: formatUnits(p.fee.toNumber(), 6)
+		});
+		i++;
+	}
+	formattedPositions.reverse();
+	return formattedPositions;
+}
 // Access utils
 export function getChainData(label) {
 	const _chainId = get(chainId);
