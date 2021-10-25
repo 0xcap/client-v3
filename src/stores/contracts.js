@@ -1,0 +1,2 @@
+// stores ethers initiated contracts: new ethers.Contract(_contract.address, _contract.abi, _provider)
+// does not need to be a store, can be just constants. when wallet connects, call hydrate() to call all methods that need to be called on page load for current page

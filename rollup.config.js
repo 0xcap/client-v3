@@ -76,17 +76,20 @@ export default {
                     src:'src/*.html',
                     dest: 'build',
                     transform: (contents) => contents.toString().replace(/\[hash\]/g, hash)
-                }
+                },
+                {
+                    src:'src/*.css',
+                    dest: 'build'
+                },
+                { src: 'public/*', dest: 'build' }
             ],
         }),
-
-		copy({ targets: [{ src: 'public/*', dest: 'build' }] }),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
 		!production && serve(),
 
-		// Watch the `public` directory and refresh the
+		// Watch the `build` directory and refresh the
 		// browser on changes when not in production
 		!production && livereload('build'),
 
