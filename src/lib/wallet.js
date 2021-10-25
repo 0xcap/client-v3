@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { hydrateData } from './data'
 import { CHAINDATA } from '../utils/constants'
 import { showToast, hideModal } from '../utils/helpers'
-import { chainId, signer, provider } from '../stores/wallet'
+import { chainId, signer, provider, address } from '../stores/wallet'
 
 let _provider;
 let _walletConnect;
@@ -93,8 +93,10 @@ export async function disconnectWallet(force) {
 	signer.set(null);
 }
 
-function handleAccountsChanged() {
-	signer.set(_provider.getSigner());
+async function handleAccountsChanged() {
+	const _signer = _provider.getSigner();
+	signer.set(_signer);
+	address.set(await _signer.getAddress());
 	hydrateData();
 }
 

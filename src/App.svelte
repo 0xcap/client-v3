@@ -6,6 +6,8 @@
 	import Header from './components/layout/Header.svelte'
 	import Footer from './components/layout/Footer.svelte'
 
+	import { initWebsocket } from './lib/stream'
+
 	import { component } from './stores/router'
 
 	import { loadRoute, navigateTo, catchLinks, hidePopoversOnClick } from './utils/helpers'
@@ -17,6 +19,8 @@
 
 		// For back button functionality
 		window.onpopstate = () => loadRoute(location.hash);
+
+		initWebsocket()
 	});
 
 </script>
@@ -50,14 +54,14 @@
 		--base-padding: 20px;
 		--semi-padding: 16px;
 		--base-radius: 8px;
-		--container-width: 580px;
+		--container-width: 2100px;
 
 	}
 
 	main {
 		width: 100%;
 		max-width: var(--container-width);
-		padding: 0 var(--base-padding);
+		padding: var(--base-padding);
 		margin: 0 auto;
 		box-sizing: border-box;
 		display: grid;

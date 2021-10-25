@@ -1,5 +1,5 @@
 
-// Products should not be chain dependent
+export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
 export const PRODUCTS = {
 	1: {
@@ -10,6 +10,11 @@ export const PRODUCTS = {
 		symbol: 'BTC-USD',
 		logo: ''
 	}
+};
+
+export const PRODUCTS_REVERSE = {
+	'ETH-USD': 1,
+	'BTC-USD': 2
 };
 
 export const ABIS = {
@@ -23,7 +28,14 @@ export const ABIS = {
 	poolUSDC: [],
 	staking: [],
 	rewardsETH: [],
-	rewardsUSDC: []
+	rewardsUSDC: [],
+	erc20: [
+		"function totalSupply() external view returns (uint256)",
+		"function balanceOf(address account) external view returns (uint256)",
+		"function transfer(address recipient, uint256 amount) external returns (bool)",
+		"function allowance(address owner, address spender) external view returns (uint256)",
+		"function approve(address spender, uint256 amount) external returns (bool)"
+	]
 };
 
 // Contract addresses are pulled from router contract
@@ -32,12 +44,20 @@ export const CHAINDATA = {
 	31337: {
 		label: 'localhost',
 		router: '0x0462Bc7390a33C8BB748d5c2ad76E93690A365c5',
-		explorer: 'http://localhost:8545'
+		explorer: 'http://localhost:8545',
+		currencies: {
+			weth: '0x76d05F58D14c0838EC630C8140eDC5aB7CD159Dc',
+			usdc: '0xd2983525E903Ef198d5dD0777712EB66680463bc'
+		}
 	},
 	42161: {
 		label: 'Arbitrum',
 		router: '',
 		explorer: 'https://arbiscan.io',
-		rpc: 'https://arb1.arbitrum.io/rpc' // for walletconnect
+		rpc: 'https://arb1.arbitrum.io/rpc', // for walletconnect
+		currencies: {
+			weth: '',
+			usdc: ''
+		}
 	}
 }

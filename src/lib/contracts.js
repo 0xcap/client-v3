@@ -31,13 +31,21 @@ export async function getContract(contractName, withSigner) {
 		router = new ethers.Contract(routerAddress, routerAbi, _provider);
 	}
 
+	// Currencies (ERC20)
+	if (!contracts['weth']) {
+		const currencies = CHAINDATA[_chainId].currencies;
+		for (const currencyLabel in currencies) {
+			contracts[currencyLabel] = new ethers.Contract(currencies[currencyLabel], ABIS.erc20, _provider);
+		}
+	}
+
 	const methodName = contractName + 'Contract';
 
 	console.log('methodName', methodName);
 
 	const address = await router[methodName]();
 		
-	console.log('address', address);
+	console.log('contract address', address);
 
 	let abiName = contractName;
 	if (abiName.includes('pool')) abiName = 'pool';

@@ -1,6 +1,8 @@
 // helpers and utility functions
 import { ethers } from 'ethers'
-import { PRODUCTS } from './constants'
+import { get } from 'svelte/store'
+
+import { PRODUCTS, CHAINDATA } from './constants'
 
 // Pages
 import Home from '../pages/Home.svelte'
@@ -13,11 +15,45 @@ import { hydrateData } from '../lib/data'
 
 import { component, currentPage } from '../stores/router'
 import { activeModal } from '../stores/ui'
+import { chainId } from '../stores/wallet'
+
+// Price title
+export function setTitle(product, price) {
+	document.title = `${shortSymbol(product)} ${price} | Cap`;
+}
 
 // Text utils
 export function shortAddress(address) {
 	if (!address) return;
 	return address.substring(0,2) + '…' + address.slice(-6);
+}
+export function shortSymbol(symbol) {
+	if (!symbol) return '';
+	return symbol.substring(0,symbol.length-4);
+}
+
+// Leverage cache
+export function getCachedLeverage(_productId) {
+	let cl = localStorage.getItem('leverage');
+	if (cl) {
+		try {
+			cl = JSON.parse(cl);
+			return cl[_productId] * 1;
+		} catch(e) {}
+	} else {
+		return null;
+	}
+}
+
+export function setCachedLeverage(_productId, _leverage) {
+	let cl = localStorage.getItem('leverage');
+	if (cl) {
+		cl = JSON.parse(cl);
+		cl[_productId] = _leverage * 1;
+		localStorage.setItem('leverage', JSON.stringify(cl));
+	} else {
+		localStorage.setItem('leverage', JSON.stringify({[_productId]: _leverage}));
+	}
 }
 
 // Toasts
@@ -57,6 +93,12 @@ export function navigateTo(path) {
 export function formatUnits(number, units) {
   return ethers.utils.formatUnits(number || 0, units || 8);
 }
+export function parseUnits(number, units) {
+  if (typeof(number) == 'number') {
+  	number = "" + number;
+  }
+  return ethers.utils.parseUnits(number, units || 8);
+}
 export function formatProduct(id, product) {
 	return {
 		id: id,
@@ -66,6 +108,13 @@ export function formatProduct(id, product) {
 		fee: formatUnits(product.fee, 4),
 		interest: formatUnits(product.fee, 2)
 	};
+}
+
+// Access utils
+export function getChainData(label) {
+	const _chainId = get(chainId);
+	if (!_chainId) return;
+	return CHAINDATA[_chainId][label];
 }
 
 // UI
