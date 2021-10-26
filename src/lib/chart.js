@@ -3,11 +3,22 @@ import { get } from 'svelte/store'
 import { product } from '../stores/order'
 import { positions } from '../stores/positions'
 
-let resolution = 900; // 15 min
+let resolution = 900; // 15 min - shoudl probably be in store
 let candles = []; // current candle set
+
+// In ms
+let start;
+let end;
 
 let chart;
 let candlestickSeries;
+
+let isLoadingCandles = false;
+
+// how much history to load for each resolution (in ms)
+const lookbacks = {
+	900: 48 * 60 * 60 * 1000
+}
 
 export function initChart() {
 
@@ -17,22 +28,26 @@ export function initChart() {
 
 	script.addEventListener("load", scriptLoaded, false);
 
-	function scriptLoaded() {
+	async function scriptLoaded() {
 
 		chart = LightweightCharts.createChart(document.getElementById('chart'), { width: 600, height: 400 });
 		chart.resize(600, 400);
 
 		candlestickSeries = chart.addCandlestickSeries();
 
-		function onVisibleLogicalRangeChanged(newVisibleLogicalRange) {
+		async function onVisibleLogicalRangeChanged(newVisibleLogicalRange) {
 			//console.log('lvc', newVisibleLogicalRange);
 		    // returns bars info in current visible range
 		    const barsInfo = candlestickSeries.barsInLogicalRange(newVisibleLogicalRange);
 		    //console.log(barsInfo);
-		    if (barsInfo !== null && barsInfo.barsBefore < 2) {
+		    if (barsInfo !== null && barsInfo.barsBefore < 5) {
 	            // try to load additional historical data and prepend it to the series data
-	            console.log('load additional data to the left');
 	            // use setData with additional data prepended
+	            if (isLoadingCandles) return;
+	            console.log('load additional data to the left');
+	            isLoadingCandles = true;
+	            await loadCandles(resolution, start - lookbacks[resolution], end - lookbacks[resolution], true);
+	            isLoadingCandles = false;
 	        }
 		}
 
@@ -50,7 +65,9 @@ export function initChart() {
 
 }
 
-export async function loadCandles(_resolution, start, end) {
+export async function loadCandles(_resolution, _start, _end, prepend) {
+
+	console.log('called loadCandles', _resolution, _start, _end, prepend);
 
 	const _product = get(product).symbol;
 
@@ -63,30 +80,57 @@ export async function loadCandles(_resolution, start, end) {
 		return;
 	}
 
-	if (_resolution) _resolution = resolution;
+	if (!_resolution) {
+		_resolution = resolution;
+	} else {
+		resolution = _resolution;
+	}
 
 	console.log('_product', _product);
 
-	start = new Date(Date.now() - 48 * 60 * 60 * 1000).toString();
-	end = new Date().toString();
+	if (!_start || !_end) { // test
+		_start = Date.now() - lookbacks[resolution];
+		_end = Date.now();
+	}
 
-	const response = await fetch(`https://api.exchange.coinbase.com/products/${_product}/candles?granularity=${resolution}&start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`);
+	start = _start;
+	end = _end;
+
+	const url_start = encodeURIComponent(new Date(start).toString());
+	const url_end = encodeURIComponent(new Date(end).toString());
+
+	const response = await fetch(`https://api.exchange.coinbase.com/products/${_product}/candles?granularity=${resolution}&start=${url_start}&end=${url_end}`);
 	const json = await response.json();
 
 	console.log('json', json);
 
-	candles = [];
-	for (const item of json) {
-		candles.push({
-			time: item[0],
-			low: item[1],
-			high: item[2],
-			open: item[3],
-			close: item[4]
-		});
+	if (prepend) {
+		// prepend candles to existing set
+		let prepend_set = [];
+		for (const item of json) {
+			prepend_set.push({
+				time: item[0],
+				low: item[1],
+				high: item[2],
+				open: item[3],
+				close: item[4]
+			});
+		}
+		prepend_set.reverse();
+		candles = prepend_set.concat(candles);
+	} else {
+		candles = [];
+		for (const item of json) {
+			candles.push({
+				time: item[0],
+				low: item[1],
+				high: item[2],
+				open: item[3],
+				close: item[4]
+			});
+		}
+		candles.reverse();
 	}
-
-	candles.reverse();
 
 	//console.log('data', data);
 
@@ -109,6 +153,8 @@ export function onNewPrice(price, timestamp, _product) {
 	if (_product != symbol) return;
 
 	let lastCandle = candles[candles.length - 1];
+
+	if (!lastCandle) return;
 
 	timestamp = timestamp/1000;
 
