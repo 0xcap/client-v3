@@ -1,5 +1,6 @@
 <script>
 
+	import Chart from '../components/chart/Chart.svelte'
 	import Order from '../components/order/Order.svelte'
 	import Positions from '../components/positions/Positions.svelte'
 	import History from '../components/history/History.svelte'
@@ -9,6 +10,10 @@
 <div class='trade'>
 
 	<div>Trade</div>
+
+	<Chart/>
+
+	<hr/>
 
 	<Order />
 

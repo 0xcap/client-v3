@@ -4,6 +4,7 @@ import { get } from 'svelte/store'
 import { monitorTx } from './monitor'
 
 import { getContract } from './contracts'
+import { loadCandles } from './chart'
 import { ADDRESS_ZERO } from '../utils/constants'
 import { formatProduct, getChainData, parseUnits, formatUnits, formatPositions } from '../utils/helpers'
 
@@ -24,6 +25,8 @@ export async function selectProduct(_productId) {
 	productId.set(_productId);
 	product.set(_product);
 	// TODO: set leverage in local storage
+
+	loadCandles(); // chart
 }
 
 export async function selectCurrency(_currencyLabel) {

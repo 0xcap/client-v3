@@ -4,6 +4,8 @@ import { get } from 'svelte/store'
 import { prices } from '../stores/prices'
 import { productId } from '../stores/order'
 
+import { onNewPrice } from './chart'
+
 import { PRODUCTS_REVERSE } from '../utils/constants'
 import { setTitle, shortSymbol } from '../utils/helpers'
 
@@ -73,6 +75,9 @@ export function initWebsocket() {
 				x[pid] = price * 1;
 				return x;
 			});
+
+			// update chart
+			onNewPrice(price, Date.now(), product_id);
 
 			if (pid == get(productId)) {
 				setTitle(product_id, price);
