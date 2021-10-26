@@ -7,9 +7,13 @@ import { CHAINDATA, ABIS } from '../utils/constants'
 let router;
 let contracts = {};
 
-export async function getContract(contractName, withSigner) {
+export async function getContract(contractName, withSigner, _currencyLabel) {
 
 	const _signer = get(signer);
+
+	if (_currencyLabel) {
+		contractName += _currencyLabel;
+	}
 
 	if (contracts[contractName]) {
 		if (withSigner) {
@@ -31,29 +35,42 @@ export async function getContract(contractName, withSigner) {
 		router = new ethers.Contract(routerAddress, routerAbi, _provider);
 	}
 
+	const currencies = CHAINDATA[_chainId].currencies;
+
 	// Currencies (ERC20)
-	if (!contracts['weth']) {
-		const currencies = CHAINDATA[_chainId].currencies;
+	if (!contracts['weth']) {	
 		for (const currencyLabel in currencies) {
 			contracts[currencyLabel] = new ethers.Contract(currencies[currencyLabel], ABIS.erc20, _provider);
 		}
 	}
 
-	const methodName = contractName + 'Contract';
+	let address;
 
-	console.log('methodName', methodName);
-
-	const address = await router[methodName]();
-		
-	console.log('contract address', address);
+	const currency = currencies[_currencyLabel];
 
 	let abiName = contractName;
-	if (abiName.includes('pool')) abiName = 'pool';
-	if (abiName.includes('rewards')) abiName = 'rewards';
+
+	if (contractName.toLowerCase().includes('poolrewards')) {
+		address = await router.getPoolRewardsContract(currency);
+		abiName = 'rewards';
+	} else if (contractName.toLowerCase().includes('caprewards')) {
+		address = await router.getCapRewardsContract(currency);
+		abiName = 'rewards';
+	} else if (contractName.toLowerCase().includes('pool')) {
+		address = await router.getPoolContract(currency);
+		console.log('address__', currency, _currencyLabel, address);
+		abiName = 'pool';
+	} else {
+		address = await router[contractName + 'Contract']();
+	}
+		
+	console.log('contract address', address);
 	
 	const abi = ABIS[abiName];
 
 	contracts[contractName] = new ethers.Contract(address, abi, _provider);
+
+	console.log('contracts', contracts);
 
 	if (withSigner) {
 		return contracts[contractName].connect(_signer);

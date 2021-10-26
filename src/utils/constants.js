@@ -20,17 +20,29 @@ export const PRODUCTS_REVERSE = {
 export const ABIS = {
 	router: [
 		"function tradingContract() view returns(address)",
+
+		"function getPoolContract(address currency) view returns(address)",
+		"function getPoolRewardsContract(address currency) view returns(address)",
+		"function getCapRewardsContract(address currency) view returns(address)"
 	],
 	trading: [
 		"function getProduct(uint256 productId) view returns(tuple(address feed, uint32 maxLeverage, uint16 oracleMaxDeviation, uint16 liquidationThreshold, uint16 fee, uint16 interest))",
 		"function submitNewPosition(address currency,uint256 productId,uint256 margin,uint256 leverage,bool isLong,address referrer) payable",
 		"function getUserPositions(address user) view returns(tuple(uint32 closeOrderId, uint16 productId, uint64 leverage, uint64 price, uint64 margin, address owner, uint88 timestamp, bool isLong, address currency, uint64 fee, uint32 positionId)[] _positions)"
 	],
-	poolETH: [],
-	poolUSDC: [],
+	pool: [
+		"function getStakedBalance(address account) view returns(uint256)",
+		"function clpSupply() view returns(uint256)",
+
+		"function mintAndStakeCLP(uint256 amount) payable returns(uint256)",
+		"function unstakeAndBurnCLP(uint256 amount) returns(uint256)"
+	],
 	staking: [],
-	rewardsETH: [],
-	rewardsUSDC: [],
+	rewards: [
+		"function getClaimableReward() view returns(uint256)",
+
+		"function collectReward()"
+	],
 	erc20: [
 		"function totalSupply() view returns (uint256)",
 		"function balanceOf(address account) view returns (uint256)",

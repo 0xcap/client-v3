@@ -8,6 +8,7 @@ import { ADDRESS_ZERO } from '../utils/constants'
 import { formatProduct, getChainData, parseUnits, formatUnits, formatPositions } from '../utils/helpers'
 
 import { productId, product, currencyLabel, currency, amount, leverage } from '../stores/order'
+import { pools } from '../stores/pools'
 import { positions } from '../stores/positions'
 import { address, allowances } from '../stores/wallet'
 
@@ -59,6 +60,60 @@ export async function getAllowance(_currencyLabel, spenderName) {
 
 }
 
+export async function getBalanceOf(_currencyLabel, _address) {
+	if (!_currencyLabel) _currencyLabel = get(currencyLabel);
+	const contract = await getContract(_currencyLabel);
+	if (!contract) return;
+	return formatUnits(await contract.balanceOf(_address), 18);
+}
+
+export async function getPoolStakedBalance(_currencyLabel) {
+	const _address = get(address);
+	if (!_address) return;
+	const contract = await getContract('pool', false, _currencyLabel);
+	if (!contract) return;
+	return formatUnits(await contract.getStakedBalance(_address), 18);
+}
+
+export async function getPoolClpSupply(_currencyLabel) {
+	const contract = await getContract('pool', false, _currencyLabel);
+	if (!contract) return;
+	return formatUnits(await contract.clpSupply(), 18);
+}
+
+export async function getClaimableReward(_currencyLabel, forCAP) {
+	let contractName;
+	if (forCAP) {
+		contractName = 'caprewards';
+	} else {
+		contractName = 'poolrewards';
+	}
+	const contract = await getContract(contractName, false, _currencyLabel);
+	if (!contract) return;
+	return formatUnits(await contract.getClaimableReward(), 18);
+}
+
+export async function getPoolInfo(_currencyLabel) {
+	// combination of above, set in store
+	const contract = await getContract('pool', false, _currencyLabel);
+	if (!contract) return;
+
+	const info = {
+		tvl: await getBalanceOf(_currencyLabel, contract.address),
+		clpSupply: await getPoolClpSupply(_currencyLabel),
+		stakedBalance: await getPoolStakedBalance(_currencyLabel),
+		claimableReward: await getClaimableReward(_currencyLabel)
+	};
+
+	pools.update((x) => {
+		x[_currencyLabel] = info;
+		return x;
+	});
+
+}
+
+
+
 export async function getUserPositions() {
 	console.log('getUserPositions');
 	const contract = await getContract('trading');
@@ -82,7 +137,7 @@ export async function approveCurrency(_currencyLabel, spenderName) {
 
 	const spenderAddress = spenderContract.address;
 
-	const tx = await contract.approve(spenderAddress, parseUnits(100 * 10**6, 18));
+	const tx = await contract.approve(spenderAddress, parseUnits(10 * 10**9, 18));
 
 	monitorTx(tx.hash, 'approve', {currencyLabel: _currencyLabel, spenderName});
 
@@ -134,5 +189,46 @@ export async function submitNewPosition(isLong) {
 	}
 
 	monitorTx(tx.hash, 'submit-new-position');
+
+}
+
+export async function stakeInPool(_currencyLabel, amount) {
+	
+	const contract = await getContract('pool', true, _currencyLabel);
+	if (!contract) return;
+
+	console.log('stakeInPool', _currencyLabel, amount, contract.address);
+	let tx;
+
+	if (_currencyLabel == 'weth') {
+		tx = await contract.mintAndStakeCLP(amount, {value: parseUnits(amount, 18)});
+	} else {
+		tx = await contract.mintAndStakeCLP(parseUnits(amount, 18));
+
+	}
+
+	monitorTx(tx.hash, 'pool-stake', {currencyLabel: _currencyLabel});
+
+}
+
+export async function unstakeFromPool(_currencyLabel, amount) {
+	
+	const contract = await getContract('pool', true, _currencyLabel);
+	if (!contract) return;
+
+	let tx = await contract.unstakeAndBurnCLP(parseUnits(amount, 18));
+
+	monitorTx(tx.hash, 'pool-unstake', {currencyLabel: _currencyLabel});
+
+}
+
+export async function collectPoolReward(_currencyLabel) {
+	
+	const contract = await getContract('poolrewards', true, _currencyLabel);
+	if (!contract) return;
+
+	let tx = await contract.collectReward();
+
+	monitorTx(tx.hash, 'pool-collect', {currencyLabel: _currencyLabel});
 
 }

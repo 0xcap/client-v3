@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 
 import { provider } from '../stores/wallet'
 
-import { getUserPositions, getAllowance } from './methods'
+import { getUserPositions, getAllowance, getPoolInfo } from './methods'
 
 export async function monitorTx(hash, type, details) {
 
@@ -27,6 +27,8 @@ function handleTxComplete(type, details) {
 		getUserPositions();
 	} else if (type == 'approve') {
 		getAllowance(details.currencyLabel, details.spenderName);
+	} else if (type == 'pool-stake' || type == 'pool-unstake' || type == 'pool-collect') {
+		getPoolInfo(details.currencyLabel);
 	}
 
 }

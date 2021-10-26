@@ -81,6 +81,12 @@ export function loadRoute(path) {
 	} else if (path.includes('/trade')) {
 		component.set(Trade);
 		currentPage.set('trade');
+	} else if (path.includes('/pool')) {
+		component.set(Pool);
+		currentPage.set('pool');
+	} else if (path.includes('/stake')) {
+		component.set(Stake);
+		currentPage.set('stake');
 	}
 	hydrateData();
 }
@@ -136,6 +142,33 @@ export function formatPositions(positions) {
 	formattedPositions.reverse();
 	return formattedPositions;
 }
+export function formatTrades(trades) {
+	if (!trades) return [];
+	let formattedTrades = [];
+	for (const t of trades) {
+		formattedTrades.push({
+			positionId: t.positionId,
+			orderId: t.orderId,
+			productId: t.productId,
+			product: PRODUCTS(t.productId).symbol,
+			price: formatUnits(t.closePrice || t.price),
+			entryPrice: formatUnits(t.entryPrice),
+			margin: formatUnits(t.margin),
+			leverage: formatUnits(t.leverage),
+			amount: formatUnits(t.margin) * formatUnits(t.leverage),
+			timestamp: t.timestamp,
+			isLong: t.isLong,
+			pnl: formatUnits(t.pnl),
+			pnlIsNegative: t.pnlIsNegative,
+			isFullClose: t.isFullClose,
+			wasLiquidated: t.wasLiquidated,
+			txHash: t.txHash,
+			block: t.blockNumber
+		});
+	}
+	return formattedTrades;
+}
+
 // Access utils
 export function getChainData(label) {
 	const _chainId = get(chainId);
