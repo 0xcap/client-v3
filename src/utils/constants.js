@@ -20,6 +20,7 @@ export const PRODUCTS_REVERSE = {
 export const ABIS = {
 	router: [
 		"function tradingContract() view returns(address)",
+		"function capStakingContract() view returns(address)",
 
 		"function getPoolContract(address currency) view returns(address)",
 		"function getPoolRewardsContract(address currency) view returns(address)",
@@ -37,7 +38,13 @@ export const ABIS = {
 		"function mintAndStakeCLP(uint256 amount) payable returns(uint256)",
 		"function unstakeAndBurnCLP(uint256 amount) returns(uint256)"
 	],
-	staking: [],
+	capStaking: [
+		"function getStakedBalance(address account) view returns(uint256)",
+		"function totalSupply() view returns(uint256)",
+
+		"function stake(uint256 amount)",
+		"function unstake(uint256 amount)"
+	],
 	rewards: [
 		"function getClaimableReward() view returns(uint256)",
 
@@ -62,7 +69,8 @@ export const CHAINDATA = {
 		currencies: {
 			weth: '0x1F585372F116E1055AF2bED81a808DDf9638dCCD',
 			usdc: '0x39826E09f8efb9df4C56Aeb9eEC0D2B8164d3B36'
-		}
+		},
+		cap: '0xACB5b53F9F193b99bcd8EF8544ddF4c398DE24a3'
 	},
 	42161: {
 		label: 'Arbitrum',
@@ -72,6 +80,7 @@ export const CHAINDATA = {
 		currencies: {
 			weth: '',
 			usdc: ''
-		}
+		},
+		cap: ''
 	}
 }

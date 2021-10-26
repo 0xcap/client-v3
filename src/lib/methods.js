@@ -10,6 +10,7 @@ import { formatProduct, getChainData, parseUnits, formatUnits, formatPositions }
 import { productId, product, currencyLabel, currency, amount, leverage } from '../stores/order'
 import { pools } from '../stores/pools'
 import { positions } from '../stores/positions'
+import { staking } from '../stores/staking'
 import { address, allowances } from '../stores/wallet'
 
 export async function selectProduct(_productId) {
@@ -67,6 +68,8 @@ export async function getBalanceOf(_currencyLabel, _address) {
 	return formatUnits(await contract.balanceOf(_address), 18);
 }
 
+// Pool
+
 export async function getPoolStakedBalance(_currencyLabel) {
 	const _address = get(address);
 	if (!_address) return;
@@ -79,18 +82,6 @@ export async function getPoolClpSupply(_currencyLabel) {
 	const contract = await getContract('pool', false, _currencyLabel);
 	if (!contract) return;
 	return formatUnits(await contract.clpSupply(), 18);
-}
-
-export async function getClaimableReward(_currencyLabel, forCAP) {
-	let contractName;
-	if (forCAP) {
-		contractName = 'caprewards';
-	} else {
-		contractName = 'poolrewards';
-	}
-	const contract = await getContract(contractName, false, _currencyLabel);
-	if (!contract) return;
-	return formatUnits(await contract.getClaimableReward(), 18);
 }
 
 export async function getPoolInfo(_currencyLabel) {
@@ -112,6 +103,61 @@ export async function getPoolInfo(_currencyLabel) {
 
 }
 
+// Staking
+
+export async function getCapStakedBalance() {
+	const _address = get(address);
+	if (!_address) return;
+	const contract = await getContract('capStaking');
+	if (!contract) return;
+	return formatUnits(await contract.getStakedBalance(_address), 18);
+}
+
+export async function getCapStakedSupply() {
+	const contract = await getContract('capStaking');
+	console.log('CAP staking address', contract.address);
+	if (!contract) return;
+	return formatUnits(await contract.totalSupply(), 18);
+}
+
+export async function getStakingInfo() {
+	// combination of above, set in store
+
+	console.log('getStakingInfo');
+	
+	const currencies = getChainData('currencies');
+	console.log('c', currencies);
+	if (!currencies) return;
+
+	let claimableRewards = {};
+	for (const _currencyLabel in currencies) {
+		claimableRewards[_currencyLabel] = await getClaimableReward(_currencyLabel, true);
+	}
+	const info = {
+		stakedSupply: await getCapStakedSupply(),
+		stakedBalance: await getCapStakedBalance(),
+		claimableRewards
+	};
+
+	staking.set(info);
+
+}
+
+// Rewards
+
+export async function getClaimableReward(_currencyLabel, forCAP) {
+	let contractName;
+	if (forCAP) {
+		contractName = 'caprewards';
+	} else {
+		contractName = 'poolrewards';
+	}
+	const contract = await getContract(contractName, false, _currencyLabel);
+	if (!contract) return;
+	return formatUnits(await contract.getClaimableReward(), 18);
+}
+
+// Positions
 
 
 export async function getUserPositions() {
@@ -192,6 +238,8 @@ export async function submitNewPosition(isLong) {
 
 }
 
+// pool 
+
 export async function stakeInPool(_currencyLabel, amount) {
 	
 	const contract = await getContract('pool', true, _currencyLabel);
@@ -230,5 +278,40 @@ export async function collectPoolReward(_currencyLabel) {
 	let tx = await contract.collectReward();
 
 	monitorTx(tx.hash, 'pool-collect', {currencyLabel: _currencyLabel});
+
+}
+
+// staking 
+
+export async function stakeCAP(amount) {
+	
+	const contract = await getContract('capStaking', true);
+	if (!contract) return;
+
+	let tx = await contract.stake(parseUnits(amount, 18));
+
+	monitorTx(tx.hash, 'cap-stake');
+
+}
+
+export async function unstakeCAP(amount) {
+	
+	const contract = await getContract('capStaking', true);
+	if (!contract) return;
+
+	let tx = await contract.unstake(parseUnits(amount, 18));
+
+	monitorTx(tx.hash, 'cap-unstake');
+
+}
+
+export async function collectCAPReward(_currencyLabel) {
+	
+	const contract = await getContract('caprewards', true, _currencyLabel);
+	if (!contract) return;
+
+	let tx = await contract.collectReward();
+
+	monitorTx(tx.hash, 'cap-collect', {currencyLabel: _currencyLabel});
 
 }

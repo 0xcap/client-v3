@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 
 import { provider } from '../stores/wallet'
 
-import { getUserPositions, getAllowance, getPoolInfo } from './methods'
+import { getUserPositions, getAllowance, getPoolInfo, getStakingInfo } from './methods'
 
 export async function monitorTx(hash, type, details) {
 
@@ -14,7 +14,7 @@ export async function monitorTx(hash, type, details) {
 		if (i > 30) return clearInterval(c);
 		const txReceipt = await get(provider).getTransactionReceipt(hash);
 	    if (txReceipt && txReceipt.blockNumber) {
-	    	handleTxComplete({type, details});
+	    	handleTxComplete(type, details);
 	    	clearInterval(c);
 	    }
 	}, 500);
@@ -29,6 +29,8 @@ function handleTxComplete(type, details) {
 		getAllowance(details.currencyLabel, details.spenderName);
 	} else if (type == 'pool-stake' || type == 'pool-unstake' || type == 'pool-collect') {
 		getPoolInfo(details.currencyLabel);
+	} else if (type == 'cap-stake' || type == 'cap-unstake' || type == 'cap-collect') {
+		getStakingInfo();
 	}
 
 }

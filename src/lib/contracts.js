@@ -44,6 +44,12 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 		}
 	}
 
+	// CAP (ERC20)
+	if (!contracts['cap']) {
+		const cap = CHAINDATA[_chainId].cap;
+		contracts['cap'] = new ethers.Contract(cap, ABIS.erc20, _provider);
+	}
+
 	let address;
 
 	const currency = currencies[_currencyLabel];
