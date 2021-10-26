@@ -17,8 +17,10 @@ let isLoadingCandles = false;
 
 // how much history to load for each resolution (in ms)
 const lookbacks = {
-	900: 48 * 60 * 60 * 1000
-}
+	300: 24 * 60 * 60 * 1000,
+	900: 48 * 60 * 60 * 1000,
+	3600: 12 * 24 * 60 * 60 * 1000
+};
 
 export function initChart() {
 
@@ -87,6 +89,7 @@ export async function loadCandles(_resolution, _start, _end, prepend) {
 	}
 
 	//console.log('_product', _product);
+	console.log('resolution', resolution, lookbacks[resolution]);
 
 	if (!_start || !_end) { // test
 		_start = Date.now() - lookbacks[resolution];
