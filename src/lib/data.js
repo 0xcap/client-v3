@@ -1,6 +1,6 @@
 import { get } from 'svelte/store'
 
-import { selectProduct, selectCurrency } from './methods'
+import { selectProduct, selectCurrency, getUserPositions } from './methods'
 
 import { currentPage } from '../stores/router'
 
@@ -17,6 +17,7 @@ export function hydrateData() {
 	} else if (_currentPage == 'trade') {
 		selectProduct();
 		selectCurrency();
+		getUserPositions();
 	}
 
 }

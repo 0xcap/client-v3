@@ -109,7 +109,7 @@ export function formatProduct(id, product) {
 		interest: formatUnits(product.fee, 2)
 	};
 }
-export function formatPositions(positionIds, positions) {
+export function formatPositions(positions) {
 	let formattedPositions = [];
 	let i = 0;
 	for (const p of positions) {
@@ -118,7 +118,7 @@ export function formatPositions(positionIds, positions) {
 			continue;
 		}
 		formattedPositions.push({
-			positionId: positionIds[i],
+			positionId: p.positionId,
 			product: PRODUCTS[p.productId].symbol,
 			timestamp: p.timestamp,
 			isLong: p.isLong,
@@ -129,7 +129,7 @@ export function formatPositions(positionIds, positions) {
 			productId: p.productId,
 			closeOrderId: p.closeOrderId,
 			currency: p.currency,
-			fee: formatUnits(p.fee.toNumber(), 6)
+			fee: formatUnits(p.fee.toNumber())
 		});
 		i++;
 	}

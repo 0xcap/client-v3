@@ -8,7 +8,7 @@ import { ADDRESS_ZERO } from '../utils/constants'
 import { formatProduct, getChainData, parseUnits, formatUnits, formatPositions } from '../utils/helpers'
 
 import { productId, product, currencyLabel, currency, amount, leverage } from '../stores/order'
-import { userPositionIds } from '../stores/positions'
+import { positions } from '../stores/positions'
 import { address, allowances } from '../stores/wallet'
 
 export async function selectProduct(_productId) {
@@ -60,11 +60,14 @@ export async function getAllowance(_currencyLabel, spenderName) {
 }
 
 export async function getUserPositions() {
+	console.log('getUserPositions');
 	const contract = await getContract('trading');
 	if (!contract) return;
 	const _address = get(address);
 	if (!_address) return;
-	positions.set(formatPositions(_userPositionIds, await contract.getUserPositions(_address)));
+	const _positions = formatPositions(await contract.getUserPositions(_address));
+	console.log('p', _positions);
+	positions.set(_positions);
 }
 
 // Setters
@@ -80,6 +83,8 @@ export async function approveCurrency(_currencyLabel, spenderName) {
 	const spenderAddress = spenderContract.address;
 
 	const tx = await contract.approve(spenderAddress, parseUnits(100 * 10**6, 18));
+
+	monitorTx(tx.hash, 'approve', {currencyLabel: _currencyLabel, spenderName});
 
 }
 

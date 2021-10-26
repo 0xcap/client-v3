@@ -4,9 +4,9 @@ import { ethers } from 'ethers'
 
 import { provider } from '../stores/wallet'
 
-import { getUserPositions } from './methods'
+import { getUserPositions, getAllowance } from './methods'
 
-export async function monitorTx(hash, type) {
+export async function monitorTx(hash, type, details) {
 
 	let i = 0;
 	let c = setInterval(async () => {
@@ -14,17 +14,19 @@ export async function monitorTx(hash, type) {
 		if (i > 30) return clearInterval(c);
 		const txReceipt = await get(provider).getTransactionReceipt(hash);
 	    if (txReceipt && txReceipt.blockNumber) {
-	    	handleTxComplete({type, receipt});
+	    	handleTxComplete({type, details});
 	    	clearInterval(c);
 	    }
 	}, 500);
 
 }
 
-function handleTxComplete(type, receipt) {
+function handleTxComplete(type, details) {
 
 	if (type == 'submitted-new-position') {
 		getUserPositions();
+	} else if (type == 'approve') {
+		getAllowance(details.currencyLabel, details.spenderName);
 	}
 
 }

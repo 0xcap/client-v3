@@ -24,7 +24,7 @@ export const ABIS = {
 	trading: [
 		"function getProduct(uint256 productId) view returns(tuple(address feed, uint32 maxLeverage, uint16 oracleMaxDeviation, uint16 liquidationThreshold, uint16 fee, uint16 interest))",
 		"function submitNewPosition(address currency,uint256 productId,uint256 margin,uint256 leverage,bool isLong,address referrer) payable",
-		"function getUserPositions(address user) view returns(tuple(uint32 closeOrderId, uint16 productId, uint64 leverage, uint64 price, uint64 margin, address owner, uint88 timestamp, bool isLong, address currency, uint96 fee)[] _positions)"
+		"function getUserPositions(address user) view returns(tuple(uint32 closeOrderId, uint16 productId, uint64 leverage, uint64 price, uint64 margin, address owner, uint88 timestamp, bool isLong, address currency, uint64 fee, uint32 positionId)[] _positions)"
 	],
 	poolETH: [],
 	poolUSDC: [],
@@ -45,11 +45,11 @@ export const ABIS = {
 export const CHAINDATA = {
 	31337: {
 		label: 'localhost',
-		router: '0x0462Bc7390a33C8BB748d5c2ad76E93690A365c5',
+		router: '0xC070A317F23E9A4e982e356485416251dd3Ed944',
 		explorer: 'http://localhost:8545',
 		currencies: {
-			weth: '0x76d05F58D14c0838EC630C8140eDC5aB7CD159Dc',
-			usdc: '0xd2983525E903Ef198d5dD0777712EB66680463bc'
+			weth: '0x1F585372F116E1055AF2bED81a808DDf9638dCCD',
+			usdc: '0x39826E09f8efb9df4C56Aeb9eEC0D2B8164d3B36'
 		}
 	},
 	42161: {
