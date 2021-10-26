@@ -29,7 +29,14 @@ export const ABIS = {
 	trading: [
 		"function getProduct(uint256 productId) view returns(tuple(address feed, uint32 maxLeverage, uint16 oracleMaxDeviation, uint16 liquidationThreshold, uint16 fee, uint16 interest))",
 		"function submitNewPosition(address currency,uint256 productId,uint256 margin,uint256 leverage,bool isLong,address referrer) payable",
-		"function getUserPositions(address user) view returns(tuple(uint32 closeOrderId, uint16 productId, uint64 leverage, uint64 price, uint64 margin, address owner, uint88 timestamp, bool isLong, address currency, uint64 fee, uint32 positionId)[] _positions)"
+		"function getUserPositions(address user) view returns(tuple(uint32 closeOrderId, uint16 productId, uint64 leverage, uint64 price, uint64 margin, address owner, uint88 timestamp, bool isLong, address currency, uint64 fee, uint32 positionId)[] _positions)",
+
+
+		"event OpenOrder(uint256 indexed positionId, address indexed user, uint256 indexed productId)",
+		"event NewPosition(uint256 indexed positionId, address indexed user, uint256 indexed productId, address currency, bool isLong, uint256 price, uint256 margin, uint256 leverage, uint256 fee)",
+		"event AddMargin(uint256 indexed positionId, address indexed user, uint256 margin, uint256 newMargin, uint256 newLeverage)",
+		"event ClosePosition(uint256 positionId, address indexed user, uint256 indexed productId, bool indexed isFullClose, bool isLong, uint256 price, uint256 entryPrice, uint256 margin, uint256 leverage, uint256 pnl, bool pnlIsNegative, bool wasLiquidated)"
+
 	],
 	pool: [
 		"function getStakedBalance(address account) view returns(uint256)",

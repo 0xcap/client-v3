@@ -6,3 +6,5 @@ export const signer = writable(null);
 export const address = writable(null);
 
 export const allowances = writable({});
+
+export const wrongNetwork = writable(false);

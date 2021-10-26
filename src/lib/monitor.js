@@ -21,16 +21,16 @@ export async function monitorTx(hash, type, details) {
 
 }
 
-function handleTxComplete(type, details) {
+async function handleTxComplete(type, details) {
 
 	if (type == 'submitted-new-position') {
-		getUserPositions();
+		await getUserPositions();
 	} else if (type == 'approve') {
-		getAllowance(details.currencyLabel, details.spenderName);
+		await getAllowance(details.currencyLabel, details.spenderName);
 	} else if (type == 'pool-stake' || type == 'pool-unstake' || type == 'pool-collect') {
-		getPoolInfo(details.currencyLabel);
+		await getPoolInfo(details.currencyLabel);
 	} else if (type == 'cap-stake' || type == 'cap-unstake' || type == 'cap-collect') {
-		getStakingInfo();
+		await getStakingInfo();
 	}
 
 }

@@ -172,7 +172,7 @@ export function formatTrades(trades) {
 // Access utils
 export function getChainData(label) {
 	const _chainId = get(chainId);
-	if (!_chainId) return;
+	if (!_chainId || !CHAINDATA[_chainId]) return;
 	return CHAINDATA[_chainId][label];
 }
 

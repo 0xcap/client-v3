@@ -1,5 +1,6 @@
 // Client side wallet interactions
 import { ethers } from 'ethers'
+import { initEventListeners } from './events'
 import { hydrateData } from './data'
 import { CHAINDATA } from '../utils/constants'
 import { showToast, hideModal } from '../utils/helpers'
@@ -98,6 +99,7 @@ async function handleAccountsChanged() {
 	signer.set(_signer);
 	address.set(await _signer.getAddress());
 	hydrateData();
+	initEventListeners();
 }
 
 function handleDisconnect() {

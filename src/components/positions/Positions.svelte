@@ -1,6 +1,7 @@
 <script>
 
 	import { positions } from '../../stores/positions'
+
 </script>
 
 <div class='positions'>

@@ -2,11 +2,12 @@
 import { get } from 'svelte/store'
 
 import { formatUnits, formatTrades } from '../utils/helpers'
+import { history } from '../stores/history'
 import { address } from '../stores/wallet'
 
 const graph_url = 'https://api.thegraph.com/subgraphs/name/0xcap/capv3';
 
-export async function getUserTrades() {
+export async function getUserHistory() {
 
 	const _address = get(address);
 	if (!_address) return;
@@ -22,7 +23,7 @@ export async function getUserTrades() {
 				  trades(
 				    orderBy: timestamp,
 				    orderDirection: desc,
-				    first:100,
+				    first:50,
 				    where: {owner: "${_address}"}
 				  ) {
 				    id,
@@ -47,5 +48,5 @@ export async function getUserTrades() {
 		})
 	});
 	const json = await response.json();
-	return formatTrades(json.data && json.data.trades);
+	history.set(formatTrades(json.data && json.data.trades));
 }
