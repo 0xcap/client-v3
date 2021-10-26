@@ -4,7 +4,7 @@ import { get } from 'svelte/store'
 import { monitorTx } from './monitor'
 
 import { getContract } from './contracts'
-import { loadCandles } from './chart'
+import { loadCandles, loadPositionLines } from './chart'
 import { ADDRESS_ZERO } from '../utils/constants'
 import { formatProduct, getChainData, parseUnits, formatUnits, formatPositions } from '../utils/helpers'
 
@@ -172,6 +172,8 @@ export async function getUserPositions() {
 	const _positions = formatPositions(await contract.getUserPositions(_address));
 	console.log('p', _positions);
 	positions.set(_positions);
+
+	loadPositionLines();
 }
 
 // Setters

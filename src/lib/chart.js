@@ -86,7 +86,7 @@ export async function loadCandles(_resolution, _start, _end, prepend) {
 		resolution = _resolution;
 	}
 
-	console.log('_product', _product);
+	//console.log('_product', _product);
 
 	if (!_start || !_end) { // test
 		_start = Date.now() - lookbacks[resolution];
@@ -102,7 +102,7 @@ export async function loadCandles(_resolution, _start, _end, prepend) {
 	const response = await fetch(`https://api.exchange.coinbase.com/products/${_product}/candles?granularity=${resolution}&start=${url_start}&end=${url_end}`);
 	const json = await response.json();
 
-	console.log('json', json);
+	//console.log('json', json);
 
 	if (prepend) {
 		// prepend candles to existing set
@@ -181,15 +181,41 @@ export function onNewPrice(price, timestamp, _product) {
 
 }
 
+let pricelines = [];
+
 export function loadPositionLines() {
 
-	const priceLine = candlestickSeries.createPriceLine({
-	    price: 80.0,
-	    color: 'green',
-	    lineWidth: 2,
-	    lineStyle: LightweightCharts.LineStyle.Dotted,
-	    axisLabelVisible: true,
-	    title: 'Position',
-	});
+	if (!candlestickSeries) {
+		console.log('nope2');
+		setTimeout(loadPositionLines, 1000);
+		return;
+	}
 
+	clearPositionLines();
+
+	const _positions = get(positions);
+
+	for (const _pos of _positions) {
+
+		//if (!_pos.price) continue;
+
+		pricelines.push(
+			candlestickSeries.createPriceLine({
+			    price: _pos.price * 1 + 4280,
+			    color: 'green',
+			    lineWidth: 2,
+			    lineStyle: LightweightCharts.LineStyle.Dotted,
+			    axisLabelVisible: true,
+			    title: _pos.amount,
+			})
+		);
+
+	}
+
+}
+
+function clearPositionLines() {
+	for (const priceline of pricelines) {
+		candlestickSeries.removePriceLine(priceLine);
+	}
 }

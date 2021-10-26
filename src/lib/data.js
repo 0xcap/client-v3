@@ -3,6 +3,7 @@ import { get } from 'svelte/store'
 import { selectProduct, selectCurrency, getUserPositions, getPoolInfo, getStakingInfo } from './methods'
 import { getUserHistory } from './graph'
 
+
 import { currentPage } from '../stores/router'
 
 // TODO: these should probably happen on mount for each component. BUT this can only happen after contracts / address are ready
