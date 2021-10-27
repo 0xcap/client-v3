@@ -2,8 +2,8 @@ import { get } from 'svelte/store'
 
 import { product } from '../stores/order'
 import { positions } from '../stores/positions'
+import { chartResolution } from '../stores/ui'
 
-let resolution = 900; // 15 min - shoudl probably be in store
 let candles = []; // current candle set
 
 // In ms
@@ -32,14 +32,27 @@ export function initChart() {
 
 	async function scriptLoaded() {
 
-		chart = LightweightCharts.createChart(document.getElementById('chart'), { width: 600, height: 400 });
-		chart.resize(600, 400);
+		let chartElem = document.getElementById('chart');
+		let tradingRowElem = document.getElementById('trading-row');
+		let chartDivWidth = tradingRowElem.offsetWidth * 0.65;
+		let chartDivHeight = chartElem.offsetHeight;
+
+		chart = LightweightCharts.createChart(chartElem, { width: chartDivWidth, height: chartDivHeight });
+		
+		window.onresize = () => {
+			chartDivWidth = tradingRowElem.offsetWidth * 0.65;
+			chartDivHeight = chartElem.offsetHeight;
+			//console.log('chartDivWidth', chartDivWidth, chartDivHeight);
+			chart.resize(chartDivWidth, chartDivHeight);
+		};
 
 		chart.applyOptions({
 			timeScale: {
 				timeVisible: true
 			}
 		});
+
+		const resolution = get(chartResolution);
 
 		candlestickSeries = chart.addCandlestickSeries();
 
@@ -82,32 +95,38 @@ function correctedTime(time) {
 	return time-(timezoneOffsetMinutes*60)
 }
 
+export async function setResolution(_resolution) {
+	chartResolution.set(_resolution);
+	await loadCandles(_resolution);
+}
+
 export async function loadCandles(_resolution, _start, _end, prepend) {
 
 	console.log('called loadCandles', _resolution, _start, _end, prepend);
 
 	const _product = get(product).symbol;
 
+	console.log('candlestickSeries', candlestickSeries);
+	console.log('_product', _product);
+
 	if (!candlestickSeries || !_product) {
 		// try again
 		console.log('nope');
 		setTimeout(() => {
-			loadCandles(_resolution, start, end);
+			loadCandles(_resolution, _start, _end);
 		}, 1000);
 		return;
 	}
 
 	if (!_resolution) {
-		_resolution = resolution;
-	} else {
-		resolution = _resolution;
+		_resolution = get(chartResolution);
 	}
 
 	//console.log('_product', _product);
-	console.log('resolution', resolution, lookbacks[resolution]);
+	console.log('resolution', _resolution, lookbacks[_resolution]);
 
 	if (!_start || !_end) { // test
-		_start = Date.now() - lookbacks[resolution];
+		_start = Date.now() - lookbacks[_resolution];
 		_end = Date.now();
 	}
 
@@ -117,7 +136,7 @@ export async function loadCandles(_resolution, _start, _end, prepend) {
 	const url_start = encodeURIComponent(new Date(start).toString());
 	const url_end = encodeURIComponent(new Date(end).toString());
 
-	const response = await fetch(`https://api.exchange.coinbase.com/products/${_product}/candles?granularity=${resolution}&start=${url_start}&end=${url_end}`);
+	const response = await fetch(`https://api.exchange.coinbase.com/products/${_product}/candles?granularity=${_resolution}&start=${url_start}&end=${url_end}`);
 	const json = await response.json();
 
 	//console.log('json', json);
@@ -175,6 +194,8 @@ export function onNewPrice(price, timestamp, _product) {
 	if (!lastCandle) return;
 
 	timestamp = correctedTime(timestamp/1000);
+
+	const resolution = get(chartResolution);
 
 	if (timestamp >= lastCandle.time + resolution) {
 		// new candle

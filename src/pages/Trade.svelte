@@ -25,7 +25,7 @@
 
 <div class='trade'>
 
-	<div class='trading-row'>
+	<div class='trading-row' id='trading-row'>
 		<div class='chart'>
 			<Chart/>
 		</div>

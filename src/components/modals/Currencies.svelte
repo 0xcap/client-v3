@@ -1,10 +1,12 @@
 <script>
+
+	import { onMount } from 'svelte'
 	
 	import Modal from '../modals/Modal.svelte'
 
 	import { currencyLabel } from '../../stores/order'
 
-	import { selectCurrency } from '../../lib/methods'
+	import { selectCurrency, getBalanceOf } from '../../lib/methods'
 
 	import { hideModal, getChainData } from '../../utils/helpers'
 	import { CURRENCY_LOGOS } from '../../utils/constants'
@@ -12,6 +14,18 @@
 	let currencies = getChainData('currencies');
 	
 	console.log('currencies', currencies);
+
+	let balances = {};
+
+	async function getBalances() {
+		for (const _currencyLabel in currencies) {
+			balances[_currencyLabel] = await getBalanceOf(_currencyLabel);
+		}
+	}
+
+	onMount(() => {
+		getBalances();
+	});
 
 </script>
 
@@ -51,9 +65,13 @@
 
 		<div class='row' class:selected={_currencyLabel == $currencyLabel} on:click={async () => {await selectCurrency(_currencyLabel); hideModal()}} data-intercept="true">
 
-			<div class='product-wrap'>
+			<div class='currency-wrap'>
 				<img src={CURRENCY_LOGOS[_currencyLabel]} alt={`${_currencyLabel} logo`}>
 				<span>{_currencyLabel}</span>
+			</div>
+
+			<div class='balance'>
+				{balances[_currencyLabel]}
 			</div>
 
 		</div>

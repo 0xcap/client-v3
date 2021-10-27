@@ -12,7 +12,7 @@ import { productId, product, currencyLabel, currency, amount, leverage, isSubmit
 import { pools } from '../stores/pools'
 import { positions } from '../stores/positions'
 import { staking } from '../stores/staking'
-import { address, allowances } from '../stores/wallet'
+import { address, allowances, provider } from '../stores/wallet'
 
 export async function selectProduct(_productId) {
 	// TODO: probably cache product info
@@ -68,9 +68,24 @@ export async function getAllowance(_currencyLabel, spenderName) {
 
 export async function getBalanceOf(_currencyLabel, _address) {
 	if (!_currencyLabel) _currencyLabel = get(currencyLabel);
-	const contract = await getContract(_currencyLabel);
-	if (!contract) return;
-	return formatUnits(await contract.balanceOf(_address), 18);
+	if (!_address) {
+		_address = get(address);
+		if (!_address) return;
+	}
+
+	console.log('_currencyLabel', _currencyLabel);
+
+	let balance;
+	if (_currencyLabel == 'weth') {
+		// get ETH balance
+		balance = await get(provider).getBalance(_address);
+	} else {
+		const contract = await getContract(_currencyLabel);
+		if (!contract) return;
+		balance = await contract.balanceOf(_address);
+	}
+	
+	return formatUnits(balance, 18);
 }
 
 // Pool
