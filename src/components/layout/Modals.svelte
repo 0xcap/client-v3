@@ -8,11 +8,16 @@
 	import ClosePosition from '../modals/ClosePosition.svelte'
 	import PositionDetails from '../modals/PositionDetails.svelte'
 	import AddMargin from '../modals/AddMargin.svelte'
+	import TradeDetails from '../modals/TradeDetails.svelte'
+	
+	import PoolDeposit from '../modals/PoolDeposit.svelte'
+	import PoolWithdraw from '../modals/PoolWithdraw.svelte'
 	
 </script>
 
 <Connect isActive={$activeModal && $activeModal.name == 'Connect'} />
 <Products isActive={$activeModal && $activeModal.name == 'Products'} />
+<TradeDetails isActive={$activeModal && $activeModal.name == 'TradeDetails'}  data={$activeModal.data} />
 
 {#if $activeModal && $activeModal.name == 'Leverage'}
 <Leverage />
@@ -30,4 +35,12 @@
 {/if}
 {#if $activeModal && $activeModal.name == 'AddMargin'}
 	<AddMargin data={$activeModal.data} />
+{/if}
+
+{#if $activeModal && $activeModal.name == 'PoolDeposit'}
+	<PoolDeposit data={$activeModal.data} />
+{/if}
+
+{#if $activeModal && $activeModal.name == 'PoolWithdraw'}
+	<PoolWithdraw data={$activeModal.data} />
 {/if}

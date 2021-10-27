@@ -30,6 +30,7 @@ export async function getUserHistory() {
 				    txHash,
 				    positionId,
 				    productId,
+				    currency,
 				    margin,
 				    leverage,
 				    amount,

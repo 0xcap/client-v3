@@ -19,6 +19,7 @@
 - nav
 - wallet, network, & disconnect
 - referrals, rebates
+- toasts
 - homepage
 - design and branding
 */

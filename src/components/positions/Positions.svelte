@@ -66,12 +66,12 @@
 	</div>
 
 	{#each $positions as position}
-		<div class='position'>
+		<div class='position' on:click={() => {showModal('PositionDetails', position)}} data-intercept="true">
 
-			<div class='column-product'>{position.isLong ? '↑' : '↓'} {position.product}</div>
-			<div class='column-price'>{position.price}</div>
-			<div class='column-amount'>{position.amount} {position.currencyLabel}</div>
-			<div class='column-pnl'>
+			<div class='column column-product'>{position.isLong ? '↑' : '↓'} {position.product}</div>
+			<div class='column column-price'>{position.price}</div>
+			<div class='column column-amount'>{position.amount} {position.currencyLabel}</div>
+			<div class='column column-pnl'>
 				<div class={`upl-wrap ${upls[position.positionId] * 1 > 0 ? 'pos' : 'neg'}`}>
 					<div class='upl'>
 						{formatPnl(upls[position.positionId])}
@@ -79,7 +79,7 @@
 				</div>
 			</div>
 
-			<div class='column-tools'>
+			<div class='column column-tools'>
 
 				{#if position.price * 1 == 0}
 						Settling

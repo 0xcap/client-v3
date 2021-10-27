@@ -33,6 +33,14 @@ export function shortSymbol(symbol) {
 	if (!symbol) return '';
 	return symbol.substring(0,symbol.length-4);
 }
+export function txLink(hash) {
+	const explorer = getChainData('explorer');
+	return `${explorer}/tx/${hash}`; 
+}
+export function addrLink(addr) {
+	const explorer = getChainData('explorer');
+	return `${explorer}/address/${addr}`; 
+}
 export function formatToDisplay(amount, maxPrecision, fixPrecision) {
 	if (amount == undefined || isNaN(amount)) return '';
 	if (!maxPrecision) maxPrecision = 100;
@@ -192,6 +200,8 @@ export function formatTrades(trades) {
 		formattedTrades.push({
 			positionId: t.positionId,
 			orderId: t.orderId,
+			currency: t.currency,
+			currencyLabel: getCurrencyLabelFromAddress(t.currency),
 			productId: t.productId,
 			product: PRODUCTS(t.productId).symbol,
 			price: formatUnits(t.closePrice || t.price),
@@ -266,6 +276,20 @@ export async function getUPL(position, latestPrice) {
 		upl -= interest;
 	}
 	return upl;
+}
+
+export async function getInterest(position) {
+		// Add interest
+		let interest;
+		let now = parseInt(Date.now() / 1000);
+		const productInfo = await getProduct(position.productId);
+		if (position.isSettling || now < position.timestamp * 1 + 1800) {
+			interest = 0;
+		} else {
+			interest = position.margin * position.leverage * ((productInfo.interest * 1 || 0) / 100) * (now - position.timestamp * 1) / (360 * 24 * 3600);
+		}
+		if (interest < 0) interest = 0;
+		return -1 * interest;
 }
 
 // UI

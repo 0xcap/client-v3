@@ -36,6 +36,10 @@ export const ABIS = {
 		"function submitNewPosition(address currency,uint256 productId,uint256 margin,uint256 leverage,bool isLong,address referrer) payable",
 		"function getUserPositions(address user) view returns(tuple(uint32 closeOrderId, uint16 productId, uint64 leverage, uint64 price, uint64 margin, address owner, uint88 timestamp, bool isLong, address currency, uint64 fee, uint32 positionId)[] _positions)",
 
+		"function addMargin(uint256 positionId, uint256 margin) payable",
+		"function submitCloseOrder(uint256 positionId, uint256 margin) payable",
+		"function cancelPosition(uint256 positionId)",
+		"function cancelOrder(uint256 orderId)",
 
 		"event OpenOrder(uint256 indexed positionId, address indexed user, uint256 indexed productId)",
 		"event NewPosition(uint256 indexed positionId, address indexed user, uint256 indexed productId, address currency, bool isLong, uint256 price, uint256 margin, uint256 leverage, uint256 fee)",
