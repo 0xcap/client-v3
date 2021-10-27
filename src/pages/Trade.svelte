@@ -7,15 +7,32 @@
 
 </script>
 
+<style>
+
+	.trading-row {
+		display: flex;
+	}
+
+	.chart {
+		flex: 1 1 auto;
+	}
+
+	.order {
+		width: 33.333%;
+	}
+
+</style>
+
 <div class='trade'>
 
-	<div>Trade</div>
-
-	<Chart/>
-
-	<hr/>
-
-	<Order />
+	<div class='trading-row'>
+		<div class='chart'>
+			<Chart/>
+		</div>
+		<div class='order'>
+			<Order />
+		</div>
+	</div>
 
 	<hr/>
 

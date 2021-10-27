@@ -8,22 +8,23 @@ import { loadCandles, loadPositionLines } from './chart'
 import { ADDRESS_ZERO } from '../utils/constants'
 import { formatProduct, getChainData, parseUnits, formatUnits, formatPositions } from '../utils/helpers'
 
-import { productId, product, currencyLabel, currency, amount, leverage } from '../stores/order'
+import { productId, product, currencyLabel, currency, amount, leverage, isSubmittingLong, isSubmittingShort } from '../stores/order'
 import { pools } from '../stores/pools'
 import { positions } from '../stores/positions'
 import { staking } from '../stores/staking'
 import { address, allowances } from '../stores/wallet'
 
 export async function selectProduct(_productId) {
+	// TODO: probably cache product info
 	if (!_productId) _productId = get(productId);
 	const contract = await getContract('trading');
 	console.log('contract', contract);
 	if (!contract) return;
 	const _product = formatProduct(_productId, await contract.getProduct(_productId));
 	console.log('product', _product);
+	product.set(_product);
 	localStorage.setItem('productId', _productId);
 	productId.set(_productId);
-	product.set(_product);
 	// TODO: set leverage in local storage
 
 	loadCandles(); // chart
@@ -38,6 +39,7 @@ export async function selectCurrency(_currencyLabel) {
 	const _currency = currencies[_currencyLabel];
 	localStorage.setItem('currencyLabel', _currencyLabel);
 	currency.set(_currency);
+	currencyLabel.set(_currencyLabel);
 	console.log('__currency', _currency);
 	await getAllowance(_currencyLabel, 'trading');
 }
@@ -209,6 +211,12 @@ export async function submitNewPosition(isLong) {
 
 	let margin = _amount / _leverage;
 
+	if (isLong) {
+		isSubmittingLong.set(true);
+	} else {
+		isSubmittingShort.set(true);
+	}
+
 	let tx;
 
 	if (_currencyLabel == 'weth') {
@@ -239,6 +247,8 @@ export async function submitNewPosition(isLong) {
 		);
 	}
 
+	isSubmittingLong.set(false);
+	isSubmittingShort.set(false);
 	monitorTx(tx.hash, 'submit-new-position');
 
 }

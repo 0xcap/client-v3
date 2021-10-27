@@ -4,7 +4,7 @@
 
 	export let title = '';
 	export let isActive;
-	export let noHeader = false;
+	export let showHeader = false;
 
 	if (isActive == undefined) isActive = true;
 
@@ -73,7 +73,7 @@
 
 	<div class='modal' data-intercept="true">
 
-		{#if !noHeader}
+		{#if showHeader}
 		<div class='modal-header'>
 			<div class='modal-title'>{title}</div>
 			<span class='done-button' on:click={hideModal}>Done</span>

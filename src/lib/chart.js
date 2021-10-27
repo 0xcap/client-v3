@@ -35,6 +35,12 @@ export function initChart() {
 		chart = LightweightCharts.createChart(document.getElementById('chart'), { width: 600, height: 400 });
 		chart.resize(600, 400);
 
+		chart.applyOptions({
+			timeScale: {
+				timeVisible: true
+			}
+		});
+
 		candlestickSeries = chart.addCandlestickSeries();
 
 		async function onVisibleLogicalRangeChanged(newVisibleLogicalRange) {
@@ -63,8 +69,17 @@ export function initChart() {
 
 		console.log('chart loaded');
 
+		loadPositionLines();
+
 	}
 
+}
+
+// timezone corrected time in seconds
+function correctedTime(time) {
+	const timezoneOffsetMinutes = new Date().getTimezoneOffset();
+	//console.log('timezoneOffsetMinutes', timezoneOffsetMinutes);
+	return time-(timezoneOffsetMinutes*60)
 }
 
 export async function loadCandles(_resolution, _start, _end, prepend) {
@@ -112,7 +127,7 @@ export async function loadCandles(_resolution, _start, _end, prepend) {
 		let prepend_set = [];
 		for (const item of json) {
 			prepend_set.push({
-				time: item[0],
+				time: correctedTime(item[0]),
 				low: item[1],
 				high: item[2],
 				open: item[3],
@@ -125,7 +140,7 @@ export async function loadCandles(_resolution, _start, _end, prepend) {
 		candles = [];
 		for (const item of json) {
 			candles.push({
-				time: item[0],
+				time: correctedTime(item[0]),
 				low: item[1],
 				high: item[2],
 				open: item[3],
@@ -159,7 +174,7 @@ export function onNewPrice(price, timestamp, _product) {
 
 	if (!lastCandle) return;
 
-	timestamp = timestamp/1000;
+	timestamp = correctedTime(timestamp/1000);
 
 	if (timestamp >= lastCandle.time + resolution) {
 		// new candle
@@ -188,6 +203,8 @@ let pricelines = [];
 
 export function loadPositionLines() {
 
+	console.log('loadPositionLines');
+
 	if (!candlestickSeries) {
 		console.log('nope2');
 		setTimeout(loadPositionLines, 1000);
@@ -197,6 +214,8 @@ export function loadPositionLines() {
 	clearPositionLines();
 
 	const _positions = get(positions);
+
+	console.log('_positions', _positions);
 
 	for (const _pos of _positions) {
 
@@ -219,6 +238,7 @@ export function loadPositionLines() {
 
 function clearPositionLines() {
 	for (const priceline of pricelines) {
-		candlestickSeries.removePriceLine(priceLine);
+		candlestickSeries.removePriceLine(priceline);
 	}
+	pricelines = [];
 }

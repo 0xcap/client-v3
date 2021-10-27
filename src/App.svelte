@@ -53,7 +53,7 @@
 		
 		--base-padding: 20px;
 		--semi-padding: 16px;
-		--base-radius: 8px;
+		--base-radius: 4px;
 		--container-width: 2100px;
 
 	}

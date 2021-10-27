@@ -31,6 +31,34 @@ export function shortSymbol(symbol) {
 	if (!symbol) return '';
 	return symbol.substring(0,symbol.length-4);
 }
+export function formatToDisplay(amount, maxPrecision, fixPrecision) {
+	if (amount == undefined || isNaN(amount)) return '';
+	if (!maxPrecision) maxPrecision = 100;
+
+	if (!fixPrecision && (amount*1 == 0 || amount * 1 >= 1) && (amount * 1).toFixed(3)*1 == Math.round(amount * 1)) return Math.round(amount).toLocaleString();
+	
+	if (amount * 1 >= 1000 || amount * 1 <= -1000) {
+		return Math.round(amount*1).toLocaleString();
+	} else if (amount * 1 >= 100 || amount * 1 <= -100) {
+		return (amount * 1).toFixed(2);
+	} else if (amount * 1 >= 1 || amount * 1 <= -1) {
+		return (amount * 1).toFixed(Math.min(maxPrecision,3));
+	} else if (amount * 1 >= 0.1 || amount * 1 <= -0.1) {
+		return (amount * 1).toFixed(Math.min(maxPrecision,5));
+	} else {
+		return (amount * 1).toFixed(Math.min(maxPrecision,6));
+	}
+}
+export function displayPricePercentChange(last, initial) {
+	if (!last || !initial) return '';
+	const diff = (last * 1 - initial * 1) / initial;
+	let string = '';
+	if (diff >= 0) {
+		string += '+';
+	}
+	string += formatToDisplay(diff*100, 2, true) + "%" || '';
+	return string;
+}
 
 // Leverage cache
 export function getCachedLeverage(_productId) {
@@ -54,6 +82,18 @@ export function setCachedLeverage(_productId, _leverage) {
 	} else {
 		localStorage.setItem('leverage', JSON.stringify({[_productId]: _leverage}));
 	}
+}
+
+// Liq price
+export function calculateLiquidationPrice(params) {
+	const { productId, price, leverage, isLong } = params;
+	let liquidationPrice;
+	if (isLong) {
+		liquidationPrice = price * (1 - 8000 / 10000 / leverage);
+	} else {
+		liquidationPrice = price * (1 + 8000 / 10000 / leverage);
+	}
+	return liquidationPrice;
 }
 
 // Toasts
