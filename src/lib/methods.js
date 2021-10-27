@@ -4,7 +4,7 @@ import { get } from 'svelte/store'
 import { monitorTx } from './monitor'
 
 import { getContract } from './contracts'
-import { loadCandles, loadPositionLines } from './chart'
+import { loadCandles, loadPositionLines, applyWatermark } from './chart'
 import { ADDRESS_ZERO } from '../utils/constants'
 import { formatProduct, getChainData, parseUnits, formatUnits, formatPositions } from '../utils/helpers'
 
@@ -14,20 +14,31 @@ import { positions } from '../stores/positions'
 import { staking } from '../stores/staking'
 import { address, allowances, provider } from '../stores/wallet'
 
-export async function selectProduct(_productId) {
-	// TODO: probably cache product info
-	if (!_productId) _productId = get(productId);
+let product_cache = {};
+
+export async function getProduct(_productId) {
+	if (product_cache[_productId]) return product_cache[_productId];
 	const contract = await getContract('trading');
-	console.log('contract', contract);
-	if (!contract) return;
-	const _product = formatProduct(_productId, await contract.getProduct(_productId));
-	console.log('product', _product);
+	console.log('contract product', contract);
+	if (!contract) return {};
+	product_cache[_productId] = formatProduct(_productId, await contract.getProduct(_productId));
+	return product_cache[_productId];
+}
+
+export async function selectProduct(_productId) {
+	console.log('selectProduct', _productId);
+	if (!_productId) _productId = get(productId);
+	console.log('selectProduct2', _productId);
+
+	const _product = await getProduct(_productId);
+	console.log('GOT product', _product);
 	product.set(_product);
 	localStorage.setItem('productId', _productId);
 	productId.set(_productId);
 	// TODO: set leverage in local storage
 
 	loadCandles(); // chart
+	applyWatermark();
 }
 
 export async function selectCurrency(_currencyLabel) {
@@ -265,6 +276,37 @@ export async function submitNewPosition(isLong) {
 	isSubmittingLong.set(false);
 	isSubmittingShort.set(false);
 	monitorTx(tx.hash, 'submit-new-position');
+
+}
+
+export async function submitCloseOrder(positionId, _productId, _margin, _leverage, _currencyLabel) {
+
+	const contract = await getContract('trading', true);
+	if (!contract) return;
+
+	let tx;
+
+	if (_currencyLabel == 'weth') {
+
+		const _product = await getProduct(_productId);
+		const fee = _margin * _leverage * _product.fee * 1.01;
+
+		tx = await contract.submitCloseOrder(
+			positionId,
+			parseUnits(_margin),
+			{value: parseUnits(fee, 18)}
+		);
+
+	} else {
+
+		tx = await contract.submitCloseOrder(
+			positionId,
+			parseUnits(_margin)
+		);
+
+	}
+
+	monitorTx(tx.hash, 'submit-close-order');
 
 }
 

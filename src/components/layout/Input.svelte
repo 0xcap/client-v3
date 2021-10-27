@@ -3,6 +3,8 @@
 	export let bindValue;
 	export let isDisabled = false;
 	export let onKeyup;
+
+	console.log('bindValue', bindValue);
 </script>
 
 <style>
@@ -39,5 +41,3 @@
 	}
 
 </style>
-
-<input id={id} type='number' step="0.0001" bind:value={$bindValue} min="0" max="1000000" maxlength="10" spellcheck="false" placeholder={`0.0`} autocomplete="off" autocorrect="off" inputmode="decimal" disabled={isDisabled} on:keyup={onKeyup} lang="en">

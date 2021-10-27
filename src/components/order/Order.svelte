@@ -60,13 +60,14 @@
 	}
 
 	function setInitialLeverage(_product) {
-		if (!product) return;
+		console.log('_product in lev', _product);
+		if (!_product) return;
 		const cached = getCachedLeverage(_product.id);
 		if (cached) return leverage.set(cached);
 		leverage.set(_product.maxLeverage);
 	}
 
-	$: setInitialLeverage($product);
+	$: setInitialLeverage($product, $productId);
 
 	//$: console.log('cp1', $productId, $product, $currency);
 
@@ -143,8 +144,8 @@
 		</div>
 
 		<div class='input-wrap'>
-			
-			<Input bindValue={amount} id='amount' />
+
+			<input id='amount' type='number' step="0.0001" bind:value={$amount} min="0" max="1000000" maxlength="10" spellcheck="false" placeholder={`0.0`} autocomplete="off" autocorrect="off" inputmode="decimal" lang="en">
 
 			<div class='selector selector-currency' on:click={() => {showModal('Currencies')}} data-intercept="true">
 				<span>{$currencyLabel}</span>{@html CARET_DOWN}

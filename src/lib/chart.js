@@ -84,6 +84,8 @@ export function initChart() {
 
 		loadPositionLines();
 
+		applyWatermark();
+
 	}
 
 }
@@ -95,6 +97,21 @@ function correctedTime(time) {
 	return time-(timezoneOffsetMinutes*60)
 }
 
+export function applyWatermark() {
+	const _product = get(product).symbol;
+	if (!_product) return;
+	chart && chart.applyOptions({
+	    watermark: {
+	        color: 'rgba(11, 94, 29, 0.4)',
+	        visible: true,
+	        text: _product,
+	        fontSize: 24,
+	        horzAlign: 'left',
+	        vertAlign: 'top',
+	    },
+	});
+}
+
 export async function setResolution(_resolution) {
 	chartResolution.set(_resolution);
 	await loadCandles(_resolution);
@@ -104,7 +121,7 @@ export async function loadCandles(_resolution, _start, _end, prepend) {
 
 	console.log('called loadCandles', _resolution, _start, _end, prepend);
 
-	const _product = get(product).symbol;
+	let _product = get(product).symbol;
 
 	console.log('candlestickSeries', candlestickSeries);
 	console.log('_product', _product);

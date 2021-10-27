@@ -88,7 +88,7 @@
 			<div class='row input-row' class:focused={amountIsFocused}>
 				<div class='label'>{row.label}</div>
 				<div class='value input-wrap'>
-					<Input bindValue={value} id='amount' onKeyup={row.onKeyUp} />
+					<input id='amount' type='number' step="0.0001" bind:value={value} min="0" max="1000000" maxlength="10" spellcheck="false" placeholder={`0.0`} autocomplete="off" autocorrect="off" inputmode="decimal" on:keyup={row.onKeyUp} lang="en">
 				</div>
 			</div>
 		{:else}

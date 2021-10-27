@@ -13,6 +13,8 @@ import Refer from '../pages/Refer.svelte'
 
 import { hydrateData } from '../lib/data'
 
+import { getProduct } from '../lib/methods'
+
 import { component, currentPage } from '../stores/router'
 import { activeModal } from '../stores/ui'
 import { chainId } from '../stores/wallet'
@@ -175,6 +177,7 @@ export function formatPositions(positions) {
 			productId: p.productId,
 			closeOrderId: p.closeOrderId,
 			currency: p.currency,
+			currencyLabel: getCurrencyLabelFromAddress(p.currency),
 			fee: formatUnits(p.fee.toNumber())
 		});
 		i++;
@@ -208,12 +211,61 @@ export function formatTrades(trades) {
 	}
 	return formattedTrades;
 }
+export function formatPnl(pnl, pnlIsNegative, isPercent) {
+	let string = '';
+	if (pnl == undefined) return string;
+	if (pnlIsNegative == undefined) {
+		pnlIsNegative = pnl < 0;
+	}
+	if (!pnlIsNegative) {
+		string += '+';
+	} else if (pnl > 0) {
+		string += '-';
+	}
+	string += formatToDisplay(pnl, isPercent ? 2 : null) || 0;
+	return string;
+}
 
 // Access utils
 export function getChainData(label) {
 	const _chainId = get(chainId);
 	if (!_chainId || !CHAINDATA[_chainId]) return;
 	return CHAINDATA[_chainId][label];
+}
+export function getCurrencyLabelFromAddress(_address) {
+	const _chainId = get(chainId);
+	if (!_chainId || !CHAINDATA[_chainId]) return;
+	const currencies = getChainData('currencies');
+	for (const _currencyLabel in currencies) {
+		if (currencies[_currencyLabel].toLowerCase() == _address.toLowerCase()) {
+			return _currencyLabel;
+		}
+	}
+}
+
+// UPL
+export async function getUPL(position, latestPrice) {
+	let upl = 0;
+	if (position.price * 1 == 0) return undefined;
+	if (latestPrice) {
+		const productInfo = await getProduct(position.productId);
+		if (position.isLong) {
+			upl = position.margin * position.leverage * (latestPrice * 1 - position.price * 1) / position.price;
+		} else {
+			upl = position.margin * position.leverage * (position.price * 1 - latestPrice * 1) / position.price;
+		}
+		// Add interest
+		let interest;
+		let now = parseInt(Date.now() / 1000);
+		if (position.isSettling || now < position.timestamp * 1 + 1800) {
+			interest = 0;
+		} else {
+			interest = position.margin * position.leverage * ((productInfo.interest * 1 || 0) / 100) * (now - position.timestamp * 1) / (360 * 24 * 3600);
+		}
+		if (interest < 0) interest = 0;
+		upl -= interest;
+	}
+	return upl;
 }
 
 // UI
