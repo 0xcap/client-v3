@@ -8,15 +8,16 @@ import { PRODUCTS, CHAINDATA } from './constants'
 import Home from '../pages/Home.svelte'
 import Trade from '../pages/Trade.svelte'
 import Pool from '../pages/Pool.svelte'
-import Stake from '../pages/Stake.svelte'
 import Refer from '../pages/Refer.svelte'
 
 import { hydrateData } from '../lib/data'
 
 import { getProduct } from '../lib/methods'
 
+import { parseErrorToString } from './errors'
+
 import { component, currentPage } from '../stores/router'
-import { activeModal } from '../stores/ui'
+import { activeModal, toast } from '../stores/ui'
 import { chainId } from '../stores/wallet'
 
 // Price title
@@ -107,11 +108,20 @@ export function calculateLiquidationPrice(params) {
 }
 
 // Toasts
+let timer;
 export function showToast(data, type) {
 	console.log('toast', data, type);
+	let message = parseErrorToString(data);
+	if (!type) type = 'error';
+	if (!message) return;
+	toast.set({message: message, type});
+	clearTimeout(timer);
+	timer = setTimeout(() => {hideToast()}, 10*1000);
 }
 export function hideToast() {
 	console.log('hideToast');
+	clearTimeout(timer);
+	toast.set(null);
 }
 
 // Modals
@@ -134,9 +144,6 @@ export function loadRoute(path) {
 	} else if (path.includes('/pool')) {
 		component.set(Pool);
 		currentPage.set('pool');
-	} else if (path.includes('/stake')) {
-		component.set(Stake);
-		currentPage.set('stake');
 	}
 	hydrateData();
 }

@@ -114,13 +114,13 @@ export async function getPoolStakedBalance(_currencyLabel) {
 	if (!_address) return;
 	const contract = await getContract('pool', false, _currencyLabel);
 	if (!contract) return;
-	return formatUnits(await contract.getStakedBalance(_address), 18);
+	return formatUnits(await contract.getBalance(_address), 18);
 }
 
 export async function getPoolClpSupply(_currencyLabel) {
 	const contract = await getContract('pool', false, _currencyLabel);
 	if (!contract) return;
-	return formatUnits(await contract.clpSupply(), 18);
+	return formatUnits(await contract.totalSupply(), 18);
 }
 
 export async function getPoolInfo(_currencyLabel) {
@@ -132,6 +132,8 @@ export async function getPoolInfo(_currencyLabel) {
 	const clpSupply = await getPoolClpSupply(_currencyLabel);
 	const stakedBalance = await getPoolStakedBalance(_currencyLabel);
 
+	console.log('WETH POOL', poolBalance, clpSupply, stakedBalance);
+	
 	const info = {
 		tvl: poolBalance,
 		clpSupply,
@@ -152,14 +154,14 @@ export async function getPoolInfo(_currencyLabel) {
 export async function getCapStakedBalance() {
 	const _address = get(address);
 	if (!_address) return;
-	const contract = await getContract('capStaking');
+	const contract = await getContract('capPool');
 	if (!contract) return;
-	return formatUnits(await contract.getStakedBalance(_address), 18);
+	return formatUnits(await contract.getBalance(_address), 18);
 }
 
 export async function getCapStakedSupply() {
-	const contract = await getContract('capStaking');
-	console.log('CAP staking address', contract.address);
+	const contract = await getContract('capPool');
+	console.log('CAP pool address', contract.address);
 	if (!contract) return;
 	return formatUnits(await contract.totalSupply(), 18);
 }

@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte'
 
 	import Modals from './components/layout/Modals.svelte'
+	import Toasts from './components/layout/Toasts.svelte'
 	import Header from './components/layout/Header.svelte'
 	import Footer from './components/layout/Footer.svelte'
 
@@ -72,6 +73,7 @@
 </style>
 
 <Modals />
+<Toasts />
 
 <main>
 	<Header />

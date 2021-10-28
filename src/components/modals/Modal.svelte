@@ -8,6 +8,8 @@
 
 	if (isActive == undefined) isActive = true;
 
+	// todo: animate modal display
+	
 </script>
 
 <style>

@@ -18,7 +18,7 @@
 - pool withdraw modal
 - nav
 - wallet, network, & disconnect
-- referrals, rebates
+- referrals <- do next
 - toasts
 - homepage
 - design and branding
@@ -157,8 +157,14 @@
 	</div>
 
 	<div class='order-details'>
-		<div class='detail-label'>Margin</div>
-		<div class='detail-value'>{$margin} {$currencyLabel}</div>
+		<div class='row'>
+			<div class='detail-label'>Margin</div>
+			<div class='detail-value'>{$margin} {$currencyLabel}</div>
+		</div>
+		<div class='row'>
+			<div class='detail-label'>Fee rebate</div>
+			<div class='detail-value'></div>
+		</div>
 	</div>
 
 	<div class='split-row'>

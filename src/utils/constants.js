@@ -24,12 +24,12 @@ export const CURRENCY_LOGOS = {
 
 export const ABIS = {
 	router: [
-		"function tradingContract() view returns(address)",
-		"function capStakingContract() view returns(address)",
+		"function trading() view returns(address)",
+		"function capPool() view returns(address)",
 
-		"function getPoolContract(address currency) view returns(address)",
-		"function getPoolRewardsContract(address currency) view returns(address)",
-		"function getCapRewardsContract(address currency) view returns(address)"
+		"function getPool(address currency) view returns(address)",
+		"function getPoolRewards(address currency) view returns(address)",
+		"function getCapRewards(address currency) view returns(address)"
 	],
 	trading: [
 		"function getProduct(uint256 productId) view returns(tuple(address feed, uint32 maxLeverage, uint16 oracleMaxDeviation, uint16 liquidationThreshold, uint16 fee, uint16 interest))",
@@ -44,22 +44,15 @@ export const ABIS = {
 		"event OpenOrder(uint256 indexed positionId, address indexed user, uint256 indexed productId)",
 		"event NewPosition(uint256 indexed positionId, address indexed user, uint256 indexed productId, address currency, bool isLong, uint256 price, uint256 margin, uint256 leverage, uint256 fee)",
 		"event AddMargin(uint256 indexed positionId, address indexed user, uint256 margin, uint256 newMargin, uint256 newLeverage)",
-		"event ClosePosition(uint256 positionId, address indexed user, uint256 indexed productId, bool indexed isFullClose, bool isLong, uint256 price, uint256 entryPrice, uint256 margin, uint256 leverage, uint256 pnl, bool pnlIsNegative, bool wasLiquidated)"
+		"event ClosePosition(uint256 positionId, address indexed user, uint256 indexed productId, uint256 price, uint256 margin, uint256 fee, uint256 pnl, bool pnlIsNegative, bool wasLiquidated)"
 
 	],
 	pool: [
-		"function getStakedBalance(address account) view returns(uint256)",
-		"function clpSupply() view returns(uint256)",
-
-		"function mintAndStakeCLP(uint256 amount) payable returns(uint256)",
-		"function unstakeAndBurnCLP(uint256 amount) returns(uint256)"
-	],
-	capStaking: [
-		"function getStakedBalance(address account) view returns(uint256)",
+		"function getBalance(address account) view returns(uint256)",
 		"function totalSupply() view returns(uint256)",
 
-		"function stake(uint256 amount)",
-		"function unstake(uint256 amount)"
+		"function deposit(uint256 amount)",
+		"function withdraw(uint256 amount)"
 	],
 	rewards: [
 		"function getClaimableReward() view returns(uint256)",
@@ -80,13 +73,13 @@ export const ABIS = {
 export const CHAINDATA = {
 	31337: {
 		label: 'localhost',
-		router: '0xC070A317F23E9A4e982e356485416251dd3Ed944',
+		router: '0x1D3b68fBD686e06Fbda1cb6cAF0C8DA558FCC3A0',
 		explorer: 'http://localhost:8545',
 		currencies: {
-			weth: '0x1F585372F116E1055AF2bED81a808DDf9638dCCD',
-			usdc: '0x39826E09f8efb9df4C56Aeb9eEC0D2B8164d3B36'
+			weth: '0xdBf466C5AbFc43bc9a6AC923fddB7ad2be209df0',
+			usdc: '0x74FeFc9b47aAea34240D8e015D7eA4201F00cFA4'
 		},
-		cap: '0xACB5b53F9F193b99bcd8EF8544ddF4c398DE24a3'
+		cap: '0x58ea05b958f7997Dd186C71579B40Aa8456c770b'
 	},
 	42161: {
 		label: 'Arbitrum',

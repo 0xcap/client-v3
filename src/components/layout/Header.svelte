@@ -12,8 +12,7 @@
 	<nav>
 		<a href='/'>Home</a> | 
 		<a href='#/trade'>Trade</a> | 
-		<a href='#/pool'>Pool</a> | 
-		<a href='#/stake'>Stake</a>
+		<a href='#/pool'>Pool</a>
 	</nav>
 	<Wallet />
 </header>

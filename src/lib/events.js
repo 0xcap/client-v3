@@ -28,6 +28,7 @@ function handleEvent() {
 	}
 
 	if (ev.event == 'ClosePosition') {
+		// From listener only - oracle triggered
 		getUserPositions();
 		getUserHistory();
 	}

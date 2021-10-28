@@ -11,10 +11,12 @@
 
 	.trading-row {
 		display: flex;
+		justify-content: space-between;
 	}
 
 	.chart {
 		flex: 1 1 auto;
+		padding-left: 20px;
 	}
 
 	.order {
@@ -26,11 +28,11 @@
 <div class='trade'>
 
 	<div class='trading-row' id='trading-row'>
-		<div class='chart'>
-			<Chart/>
-		</div>
 		<div class='order'>
 			<Order />
+		</div>
+		<div class='chart'>
+			<Chart/>
 		</div>
 	</div>
 

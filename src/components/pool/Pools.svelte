@@ -10,7 +10,7 @@
 	import { allowances } from '../../stores/wallet'
 
 	async function _approveCurrency(_currencyLabel) {
-		const result = await approveCurrency(_currencyLabel, _currencyLabel == 'cap' ? 'capStaking' : 'pool' + _currencyLabel);
+		const result = await approveCurrency(_currencyLabel, _currencyLabel == 'cap' ? 'capPool' : 'pool' + _currencyLabel);
 	}
 
 	$: console.log('$allowances', $allowances);
@@ -20,7 +20,7 @@
 		for (const _currencyLabel in _pools) {
 			await getAllowance(_currencyLabel, 'pool' + _currencyLabel);
 		}
-		await getAllowance('cap', 'capStaking');
+		await getAllowance('cap', 'capPool');
 	}
 
 	$: getAllowances($pools);
@@ -116,7 +116,7 @@
     			<div class='label'>My Share</div>
     			<div class='value'>{$staking.stakedBalance}</div>
     			<div class='tools'>
-    				{#if $allowances['cap'] && $allowances['cap']['capStaking'] * 1 == 0}
+    				{#if $allowances['cap'] && $allowances['cap']['capPool'] * 1 == 0}
     					<a on:click={() => {_approveCurrency('cap')}}>Approve</a>
     				{:else}
     					<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: 'cap'})}}>Deposit</a> | <a data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: _currencyLabel})}}>Withdraw</a>

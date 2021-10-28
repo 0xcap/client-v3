@@ -64,17 +64,20 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 	let abiName = contractName;
 
 	if (contractName.toLowerCase().includes('poolrewards')) {
-		address = await router.getPoolRewardsContract(currency);
+		address = await router.getPoolRewards(currency);
 		abiName = 'rewards';
 	} else if (contractName.toLowerCase().includes('caprewards')) {
-		address = await router.getCapRewardsContract(currency);
+		address = await router.getCapRewards(currency);
 		abiName = 'rewards';
+	} else if (contractName == 'capPool') {
+		address = await router[contractName]();
+		abiName = 'pool';
 	} else if (contractName.toLowerCase().includes('pool')) {
-		address = await router.getPoolContract(currency);
+		address = await router.getPool(currency);
 		console.log('address__', currency, _currencyLabel, address);
 		abiName = 'pool';
 	} else {
-		address = await router[contractName + 'Contract']();
+		address = await router[contractName]();
 	}
 		
 	console.log('contract address', address);
