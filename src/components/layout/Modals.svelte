@@ -15,8 +15,14 @@
 	
 </script>
 
-<Connect isActive={$activeModal && $activeModal.name == 'Connect'} />
-<Products isActive={$activeModal && $activeModal.name == 'Products'} />
+{#if $activeModal && $activeModal.name == 'Connect'}
+<Connect />
+{/if}
+
+{#if $activeModal && $activeModal.name == 'Products'}
+<Products />
+{/if}
+
 <TradeDetails isActive={$activeModal && $activeModal.name == 'TradeDetails'}  data={$activeModal.data} />
 
 {#if $activeModal && $activeModal.name == 'Leverage'}

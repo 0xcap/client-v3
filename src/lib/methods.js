@@ -5,7 +5,7 @@ import { monitorTx } from './monitor'
 
 import { getContract } from './contracts'
 import { loadCandles, loadPositionLines, applyWatermark } from './chart'
-import { formatUnits, formatProduct, parseUnits, getChainData, hideModal, showToast } from './utils'
+import { formatUnits, formatProduct, formatPositions, parseUnits, getChainData, hideModal, showToast } from './utils'
 
 
 import * as Stores from './stores'
@@ -172,7 +172,6 @@ export async function deposit(currencyLabel, amount) {
 	const contract = await getContract('pool', true, currencyLabel);
 	if (!contract) return;
 
-	console.log('stakeInPool', currencyLabel, amount, contract.address);
 	let tx;
 
 	if (currencyLabel == 'weth') {

@@ -36,8 +36,6 @@ export async function connectMetamask(resume) {
 
 	provider.set(_provider);
 
-	console.log('accounts', accounts);
-
 	if (accounts.length) handleAccountsChanged();
 	metamask.on('accountsChanged', handleAccountsChanged);
 

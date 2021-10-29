@@ -78,8 +78,6 @@ export function initChart() {
 
 		chart.timeScale().subscribeVisibleLogicalRangeChange(onVisibleLogicalRangeChanged);
 
-		console.log('chart loaded');
-
 		loadPositionLines();
 
 		applyWatermark();
@@ -117,16 +115,16 @@ export async function setResolution(_resolution) {
 
 export async function loadCandles(_resolution, _start, _end, prepend) {
 
-	console.log('called loadCandles', _resolution, _start, _end, prepend);
+	//console.log('called loadCandles', _resolution, _start, _end, prepend);
 
 	let _product = get(product).symbol;
 
-	console.log('candlestickSeries', candlestickSeries);
-	console.log('_product', _product);
+	//console.log('candlestickSeries', candlestickSeries);
+	//console.log('_product', _product);
 
 	if (!candlestickSeries || !_product) {
 		// try again
-		console.log('nope');
+		console.log('attempting chart again...');
 		setTimeout(() => {
 			loadCandles(_resolution, _start, _end);
 		}, 1000);
@@ -138,7 +136,7 @@ export async function loadCandles(_resolution, _start, _end, prepend) {
 	}
 
 	//console.log('_product', _product);
-	console.log('resolution', _resolution, lookbacks[_resolution]);
+	//console.log('resolution', _resolution, lookbacks[_resolution]);
 
 	if (!_start || !_end) { // test
 		_start = Date.now() - lookbacks[_resolution];
@@ -239,10 +237,10 @@ let pricelines = [];
 
 export function loadPositionLines() {
 
-	console.log('loadPositionLines');
+	//console.log('loadPositionLines');
 
 	if (!candlestickSeries) {
-		console.log('nope2');
+		//console.log('nope2');
 		setTimeout(loadPositionLines, 1000);
 		return;
 	}
@@ -251,7 +249,7 @@ export function loadPositionLines() {
 
 	const _positions = get(positions);
 
-	console.log('_positions', _positions);
+	//console.log('_positions', _positions);
 
 	for (const _pos of _positions) {
 

@@ -32,20 +32,17 @@ export const ABIS = {
 		"function getCapRewards(address currency) view returns(address)"
 	],
 	trading: [
-		"function getProduct(uint256 productId) view returns(tuple(address feed, uint32 maxLeverage, uint16 oracleMaxDeviation, uint16 liquidationThreshold, uint16 fee, uint16 interest))",
-		"function submitNewPosition(address currency,uint256 productId,uint256 margin,uint256 leverage,bool isLong,address referrer) payable",
-		"function getUserPositions(address user) view returns(tuple(uint32 closeOrderId, uint16 productId, uint64 leverage, uint64 price, uint64 margin, address owner, uint88 timestamp, bool isLong, address currency, uint64 fee, uint32 positionId)[] _positions)",
+		"function getProduct(uint256 productId) view returns(tuple(address feed, uint256 maxLeverage, uint256 oracleMaxDeviation, uint256 liquidationThreshold, uint256 fee, uint256 interest))",
+		"function getUserPositions(address user) view returns(tuple(uint256 closeOrderId, uint256 productId, uint256 size, uint256 price, uint256 margin, bool isLong, address owner, uint256 timestamp, address currency, uint256 fee, uint256 positionId)[] _positions)",
 
+		"function submitNewPosition(address currency, uint256 productId, uint256 margin, uint256 size, bool isLong) payable",
 		"function addMargin(uint256 positionId, uint256 margin) payable",
-		"function submitCloseOrder(uint256 positionId, uint256 margin) payable",
+		"function submitCloseOrder(uint256 positionId, uint256 size) payable",
 		"function cancelPosition(uint256 positionId)",
 		"function cancelOrder(uint256 orderId)",
 
-		"event OpenOrder(uint256 indexed positionId, address indexed user, uint256 indexed productId)",
-		"event NewPosition(uint256 indexed positionId, address indexed user, uint256 indexed productId, address currency, bool isLong, uint256 price, uint256 margin, uint256 leverage, uint256 fee)",
-		"event AddMargin(uint256 indexed positionId, address indexed user, uint256 margin, uint256 newMargin, uint256 newLeverage)",
-		"event ClosePosition(uint256 positionId, address indexed user, uint256 indexed productId, uint256 price, uint256 margin, uint256 fee, uint256 pnl, bool pnlIsNegative, bool wasLiquidated)"
-
+		"event NewPosition(uint256 indexed positionId, address indexed user, uint256 indexed productId, address currency, bool isLong, uint256 price, uint256 margin, uint256 size, uint256 fee)",
+		"event ClosePosition(uint256 positionId, address indexed user, uint256 indexed productId, uint256 price, uint256 margin, uint256 size, uint256 fee, int256 pnl, bool wasLiquidated)"
 	],
 	pool: [
 		"function getBalance(address account) view returns(uint256)",

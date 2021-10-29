@@ -59,7 +59,6 @@
 	}
 
 	function setInitialLeverage(_product) {
-		console.log('_product in lev', _product);
 		if (!_product) return;
 		const cached = getCachedLeverage(_product.id);
 		if (cached) return leverage.set(cached);

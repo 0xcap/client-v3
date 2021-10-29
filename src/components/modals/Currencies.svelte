@@ -13,8 +13,6 @@
 
 	let currencies = getChainData('currencies');
 	
-	console.log('currencies', currencies);
-
 	let balances = {};
 
 	async function getBalances() {

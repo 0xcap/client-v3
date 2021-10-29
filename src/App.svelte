@@ -12,7 +12,7 @@
 	import { loadRoute, navigateTo, catchLinks, hidePopoversOnClick } from './lib/utils'
 
 	onMount(async () => {
-		loadRoute(location.hash);
+		loadRoute(location.hash, true);
 		catchLinks((path) => navigateTo(path));
 		hidePopoversOnClick();
 

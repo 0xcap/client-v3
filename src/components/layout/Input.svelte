@@ -3,8 +3,6 @@
 	export let bindValue;
 	export let isDisabled = false;
 	export let onKeyup;
-
-	console.log('bindValue', bindValue);
 </script>
 
 <style>

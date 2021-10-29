@@ -105,7 +105,6 @@ export function calculateLiquidationPrice(params) {
 // Toasts
 let timer;
 export function showToast(data, type) {
-	console.log('toast', data, type);
 	let message = parseErrorToString(data);
 	if (!type) type = 'error';
 	if (!message) return;
@@ -114,7 +113,6 @@ export function showToast(data, type) {
 	timer = setTimeout(() => {hideToast()}, 10*1000);
 }
 export function hideToast() {
-	console.log('hideToast');
 	clearTimeout(timer);
 	toast.set(null);
 }
@@ -128,8 +126,7 @@ export function hideModal() {
 }
 
 // Routing
-export function loadRoute(path) {
-	console.log('loadRoute', path);
+export function loadRoute(path, isInitial) {
 	if (!path || path == '/') {
 		component.set(Home);
 		currentPage.set('home');
@@ -140,11 +137,11 @@ export function loadRoute(path) {
 		component.set(Pool);
 		currentPage.set('pool');
 	}
-	hydrateData();
+	if (!isInitial) hydrateData();
 }
 export function navigateTo(path) {
     window.history.pushState(null, null, path);
-    loadRoute(path);
+    loadRoute(path, false);
 }
 
 // Data formatters
@@ -161,7 +158,7 @@ export function formatProduct(id, product) {
 	return {
 		productId: id,
 		symbol: PRODUCTS[id].symbol,
-		maxLeverage: product.maxLeverage,
+		maxLeverage: formatUnits(product.maxLeverage),
 		liquidationThreshold: formatUnits(product.liquidationThreshold, 2),
 		fee: formatUnits(product.fee, 4),
 		interest: formatUnits(product.fee, 2)
@@ -181,8 +178,7 @@ export function formatPositions(positions) {
 			timestamp: p.timestamp,
 			isLong: p.isLong,
 			margin: formatUnits(p.margin),
-			leverage: formatUnits(p.leverage),
-			amount: formatUnits(p.margin) * formatUnits(p.leverage),
+			size: formatUnits(p.size),
 			price: formatUnits(p.price),
 			productId: p.productId,
 			closeOrderId: p.closeOrderId,
@@ -209,8 +205,7 @@ export function formatTrades(trades) {
 			price: formatUnits(t.closePrice || t.price),
 			entryPrice: formatUnits(t.entryPrice),
 			margin: formatUnits(t.margin),
-			leverage: formatUnits(t.leverage),
-			amount: formatUnits(t.margin) * formatUnits(t.leverage),
+			size: formatUnits(t.size),
 			timestamp: t.timestamp,
 			isLong: t.isLong,
 			pnl: formatUnits(t.pnl),

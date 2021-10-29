@@ -25,7 +25,7 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 	const _chainId = get(Stores.chainId);
 	const _provider = get(Stores.provider);
 
-	console.log('_chainId', _chainId, _provider);
+	//console.log('_chainId', _chainId, _provider);
 
 	if (!_chainId || !_provider) return;
 
@@ -74,19 +74,18 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 		abiName = 'pool';
 	} else if (contractName.toLowerCase().includes('pool')) {
 		address = await router.getPool(currency);
-		console.log('address__', currency, _currencyLabel, address);
 		abiName = 'pool';
 	} else {
 		address = await router[contractName]();
 	}
 		
-	console.log('contract address', address);
+	//console.log('contract address', address);
 	
 	const abi = ABIS[abiName];
 
 	contracts[contractName] = new ethers.Contract(address, abi, _provider);
 
-	console.log('contracts', contracts);
+	//console.log('contracts', contracts);
 
 	if (withSigner) {
 		return contracts[contractName].connect(_signer);
