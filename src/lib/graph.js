@@ -1,9 +1,8 @@
 // Subgraph interaction
 import { get } from 'svelte/store'
 
-import { formatUnits, formatTrades } from '../utils/helpers'
-import { history } from '../stores/history'
-import { address } from '../stores/wallet'
+import { formatUnits, formatTrades } from './utils'
+import { history, address } from './stores'
 
 const graph_url = 'https://api.thegraph.com/subgraphs/name/0xcap/capv3';
 

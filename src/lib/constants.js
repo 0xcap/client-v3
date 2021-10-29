@@ -49,6 +49,7 @@ export const ABIS = {
 	],
 	pool: [
 		"function getBalance(address account) view returns(uint256)",
+		"function getCurrencyBalance(address account) view returns(uint256)",
 		"function totalSupply() view returns(uint256)",
 
 		"function deposit(uint256 amount)",

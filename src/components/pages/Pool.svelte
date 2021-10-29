@@ -1,5 +1,5 @@
 <script>
-	import Pools from '../components/pool/Pools.svelte'
+	import Pools from '../Pools.svelte'
 
 </script>
 

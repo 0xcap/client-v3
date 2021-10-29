@@ -2,9 +2,9 @@
 import { get } from 'svelte/store'
 import { ethers } from 'ethers'
 
-import { provider } from '../stores/wallet'
+import { provider } from './stores'
 
-import { getUserPositions, getAllowance, getPoolInfo, getStakingInfo } from './methods'
+import { getUserPositions, getAllowance, getPoolInfo, getCapPoolInfo } from './methods'
 
 export async function monitorTx(hash, type, details) {
 
@@ -27,10 +27,10 @@ async function handleTxComplete(type, details) {
 		await getUserPositions();
 	} else if (type == 'approve') {
 		await getAllowance(details.currencyLabel, details.spenderName);
-	} else if (type == 'pool-stake' || type == 'pool-unstake' || type == 'pool-collect') {
+	} else if (type == 'pool-deposit' || type == 'pool-withdraw' || type == 'pool-collect') {
 		await getPoolInfo(details.currencyLabel);
-	} else if (type == 'cap-stake' || type == 'cap-unstake' || type == 'cap-collect') {
-		await getStakingInfo();
+	} else if (type == 'cap-deposit' || type == 'cap-withdraw' || type == 'cap-collect') {
+		await getCapPoolInfo();
 	}
 
 }

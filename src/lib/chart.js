@@ -1,8 +1,6 @@
 import { get } from 'svelte/store'
 
-import { product } from '../stores/order'
-import { positions } from '../stores/positions'
-import { chartResolution } from '../stores/ui'
+import { product, positions, chartResolution } from './stores'
 
 let candles = []; // current candle set
 

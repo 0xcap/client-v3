@@ -1,10 +1,10 @@
 import { get } from 'svelte/store'
 
-import { selectProduct, selectCurrency, getUserPositions, getPoolInfo, getStakingInfo } from './methods'
+import { selectProduct, selectCurrency, getUserPositions, getPoolInfo, getCapPoolInfo } from './methods'
 import { getUserHistory } from './graph'
 
 
-import { currentPage } from '../stores/router'
+import { currentPage } from './stores'
 
 // TODO: these should probably happen on mount for each component. BUT this can only happen after contracts / address are ready
 
@@ -25,7 +25,7 @@ export function hydrateData() {
 	} else if (_currentPage == 'pool') {
 		getPoolInfo('weth');
 		getPoolInfo('usdc');
-		getStakingInfo();
+		getCapPoolInfo();
 	}
 
 }

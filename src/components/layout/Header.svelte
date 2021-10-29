@@ -1,5 +1,5 @@
 <script>
-	import Wallet from '../wallet/Wallet.svelte'
+	import Wallet from '../Wallet.svelte'
 </script>
 
 <style>

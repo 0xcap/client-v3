@@ -2,7 +2,7 @@
 
 	import { onMount } from 'svelte'
 
-	import { calculateLiquidationPrice, formatToDisplay } from '../../utils/helpers'
+	import { calculateLiquidationPrice, formatToDisplay } from '../../lib/utils'
 	
 	import { addMargin } from '../../lib/methods'
 	

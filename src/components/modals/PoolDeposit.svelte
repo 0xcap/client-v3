@@ -2,9 +2,9 @@
 
 	import { onMount } from 'svelte'
 
-	import { formatToDisplay } from '../../utils/helpers'
+	import { formatToDisplay } from '../../lib/utils'
 	
-	import { stakeInPool, stakeCAP } from '../../lib/methods'
+	import { deposit, depositCAP } from '../../lib/methods'
 	
 	import Modal from './Modal.svelte'
 	import DataList from '../layout/DataList.svelte'
@@ -26,11 +26,11 @@
 		submitIsPending = true;
 		let error;
 		if (data.currencyLabel == 'cap') {
-			error = await stakeCAP(
+			error = await depositCAP(
 				amount
 			);
 		} else {
-			error = await stakeInPool(
+			error = await deposit(
 				data.currencyLabel,
 				amount
 			);

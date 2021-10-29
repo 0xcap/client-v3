@@ -4,7 +4,7 @@
 
 	import Input from './Input.svelte'
 
-	import { showModal } from '../../utils/helpers'
+	import { showModal } from '../../lib/utils'
 
 	export let data;
 	export let value = '';

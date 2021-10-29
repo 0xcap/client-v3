@@ -2,7 +2,7 @@
 
 	import { submitCloseOrder } from '../../lib/methods'
 	
-	import { formatToDisplay } from '../../utils/helpers'
+	import { formatToDisplay } from '../../lib/utils'
 
 	import Modal from './Modal.svelte'
 	

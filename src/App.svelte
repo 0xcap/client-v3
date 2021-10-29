@@ -8,10 +8,8 @@
 	import Footer from './components/layout/Footer.svelte'
 
 	import { initWebsocket } from './lib/stream'
-
-	import { component } from './stores/router'
-
-	import { loadRoute, navigateTo, catchLinks, hidePopoversOnClick } from './utils/helpers'
+	import { component } from './lib/stores'
+	import { loadRoute, navigateTo, catchLinks, hidePopoversOnClick } from './lib/utils'
 
 	onMount(async () => {
 		loadRoute(location.hash);

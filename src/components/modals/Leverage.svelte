@@ -6,11 +6,9 @@
 	
 	import DataList from '../layout/DataList.svelte'
 
-	import { calculateLiquidationPrice, setCachedLeverage, formatToDisplay, displayPricePercentChange } from '../../utils/helpers'
+	import { calculateLiquidationPrice, setCachedLeverage, formatToDisplay, displayPricePercentChange } from '../../lib/utils'
 
-	import { prices } from '../../stores/prices'
-	import { product, productId, leverage } from '../../stores/order'
-	import { address } from '../../stores/wallet'
+	import { prices, product, productId, leverage, address } from '../../lib/stores'
 
 	let maxLeverage;
 	$: maxLeverage = $product.maxLeverage * 1 || 50

@@ -2,14 +2,14 @@
 
 	import { onMount } from 'svelte'
 	
-	import Modal from '../modals/Modal.svelte'
+	import Modal from './Modal.svelte'
 
-	import { currencyLabel } from '../../stores/order'
+	import { currencyLabel } from '../../lib/stores'
 
 	import { selectCurrency, getBalanceOf } from '../../lib/methods'
 
-	import { hideModal, getChainData } from '../../utils/helpers'
-	import { CURRENCY_LOGOS } from '../../utils/constants'
+	import { hideModal, getChainData } from '../../lib/utils'
+	import { CURRENCY_LOGOS } from '../../lib/constants'
 
 	let currencies = getChainData('currencies');
 	

@@ -1,13 +1,13 @@
 // Websocket (price)
 
 import { get } from 'svelte/store'
-import { prices } from '../stores/prices'
-import { productId } from '../stores/order'
+
+import { prices, productId } from './stores'
 
 import { onNewPrice } from './chart'
 
-import { PRODUCTS_REVERSE } from '../utils/constants'
-import { setTitle, shortSymbol } from '../utils/helpers'
+import { PRODUCTS_REVERSE } from './constants'
+import { setTitle, shortSymbol } from './utils'
 
 let ws;
 let lastTimestamp = {};

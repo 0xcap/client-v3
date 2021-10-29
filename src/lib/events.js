@@ -3,7 +3,7 @@ import { get } from 'svelte/store'
 import { getContract } from './contracts'
 import { getUserPositions } from './methods'
 
-import { address } from '../stores/wallet'
+import { address } from './stores'
 
 export async function initEventListeners() {
 	const tradingContract = await getContract('trading');

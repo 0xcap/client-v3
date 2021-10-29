@@ -18,39 +18,37 @@
 - pool withdraw modal
 - nav
 - wallet, network, & disconnect
-- referrals <- do next
 - toasts
+- disconnected state
 - homepage
 - design and branding
 */
 
 	import { onMount } from 'svelte'
 
-	import Input from '../layout/Input.svelte'
-	import Button from '../layout/Button.svelte'
+	import Input from './layout/Input.svelte'
+	import Button from './layout/Button.svelte'
 
-	import { submitNewPosition, approveCurrency } from '../../lib/methods'
+	import { submitNewPosition, approveCurrency } from '../lib/methods'
 
-	import { PRODUCTS } from '../../utils/constants'
-	import { showModal, shortSymbol, getCachedLeverage, formatToDisplay } from '../../utils/helpers'
-	import { CARET_DOWN } from '../../utils/icons'
+	import { PRODUCTS } from '../lib/constants'
+	import { showModal, shortSymbol, getCachedLeverage, formatToDisplay } from '../lib/utils'
+	import { CARET_DOWN } from '../lib/icons'
 
-	import { productId, product, currencyLabel, leverage, amount, margin, isSubmittingShort, isSubmittingLong } from '../../stores/order'
-	import { prices } from '../../stores/prices'
-	import { allowances } from '../../stores/wallet'
+	import { productId, product, currencyLabel, leverage, size, margin, isSubmittingShort, isSubmittingLong, prices, allowances } from '../lib/stores'
 
 	// functions
 
 	function focusAmount() {
-		const elem = document.getElementById('amount');
+		const elem = document.getElementById('size');
 		if (elem) elem.focus();
 	}
 
 	async function _submitNewPosition(isLong) {
-		if (!$amount) return focusAmount();
+		if (!$size) return focusAmount();
 		const result = await submitNewPosition(isLong);
 		if (result) {
-			amount.set();
+			size.set();
 		} else {
 			focusAmount();
 		}
@@ -88,7 +86,7 @@
 		grid-gap: var(--base-padding);
 	}
 
-	.amount-row {
+	.size-row {
 
 	}
 
@@ -135,18 +133,18 @@
 
 	</div>
 
-	<div class='amount-row'>
+	<div class='size-row'>
 
 		<div class='label-row'>
-			<div class='label'>Amount</div>
+			<div class='label'>Trade Size</div>
 			{#if $currencyLabel == 'weth'}
-			<div class='tool'>${formatToDisplay($prices[1] * $amount, 2)}</div>
+			<div class='tool'>${formatToDisplay($prices[1] * $size, 2)}</div>
 			{/if}
 		</div>
 
 		<div class='input-wrap'>
 
-			<input id='amount' type='number' step="0.0001" bind:value={$amount} min="0" max="1000000" maxlength="10" spellcheck="false" placeholder={`0.0`} autocomplete="off" autocorrect="off" inputmode="decimal" lang="en">
+			<input id='size' type='number' step="0.0001" bind:value={$size} min="0" max="1000000" maxlength="10" spellcheck="false" placeholder={`0.0`} autocomplete="off" autocorrect="off" inputmode="decimal" lang="en">
 
 			<div class='selector selector-currency' on:click={() => {showModal('Currencies')}} data-intercept="true">
 				<span>{$currencyLabel}</span>{@html CARET_DOWN}

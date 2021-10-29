@@ -1,13 +1,10 @@
 <script>
 
-	import { staking } from '../../stores/staking'
-	import { pools } from '../../stores/pools'
+	import { pools, capPool, allowances } from '../lib/stores'
 
-	import { getAllowance, collectPoolReward, collectCAPReward, approveCurrency } from '../../lib/methods'
+	import { getAllowance, collectPoolReward, collectCAPReward, approveCurrency } from '../lib/methods'
 
-	import { showModal } from '../../utils/helpers'
-
-	import { allowances } from '../../stores/wallet'
+	import { showModal } from '../lib/utils'
 
 	async function _approveCurrency(_currencyLabel) {
 		const result = await approveCurrency(_currencyLabel, _currencyLabel == 'cap' ? 'capPool' : 'pool' + _currencyLabel);
@@ -107,14 +104,14 @@
     	<div class='info'>
     		<div class='column column-asset'>CAP</div>
     		<div class='column column-apr'>100%+</div>
-    		<div class='column column-tvl'>{$staking.stakedSupply}</div>
+    		<div class='column column-tvl'>{$capPool.stakedSupply}</div>
     	</div>
 
     	<div class='my-share'>
 
     		<div class='row'>
     			<div class='label'>My Share</div>
-    			<div class='value'>{$staking.stakedBalance}</div>
+    			<div class='value'>{$capPool.stakedBalance}</div>
     			<div class='tools'>
     				{#if $allowances['cap'] && $allowances['cap']['capPool'] * 1 == 0}
     					<a on:click={() => {_approveCurrency('cap')}}>Approve</a>
@@ -126,7 +123,7 @@
 
     		<h3>My rewards</h3>
 
-    		{#each Object.entries($staking.claimableRewards || {}) as [_currencyLabel, reward]}
+    		{#each Object.entries($capPool.claimableRewards || {}) as [_currencyLabel, reward]}
 
     			<div class='row'>
     				<div class='label'>{_currencyLabel}</div>

@@ -1,11 +1,11 @@
 <script>
 	import { onMount } from 'svelte'
 
-	import { checkMetamaskSession } from '../../lib/wallet'
+	import { checkMetamaskSession } from '../lib/wallet'
 
-	import { address, wrongNetwork } from '../../stores/wallet'
+	import { address, wrongNetwork } from '../lib/stores'
 
-	import { shortAddress, showModal } from '../../utils/helpers'
+	import { shortAddress, showModal } from '../lib/utils'
 
 	onMount(async () => {
 		await checkMetamaskSession();

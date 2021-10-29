@@ -1,6 +1,6 @@
 <script>
 
-	import { hideModal } from '../../utils/helpers'
+	import { hideModal } from '../../lib/utils'
 
 	export let title = '';
 	export let isActive;

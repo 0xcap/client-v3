@@ -2,9 +2,9 @@
 import { ethers } from 'ethers'
 import { initEventListeners } from './events'
 import { hydrateData } from './data'
-import { CHAINDATA } from '../utils/constants'
-import { showToast, hideModal } from '../utils/helpers'
-import { chainId, signer, provider, address } from '../stores/wallet'
+import { CHAINDATA } from './constants'
+import { showToast, hideModal } from './utils'
+import { chainId, signer, provider, address } from './stores'
 
 let _provider;
 let _walletConnect;

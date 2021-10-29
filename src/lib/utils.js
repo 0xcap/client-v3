@@ -5,20 +5,15 @@ import { get } from 'svelte/store'
 import { PRODUCTS, CHAINDATA } from './constants'
 
 // Pages
-import Home from '../pages/Home.svelte'
-import Trade from '../pages/Trade.svelte'
-import Pool from '../pages/Pool.svelte'
-import Refer from '../pages/Refer.svelte'
+import Home from '../components/pages/Home.svelte'
+import Trade from '../components/pages/Trade.svelte'
+import Pool from '../components/pages/Pool.svelte'
 
-import { hydrateData } from '../lib/data'
-
-import { getProduct } from '../lib/methods'
-
+import { hydrateData } from './data'
+import { getProduct } from './methods'
 import { parseErrorToString } from './errors'
 
-import { component, currentPage } from '../stores/router'
-import { activeModal, toast } from '../stores/ui'
-import { chainId } from '../stores/wallet'
+import { component, currentPage, activeModal, toast, chainId } from './stores'
 
 // Price title
 export function setTitle(product, price) {
@@ -154,13 +149,13 @@ export function navigateTo(path) {
 
 // Data formatters
 export function formatUnits(number, units) {
-  return ethers.utils.formatUnits(number || 0, units || 8);
+  return ethers.utils.formatUnits(number || 0, units || 18);
 }
 export function parseUnits(number, units) {
   if (typeof(number) == 'number') {
   	number = "" + number;
   }
-  return ethers.utils.parseUnits(number, units || 8);
+  return ethers.utils.parseUnits(number, units || 18);
 }
 export function formatProduct(id, product) {
 	return {

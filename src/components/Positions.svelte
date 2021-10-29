@@ -1,12 +1,10 @@
 <script>
 
-	import { positions } from '../../stores/positions'
-	import { prices } from '../../stores/prices'
+	import { positions, prices } from '../lib/stores'
 
-	import { CANCEL_ICON } from '../../utils/icons'
+	import { CANCEL_ICON } from '../lib/icons'
 
-
-	import { formatPnl, showModal, getUPL } from '../../utils/helpers'
+	import { formatPnl, showModal, getUPL } from '../lib/utils'
 
 	let upls = {};
 	let upls_percent = {};

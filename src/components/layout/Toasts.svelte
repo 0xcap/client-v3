@@ -1,7 +1,7 @@
 <script>
-	import { toast } from '../../stores/ui'
-	import { hideToast } from '../../utils/helpers'
-	import { CANCEL_ICON } from '../../utils/icons'
+	import { toast } from '../../lib/stores'
+	import { hideToast } from '../../lib/utils'
+	import { CANCEL_ICON } from '../../lib/icons'
 </script>
 
 <style>

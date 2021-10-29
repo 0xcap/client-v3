@@ -2,9 +2,9 @@
 
 	import { onMount } from 'svelte'
 
-	import { formatToDisplay } from '../../utils/helpers'
+	import { formatToDisplay } from '../../lib/utils'
 	
-	import { unstakeFromPool, unstakeCAP } from '../../lib/methods'
+	import { withdraw, withdrawCAP } from '../../lib/methods'
 	
 	import Modal from './Modal.svelte'
 	import DataList from '../layout/DataList.svelte'
@@ -26,11 +26,11 @@
 		submitIsPending = true;
 		let error;
 		if (data.currencyLabel == 'cap') {
-			error = await unstakeCAP(
+			error = await withdrawCAP(
 				amount
 			);
 		} else {
-			error = await unstakeFromPool(
+			error = await withdraw(
 				data.currencyLabel,
 				amount
 			);

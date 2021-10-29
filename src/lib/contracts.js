@@ -1,15 +1,15 @@
 // Connects to contracts deduced from router, initializes with ethers js
 import { get } from 'svelte/store'
 import { ethers } from 'ethers'
-import { chainId, provider, signer, wrongNetwork } from '../stores/wallet'
-import { CHAINDATA, ABIS } from '../utils/constants'
+import { CHAINDATA, ABIS } from './constants'
+import * as Stores from './stores'
 
 let router;
 let contracts = {};
 
 export async function getContract(contractName, withSigner, _currencyLabel) {
 
-	const _signer = get(signer);
+	const _signer = get(Stores.signer);
 
 	if (_currencyLabel) {
 		contractName += _currencyLabel;
@@ -22,19 +22,19 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 		return contracts[contractName];
 	}
 
-	const _chainId = get(chainId);
-	const _provider = get(provider);
+	const _chainId = get(Stores.chainId);
+	const _provider = get(Stores.provider);
 
 	console.log('_chainId', _chainId, _provider);
 
 	if (!_chainId || !_provider) return;
 
 	if (!CHAINDATA[_chainId]) {
-		wrongNetwork.set(true);
+		Stores.wrongNetwork.set(true);
 		return;
 	}
 	
-	wrongNetwork.set(false);
+	Stores.wrongNetwork.set(false);
 
 	if (!router) {
 		const routerAddress = CHAINDATA[_chainId].router;

@@ -3,8 +3,8 @@
 	import Modal from './Modal.svelte'
 	import DataList from '../layout/DataList.svelte'
 
-	import { EXTERNAL_ICON } from '../../utils/icons'
-	import { txLink, formatToDisplay, formatPnl } from '../../utils/helpers'
+	import { EXTERNAL_ICON } from '../../lib/icons'
+	import { txLink, formatToDisplay, formatPnl } from '../../lib/utils'
 
 	export let data;
 	export let isActive;

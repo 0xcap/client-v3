@@ -5,10 +5,10 @@
 	import Modal from './Modal.svelte'
 	import DataList from '../layout/DataList.svelte'
 
-	import { getUPL, getInterest, calculateLiquidationPrice, formatToDisplay, formatPnl } from '../../utils/helpers'
+	import { getUPL, getInterest, calculateLiquidationPrice, formatToDisplay, formatPnl } from '../../lib/utils'
 	import { cancelPosition, cancelOrder } from '../../lib/methods'
 
-	import { prices } from '../../stores/prices'
+	import { prices } from '../../lib/stores'
 
 	export let data;
 

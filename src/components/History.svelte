@@ -1,6 +1,6 @@
 <script>
 
-	import { history } from '../../stores/history'
+	import { history } from '../lib/stores'
 
 </script>
 

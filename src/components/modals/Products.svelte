@@ -1,13 +1,13 @@
 <script>
 	
-	import Modal from '../modals/Modal.svelte'
+	import Modal from './Modal.svelte'
 
-	import { productId } from '../../stores/order'
+	import { productId } from '../../lib/stores'
 
 	import { selectProduct } from '../../lib/methods'
 
-	import { hideModal, shortSymbol } from '../../utils/helpers'
-	import { PRODUCTS } from '../../utils/constants'
+	import { hideModal, shortSymbol } from '../../lib/utils'
+	import { PRODUCTS } from '../../lib/constants'
 
 	export let isActive;
 	

@@ -2,9 +2,9 @@
 
 	import { onMount } from 'svelte'
 
-	import { initChart, setResolution } from '../../lib/chart'
+	import { initChart, setResolution } from '../lib/chart'
 
-	import { chartResolution } from '../../stores/ui'
+	import { chartResolution } from '../lib/stores'
 
 	onMount(() => {
 		initChart();

@@ -5,225 +5,96 @@ import { monitorTx } from './monitor'
 
 import { getContract } from './contracts'
 import { loadCandles, loadPositionLines, applyWatermark } from './chart'
-import { ADDRESS_ZERO } from '../utils/constants'
-import { formatProduct, getChainData, parseUnits, formatUnits, formatPositions, hideModal, showToast } from '../utils/helpers'
+import { formatUnits, formatProduct, parseUnits, getChainData, hideModal, showToast } from './utils'
 
-import { productId, product, currencyLabel, currency, amount, leverage, isSubmittingLong, isSubmittingShort } from '../stores/order'
-import { pools } from '../stores/pools'
-import { positions } from '../stores/positions'
-import { staking } from '../stores/staking'
-import { address, allowances, provider } from '../stores/wallet'
 
-let product_cache = {};
+import * as Stores from './stores'
 
-export async function getProduct(_productId) {
-	if (product_cache[_productId]) return product_cache[_productId];
+let productCache = {};
+
+export async function getProduct(productId) {
+	
+	if (productCache[productId]) return productCache[productId];
+	
 	const contract = await getContract('trading');
-	console.log('contract product', contract);
 	if (!contract) return {};
-	product_cache[_productId] = formatProduct(_productId, await contract.getProduct(_productId));
-	return product_cache[_productId];
+
+	productCache[productId] = formatProduct(productId, await contract.getProduct(productId));
+	
+	return productCache[productId];
+
 }
 
-export async function selectProduct(_productId) {
-	console.log('selectProduct', _productId);
-	if (!_productId) _productId = get(productId);
-	console.log('selectProduct2', _productId);
+export async function selectProduct(productId) {
+	
+	if (!productId) productId = get(Stores.productId);
 
-	const _product = await getProduct(_productId);
-	console.log('GOT product', _product);
-	product.set(_product);
-	localStorage.setItem('productId', _productId);
-	productId.set(_productId);
-	// TODO: set leverage in local storage
+	const product = await getProduct(productId);
 
-	loadCandles(); // chart
+	Stores.product.set(product);
+	Stores.productId.set(productId);
+	localStorage.setItem('productId', productId);
+
+	// Chart
+	loadCandles();
 	applyWatermark();
+
 }
 
-export async function selectCurrency(_currencyLabel) {
-	if (!_currencyLabel) _currencyLabel = get(currencyLabel);
-	console.log('selectCurrency', _currencyLabel);
+export async function selectCurrency(currencyLabel) {
+	
+	if (!currencyLabel) currencyLabel = get(Stores.currencyLabel);
+
 	const currencies = getChainData('currencies');
-	console.log('c', currencies);
 	if (!currencies) return;
-	const _currency = currencies[_currencyLabel];
-	localStorage.setItem('currencyLabel', _currencyLabel);
-	currency.set(_currency);
-	currencyLabel.set(_currencyLabel);
-	console.log('__currency', _currency);
-	await getAllowance(_currencyLabel, 'trading');
+
+	const currency = currencies[currencyLabel];
+
+	Stores.currency.set(currency);
+	Stores.currencyLabel.set(currencyLabel);
+	localStorage.setItem('currencyLabel', currencyLabel);
+
+	await getAllowance(currencyLabel, 'trading');
+
 }
 
-export async function getAllowance(_currencyLabel, spenderName) {
-	if (_currencyLabel == 'weth') {
-		allowances.update((x) => {
-			if (!x[_currencyLabel]) x[_currencyLabel] = {};
-			x[_currencyLabel][spenderName] = parseUnits(10 * 10**9, 18);
+export async function getAllowance(currencyLabel, spenderName) {
+	
+	if (!currencyLabel) currencyLabel = get(Stores.currencyLabel);
+
+	if (currencyLabel == 'weth') {
+		Stores.allowances.update((x) => {
+			if (!x[currencyLabel]) x[currencyLabel] = {};
+			x[currencyLabel][spenderName] = parseUnits(10**10, 18);
 			return x;
 		});
 		return;
 	}
-	if (!_currencyLabel) _currencyLabel = get(currencyLabel);
-	const _address = get(address);
-	console.log('_address', _address);
-	if (!_address) return;
-	const contract = await getContract(_currencyLabel);
-	console.log('cc', contract);
+
+	const address = get(Stores.address);
+	if (!address) return;
+
+	const contract = await getContract(currencyLabel);
 	if (!contract) return;
+
 	const spenderContract = await getContract(spenderName);
 	if (!spenderContract) return;
-	const allowance = formatUnits(await contract.allowance(_address, spenderContract.address));
 
-	console.log('allowance', allowance);
+	const allowance = formatUnits(await contract.allowance(address, spenderContract.address));
 
-	allowances.update((x) => {
-		if (!x[_currencyLabel]) x[_currencyLabel] = {};
-		x[_currencyLabel][spenderName] = allowance;
+	Stores.allowances.update((x) => {
+		if (!x[currencyLabel]) x[currencyLabel] = {};
+		x[currencyLabel][spenderName] = allowance;
 		return x;
 	});
 
 }
 
-export async function getBalanceOf(_currencyLabel, _address, forceWETH) {
-	if (!_currencyLabel) _currencyLabel = get(currencyLabel);
-	if (!_address) {
-		_address = get(address);
-		if (!_address) return;
-	}
+// ERC20
 
-	console.log('_currencyLabel', _currencyLabel);
-
-	let balance;
-	if (_currencyLabel == 'weth' && !forceWETH) {
-		// get ETH balance
-		balance = await get(provider).getBalance(_address);
-	} else {
-		const contract = await getContract(_currencyLabel);
-		if (!contract) return;
-		balance = await contract.balanceOf(_address);
-	}
+export async function approveCurrency(currencyLabel, spenderName) {
 	
-	return formatUnits(balance, 18);
-}
-
-// Pool
-
-export async function getPoolStakedBalance(_currencyLabel) {
-	const _address = get(address);
-	if (!_address) return;
-	const contract = await getContract('pool', false, _currencyLabel);
-	if (!contract) return;
-	return formatUnits(await contract.getBalance(_address), 18);
-}
-
-export async function getPoolClpSupply(_currencyLabel) {
-	const contract = await getContract('pool', false, _currencyLabel);
-	if (!contract) return;
-	return formatUnits(await contract.totalSupply(), 18);
-}
-
-export async function getPoolInfo(_currencyLabel) {
-	// combination of above, set in store
-	const contract = await getContract('pool', false, _currencyLabel);
-	if (!contract) return;
-
-	const poolBalance = await getBalanceOf(_currencyLabel, contract.address, true);
-	const clpSupply = await getPoolClpSupply(_currencyLabel);
-	const stakedBalance = await getPoolStakedBalance(_currencyLabel);
-
-	console.log('WETH POOL', poolBalance, clpSupply, stakedBalance);
-	
-	const info = {
-		tvl: poolBalance,
-		clpSupply,
-		stakedBalance,
-		userShare: stakedBalance * poolBalance / clpSupply, // ETH or USDC owed to user
-		claimableReward: await getClaimableReward(_currencyLabel)
-	};
-
-	pools.update((x) => {
-		x[_currencyLabel] = info;
-		return x;
-	});
-
-}
-
-// Staking
-
-export async function getCapStakedBalance() {
-	const _address = get(address);
-	if (!_address) return;
-	const contract = await getContract('capPool');
-	if (!contract) return;
-	return formatUnits(await contract.getBalance(_address), 18);
-}
-
-export async function getCapStakedSupply() {
-	const contract = await getContract('capPool');
-	console.log('CAP pool address', contract.address);
-	if (!contract) return;
-	return formatUnits(await contract.totalSupply(), 18);
-}
-
-export async function getStakingInfo() {
-	// combination of above, set in store
-
-	console.log('getStakingInfo');
-	
-	const currencies = getChainData('currencies');
-	console.log('c', currencies);
-	if (!currencies) return;
-
-	let claimableRewards = {};
-	for (const _currencyLabel in currencies) {
-		claimableRewards[_currencyLabel] = await getClaimableReward(_currencyLabel, true);
-	}
-	const info = {
-		stakedSupply: await getCapStakedSupply(),
-		stakedBalance: await getCapStakedBalance(),
-		claimableRewards
-	};
-
-	staking.set(info);
-
-}
-
-// Rewards
-
-export async function getClaimableReward(_currencyLabel, forCAP) {
-	let contractName;
-	if (forCAP) {
-		contractName = 'caprewards';
-	} else {
-		contractName = 'poolrewards';
-	}
-	const contract = await getContract(contractName, false, _currencyLabel);
-	if (!contract) return;
-	return formatUnits(await contract.getClaimableReward(), 18);
-}
-
-// Positions
-
-
-export async function getUserPositions() {
-	console.log('getUserPositions');
-	const contract = await getContract('trading');
-	if (!contract) return;
-	const _address = get(address);
-	if (!_address) return;
-	const _positions = formatPositions(await contract.getUserPositions(_address));
-	console.log('p', _positions);
-	positions.set(_positions);
-
-	loadPositionLines();
-}
-
-// Setters
-
-export async function approveCurrency(_currencyLabel, spenderName) {
-	
-	const contract = await getContract(_currencyLabel, true);
+	const contract = await getContract(currencyLabel, true);
 	if (!contract) return;
 
 	const spenderContract = await getContract(spenderName);
@@ -233,24 +104,232 @@ export async function approveCurrency(_currencyLabel, spenderName) {
 
 	const tx = await contract.approve(spenderAddress, parseUnits(10 * 10**9, 18));
 
-	monitorTx(tx.hash, 'approve', {currencyLabel: _currencyLabel, spenderName});
+	monitorTx(tx.hash, 'approve', {currencyLabel, spenderName});
 
 }
+
+export async function getBalanceOf(currencyLabel, address, forceWETH) {
+	
+	if (!currencyLabel) currencyLabel = get(Stores.currencyLabel);
+	
+	if (!address) {
+		address = get(Stores.address);
+		if (!address) return;
+	}
+
+	let balance;
+	if (currencyLabel == 'weth' && !forceWETH) {
+		// get ETH balance
+		balance = await get(provider).getBalance(address);
+	} else {
+		const contract = await getContract(currencyLabel);
+		if (!contract) return;
+		balance = await contract.balanceOf(address);
+	}
+	
+	return formatUnits(balance);
+
+}
+
+// Pool
+
+export async function getUserPoolBalance(currencyLabel) {
+	
+	const address = get(Stores.address);
+	if (!address) return 0;
+
+	const contract = await getContract('pool', false, currencyLabel);
+	if (!contract) return 0;
+
+	return formatUnits(await contract.getCurrencyBalance(address));
+
+}
+
+export async function getPoolInfo(currencyLabel) {
+
+	const contract = await getContract('pool', false, currencyLabel);
+	if (!contract) return {};
+
+	const poolBalance = await getBalanceOf(currencyLabel, contract.address, true);
+	const userBalance = await getUserPoolBalance(currencyLabel);
+	const claimableReward = await getClaimableReward(currencyLabel);
+
+	const info = {
+		tvl: poolBalance,
+		userBalance,
+		claimableReward
+	};
+
+	Stores.pools.update((x) => {
+		x[_currencyLabel] = info;
+		return x;
+	});
+
+}
+
+export async function deposit(currencyLabel, amount) {
+	
+	const contract = await getContract('pool', true, currencyLabel);
+	if (!contract) return;
+
+	console.log('stakeInPool', currencyLabel, amount, contract.address);
+	let tx;
+
+	if (currencyLabel == 'weth') {
+		tx = await contract.deposit(amount, {value: parseUnits(amount)});
+	} else {
+		tx = await contract.deposit(parseUnits(amount));
+	}
+
+	monitorTx(tx.hash, 'pool-deposit', {currencyLabel});
+
+}
+
+export async function withdraw(currencyLabel, amount) {
+	
+	const contract = await getContract('pool', true, currencyLabel);
+	if (!contract) return;
+
+	let tx = await contract.withdraw(parseUnits(amount));
+
+	monitorTx(tx.hash, 'pool-withdraw', {currencyLabel});
+
+}
+
+export async function collectPoolReward(currencyLabel) {
+	
+	const contract = await getContract('poolrewards', true, currencyLabel);
+	if (!contract) return;
+
+	let tx = await contract.collectReward();
+
+	monitorTx(tx.hash, 'pool-collect', {currencyLabel});
+
+}
+
+// Cap Pool
+
+export async function getUserCapBalance() {
+
+	const address = get(Stores.address);
+	if (!address) return;
+
+	const contract = await getContract('capPool');
+	if (!contract) return;
+
+	return formatUnits(await contract.getBalance(address));
+
+}
+
+export async function getCapSupply() {
+
+	const contract = await getContract('capPool');
+	if (!contract) return;
+	
+	return formatUnits(await contract.totalSupply());
+
+}
+
+export async function getCapPoolInfo() {
+	
+	const currencies = getChainData('currencies');
+	if (!currencies) return;
+
+	let claimableRewards = {};
+	for (const currencyLabel in currencies) {
+		claimableRewards[currencyLabel] = await getClaimableReward(currencyLabel, true);
+	}
+
+	const info = {
+		supply: await getCapSupply(),
+		userBalance: await getUserCapBalance(),
+		claimableRewards
+	};
+
+	Stores.capPool.set(info);
+
+}
+
+export async function depositCAP(amount) {
+	
+	const contract = await getContract('capPool', true);
+	if (!contract) return;
+
+	let tx = await contract.stake(parseUnits(amount));
+
+	monitorTx(tx.hash, 'cap-deposit');
+
+}
+
+export async function withdrawCAP(amount) {
+	
+	const contract = await getContract('capPool', true);
+	if (!contract) return;
+
+	let tx = await contract.withdraw(parseUnits(amount));
+
+	monitorTx(tx.hash, 'cap-withdraw');
+
+}
+
+export async function collectCAPReward(currencyLabel) {
+	
+	const contract = await getContract('caprewards', true, currencyLabel);
+	if (!contract) return;
+
+	let tx = await contract.collectReward();
+
+	monitorTx(tx.hash, 'cap-collect', {currencyLabel});
+
+}
+
+// Rewards
+
+export async function getClaimableReward(currencyLabel, forCAP) {
+	
+	const contractName = forCAP ? 'caprewards' : 'poolrewards';
+	const contract = await getContract(contractName, false, currencyLabel);
+	if (!contract) return;
+
+	return formatUnits(await contract.getClaimableReward());
+
+}
+
+// Positions
+
+export async function getUserPositions() {
+
+	const contract = await getContract('trading');
+	if (!contract) return;
+	
+	const address = get(Stores.address);
+	if (!address) return;
+	
+	const positions = formatPositions(await contract.getUserPositions(address));
+
+	Stores.positions.set(positions);
+
+	// Chart
+	loadPositionLines();
+
+}
+
+// TODO: error handling
 
 export async function submitNewPosition(isLong) {
 
 	const contract = await getContract('trading', true);
 	if (!contract) return;
 
-	const _currencyLabel = get(currencyLabel);
-	const _currency = get(currency);
-	const _productId = get(productId);
-	const _amount = get(amount);
-	const _leverage = get(leverage);
+	const currencyLabel = get(Stores.currencyLabel);
+	const currency = get(Stores.currency);
+	const productId = get(Stores.productId);
+	const size = get(Stores.size);
+	const leverage = get(Stores.leverage);
 
-	if (!_amount || !_leverage) return;
+	if (!size || !leverage) return;
 
-	let margin = _amount / _leverage;
+	let margin = size / leverage;
 
 	if (isLong) {
 		isSubmittingLong.set(true);
@@ -260,63 +339,65 @@ export async function submitNewPosition(isLong) {
 
 	let tx;
 
-	if (_currencyLabel == 'weth') {
+	if (currencyLabel == 'weth') {
 
 		// Add fee to margin
-		const _product = get(product);
-		const fee = _product.fee * 1;
-		margin += _amount * fee / 100;
+		const product = get(Stores.product);
+		const fee = product.fee * 1;
+		margin += size * fee / 100;
 
 		tx = await contract.submitNewPosition(
-			_currency,
-			_productId,
+			currency,
+			productId,
 			0,
-			parseUnits(_leverage),
+			parseUnits(size),
 			isLong,
-			ADDRESS_ZERO, // referrer
-			{value: parseUnits(margin, 18)}
+			{value: parseUnits(margin)}
 		);
+
 	} else {
+
 		// ERC20, should be pre-approved
 		tx = await contract.submitNewPosition(
-			_currency,
-			_productId,
+			currency,
+			productId,
 			parseUnits(margin),
-			parseUnits(_leverage),
-			isLong,
-			ADDRESS_ZERO // referrer
+			parseUnits(size),
+			isLong
 		);
+
 	}
 
 	isSubmittingLong.set(false);
 	isSubmittingShort.set(false);
+
 	monitorTx(tx.hash, 'submit-new-position');
 
 }
 
-export async function submitCloseOrder(positionId, _productId, _margin, _leverage, _currencyLabel) {
+export async function submitCloseOrder(positionId, productId, size, currencyLabel) {
 
 	const contract = await getContract('trading', true);
 	if (!contract) return;
 
 	let tx;
 
-	if (_currencyLabel == 'weth') {
+	if (currencyLabel == 'weth') {
 
-		const _product = await getProduct(_productId);
-		const fee = _margin * _leverage * _product.fee * 1.01;
+		const product = await getProduct(productId);
+		const fee = size * product.fee * 1.003;
 
 		tx = await contract.submitCloseOrder(
 			positionId,
-			parseUnits(_margin),
-			{value: parseUnits(fee, 18)}
+			parseUnits(size),
+			{value: parseUnits(fee)}
 		);
 
 	} else {
 
 		tx = await contract.submitCloseOrder(
 			positionId,
-			parseUnits(_margin)
+			parseUnits(size)
 		);
 
 	}
@@ -326,21 +407,29 @@ export async function submitCloseOrder(positionId, _productId, _margin, _leverag
 }
 
 export async function cancelPosition(positionId) {
+
 	const contract = await getContract('trading', true);
 	if (!contract) return;
 
 	try {
+
 		const tx = await contract.cancelPosition(positionId);
+		
 		monitorTx(tx.hash, 'cancel-position');
 		hideModal();
+
 	} catch(e) {
+		
 		showToast(e);
 		return e;
+
 	}
+
 }
 
-export async function addMargin(positionId, margin, _productId, _currencyLabel) {
-	const product = await getProduct(_productId);
+export async function addMargin(positionId, margin, productId, currencyLabel) {
+	
+	const product = await getProduct(productId);
 
 	const contract = await getContract('trading', true);
 	if (!contract) return;
@@ -349,16 +438,20 @@ export async function addMargin(positionId, margin, _productId, _currencyLabel) 
 
 		let tx;
 
-		if (_currencyLabel == 'weth') {
-			tx = await contract.addMargin(positionId, parseUnits(margin,18), {value: parseUnits(margin, 18)});
+		if (currencyLabel == 'weth') {
+			tx = await contract.addMargin(positionId, 0, {value: parseUnits(margin)});
 		} else {
-			tx = await contract.addMargin(positionId, parseUnits(margin, 18));
+			tx = await contract.addMargin(positionId, parseUnits(margin));
 		}
+	
 		monitorTx(tx.hash, 'add-margin');
 		hideModal();
+	
 	} catch(e) {
+	
 		showToast(e);
 		return e;
+	
 	}
 }
 
@@ -368,90 +461,16 @@ export async function cancelOrder(orderId) {
 	if (!contract) return;
 
 	try {
+
 		const tx = await contract.cancelOrder(orderId);
 		monitorTx(tx.hash, 'cancel-order');
 		hideModal();
+
 	} catch(e) {
+
 		showToast(e);
 		return e;
-	}
-}
-
-
-// pool 
-
-export async function stakeInPool(_currencyLabel, amount) {
-	
-	const contract = await getContract('pool', true, _currencyLabel);
-	if (!contract) return;
-
-	console.log('stakeInPool', _currencyLabel, amount, contract.address);
-	let tx;
-
-	if (_currencyLabel == 'weth') {
-		tx = await contract.mintAndStakeCLP(amount, {value: parseUnits(amount, 18)});
-	} else {
-		tx = await contract.mintAndStakeCLP(parseUnits(amount, 18));
 
 	}
-
-	monitorTx(tx.hash, 'pool-stake', {currencyLabel: _currencyLabel});
-
-}
-
-export async function unstakeFromPool(_currencyLabel, amount) {
-	
-	const contract = await getContract('pool', true, _currencyLabel);
-	if (!contract) return;
-
-	let tx = await contract.unstakeAndBurnCLP(parseUnits(amount, 18));
-
-	monitorTx(tx.hash, 'pool-unstake', {currencyLabel: _currencyLabel});
-
-}
-
-export async function collectPoolReward(_currencyLabel) {
-	
-	const contract = await getContract('poolrewards', true, _currencyLabel);
-	if (!contract) return;
-
-	let tx = await contract.collectReward();
-
-	monitorTx(tx.hash, 'pool-collect', {currencyLabel: _currencyLabel});
-
-}
-
-// staking 
-
-export async function stakeCAP(amount) {
-	
-	const contract = await getContract('capStaking', true);
-	if (!contract) return;
-
-	let tx = await contract.stake(parseUnits(amount, 18));
-
-	monitorTx(tx.hash, 'cap-stake');
-
-}
-
-export async function unstakeCAP(amount) {
-	
-	const contract = await getContract('capStaking', true);
-	if (!contract) return;
-
-	let tx = await contract.unstake(parseUnits(amount, 18));
-
-	monitorTx(tx.hash, 'cap-unstake');
-
-}
-
-export async function collectCAPReward(_currencyLabel) {
-	
-	const contract = await getContract('caprewards', true, _currencyLabel);
-	if (!contract) return;
-
-	let tx = await contract.collectReward();
-
-	monitorTx(tx.hash, 'cap-collect', {currencyLabel: _currencyLabel});
 
 }

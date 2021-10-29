@@ -1,5 +1,5 @@
 <script>
-	import { activeModal } from '../../stores/ui'
+	import { activeModal } from '../../lib/stores'
 
 	import Connect from '../modals/Connect.svelte'
 	import Products from '../modals/Products.svelte'
