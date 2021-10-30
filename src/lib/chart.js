@@ -32,13 +32,13 @@ export function initChart() {
 
 		let chartElem = document.getElementById('chart');
 		let tradingRowElem = document.getElementById('trading-row');
-		let chartDivWidth = tradingRowElem.offsetWidth * 0.65;
+		let chartDivWidth = tradingRowElem.offsetWidth * 0.618;
 		let chartDivHeight = chartElem.offsetHeight;
 
 		chart = LightweightCharts.createChart(chartElem, { width: chartDivWidth, height: chartDivHeight });
 		
 		window.onresize = () => {
-			chartDivWidth = tradingRowElem.offsetWidth * 0.65;
+			chartDivWidth = tradingRowElem.offsetWidth * 0.618;
 			chartDivHeight = chartElem.offsetHeight;
 			//console.log('chartDivWidth', chartDivWidth, chartDivHeight);
 			chart.resize(chartDivWidth, chartDivHeight);

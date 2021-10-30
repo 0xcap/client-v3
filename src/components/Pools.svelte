@@ -116,7 +116,7 @@
     				{#if $allowances['cap'] && $allowances['cap']['capPool'] * 1 == 0}
     					<a on:click={() => {_approveCurrency('cap')}}>Approve</a>
     				{:else}
-    					<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: 'cap'})}}>Deposit</a> | <a data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: _currencyLabel})}}>Withdraw</a>
+    					<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: 'cap'})}}>Deposit</a> | <a data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: 'cap'})}}>Withdraw</a>
     				{/if}
     			</div>
     		</div>

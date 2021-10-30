@@ -96,6 +96,10 @@
 		stroke: #fff;
 	}
 
+	.selector img {
+		width: 24px;
+	}
+
 </style>
 
 <div class='order' class:loading={$isSubmittingLong || $isSubmittingShort}>

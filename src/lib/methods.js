@@ -150,18 +150,22 @@ export async function getPoolInfo(currencyLabel) {
 	const contract = await getContract('pool', false, currencyLabel);
 	if (!contract) return {};
 
-	const poolBalance = await getBalanceOf(currencyLabel, contract.address, true);
-	const userBalance = await getUserPoolBalance(currencyLabel);
-	const claimableReward = await getClaimableReward(currencyLabel);
+	let info = {};
 
-	const info = {
-		tvl: poolBalance,
-		userBalance,
-		claimableReward
-	};
+	try {
+		const poolBalance = await getBalanceOf(currencyLabel, contract.address, true);
+		const userBalance = await getUserPoolBalance(currencyLabel);
+		const claimableReward = await getClaimableReward(currencyLabel);
+
+		info = {
+			tvl: poolBalance,
+			userBalance,
+			claimableReward
+		};
+	} catch(e) {}
 
 	Stores.pools.update((x) => {
-		x[_currencyLabel] = info;
+		x[currencyLabel] = info;
 		return x;
 	});
 
