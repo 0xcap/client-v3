@@ -49,14 +49,14 @@
 		--sonic-silver: #707070;
 		--orange: rgb(253,167,20);
 		
-		--base-padding: 20px;
+		--base-padding: 16px;
 		--semi-padding: 16px;
 		--base-radius: 4px;
 		--container-width: 2100px;
 
 		--chart-height: 440px;
 		--header-height: 60px;
-		--ticker-height: 70px;
+		--ticker-height: 60px;
 		--grid-gap: 1px;
 
 	}

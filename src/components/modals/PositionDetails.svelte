@@ -63,7 +63,7 @@
 			},
 			{
 				label: 'Trade Size',
-				value: `${formatToDisplay(data.amount, 0, true)}`,
+				value: `${formatToDisplay(data.size, 0, true)}`,
 			},
 			{
 				label: 'Margin',

@@ -66,7 +66,7 @@
 
 			<div class='column column-product'>{position.isLong ? '↑' : '↓'} {position.product}</div>
 			<div class='column column-price'>{position.price}</div>
-			<div class='column column-amount'>{position.amount} {position.currencyLabel}</div>
+			<div class='column column-amount'>{position.size} {position.currencyLabel}</div>
 			<div class='column column-pnl'>
 				<div class={`upl-wrap ${upls[position.positionId] * 1 > 0 ? 'pos' : 'neg'}`}>
 					<div class='upl'>

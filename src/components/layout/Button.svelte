@@ -11,7 +11,7 @@
 
 	button {
 		padding: 0 var(--base-padding);
-		height: 64px;
+		height: 48px;
 		border-radius: var(--base-radius);
 		font-weight: 700;
 		color: var(--green-dark);

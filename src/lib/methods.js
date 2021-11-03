@@ -120,7 +120,7 @@ export async function getBalanceOf(currencyLabel, address, forceWETH) {
 	let balance;
 	if (currencyLabel == 'weth' && !forceWETH) {
 		// get ETH balance
-		balance = await get(provider).getBalance(address);
+		balance = await get(Stores.provider).getBalance(address);
 	} else {
 		const contract = await getContract(currencyLabel);
 		if (!contract) return;
@@ -335,9 +335,9 @@ export async function submitNewPosition(isLong) {
 	let margin = size / leverage;
 
 	if (isLong) {
-		isSubmittingLong.set(true);
+		Stores.isSubmittingLong.set(true);
 	} else {
-		isSubmittingShort.set(true);
+		Stores.isSubmittingShort.set(true);
 	}
 
 	let tx;
@@ -371,8 +371,8 @@ export async function submitNewPosition(isLong) {
 
 	}
 
-	isSubmittingLong.set(false);
-	isSubmittingShort.set(false);
+	Stores.isSubmittingLong.set(false);
+	Stores.isSubmittingShort.set(false);
 
 	monitorTx(tx.hash, 'submit-new-position');
 

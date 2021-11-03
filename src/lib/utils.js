@@ -37,6 +37,10 @@ export function addrLink(addr) {
 	const explorer = getChainData('explorer');
 	return `${explorer}/address/${addr}`; 
 }
+export function formatCurrency(_currencyLabel) {
+	if (_currencyLabel.toLowerCase() == 'weth') return 'ETH';
+	if (_currencyLabel.toLowerCase() == 'usdc') return 'USDC';
+}
 export function formatToDisplay(amount, maxPrecision, fixPrecision) {
 	if (amount == undefined || isNaN(amount)) return '';
 	if (!maxPrecision) maxPrecision = 100;
@@ -184,7 +188,7 @@ export function formatPositions(positions) {
 			closeOrderId: p.closeOrderId,
 			currency: p.currency,
 			currencyLabel: getCurrencyLabelFromAddress(p.currency),
-			fee: formatUnits(p.fee.toNumber())
+			fee: formatUnits(p.fee)
 		});
 		i++;
 	}
@@ -206,6 +210,7 @@ export function formatTrades(trades) {
 			entryPrice: formatUnits(t.entryPrice),
 			margin: formatUnits(t.margin),
 			size: formatUnits(t.size),
+			leverage: formatUnits(t.size) * 1 / (formatUnits(t.margin) * 1),
 			timestamp: t.timestamp,
 			isLong: t.isLong,
 			pnl: formatUnits(t.pnl),
