@@ -1,46 +1,89 @@
 <script>
 
+	import Ticker from '../Ticker.svelte'
 	import Chart from '../Chart.svelte'
 	import Order from '../Order.svelte'
 	import Positions from '../Positions.svelte'
 	import History from '../History.svelte'
 
+	let panel = 'positions';
+
+	function selectPanel(_panel) {
+		panel = _panel;
+	}
+
 </script>
 
 <style>
 
-	.trading-row {
-		display: flex;
-		justify-content: space-between;
+	.trade {
+		display: grid;
+		grid-gap: var(--grid-gap);
+		grid-auto-flow: column;
+		grid-template-columns: auto 280px;
+		background-color: var(--rich-black-fogra);
+		position: absolute;
+		top: calc(var(--header-height) + var(--grid-gap));
+		bottom: 0;
+		left: 0;
+		right: 0;
+	}
+
+	.core {
+		display: grid;
+		grid-gap: var(--grid-gap);
+		grid-auto-flow: row;
+		grid-template-rows: var(--ticker-height) var(--chart-height) auto;
+	}
+
+	.sidebar {
+		background-color: var(--jet);
+	}
+
+	.account {
+		background-color: var(--eerie-black);
 	}
 
 	.chart {
 		flex: 1 1 auto;
+		background-color: var(--eerie-black);
 	}
 
-	.order {
-		width: 38.2%;
+	.active {
+		color: var(--green);
+		text-decoration: underline;
 	}
 
 </style>
 
-<div class='trade'>
+<div class='trade' id='trade'>
 
-	<div class='trading-row' id='trading-row'>
+	<div class='core'>
+
+		<Ticker />
+
 		<div class='chart'>
 			<Chart/>
 		</div>
-		<div class='order'>
-			<Order />
+
+		<div class='account'>
+			<div class='account-nav'>
+				<a class:active={panel == 'positions'} on:click={() => {selectPanel('positions')}}>Positions</a> |
+				<a class:active={panel == 'history'} on:click={() => {selectPanel('history')}}>History</a>
+			</div>
+
+			{#if panel == 'positions'}
+				<Positions />
+			{/if}
+			{#if panel == 'history'}
+				<History />
+			{/if}
 		</div>
+
 	</div>
 
-	<hr/>
-
-	<Positions />
-
-	<hr/>
-
-	<History />
+	<div class='sidebar'>
+		<Order />
+	</div>
 
 </div>

@@ -13,12 +13,19 @@
 </script>
 
 <style>
+
+	.resolution {
+		display: flex;
+		align-items: center;
+		height: 30px;
+	}
+
 	.selected {
 		font-weight: 700;
 	}
 
 	#chart {
-		min-height: 400px;
+		min-height: var(--chart-height);
 	}
 </style>
 

@@ -32,9 +32,6 @@
 
 <div class='history'>
 
-	<h2>History</h2>
-
-
 	{#each $history as item}
 
 		<div class='position' on:click={() => {showModal('TradeDetails', item)}} data-intercept="true">

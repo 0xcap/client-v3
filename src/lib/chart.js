@@ -20,6 +20,9 @@ const lookbacks = {
 	3600: 12 * 24 * 60 * 60 * 1000
 };
 
+const sidebarWidth = 280;
+const intervalHeight = 30;
+
 export function initChart() {
 
 	let script = document.createElement("script");
@@ -31,20 +34,39 @@ export function initChart() {
 	async function scriptLoaded() {
 
 		let chartElem = document.getElementById('chart');
-		let tradingRowElem = document.getElementById('trading-row');
-		let chartDivWidth = tradingRowElem.offsetWidth * 0.618;
-		let chartDivHeight = chartElem.offsetHeight;
+		let tradingRowElem = document.getElementById('trade');
+		let chartDivWidth = tradingRowElem.offsetWidth - sidebarWidth;
+		let chartDivHeight = chartElem.offsetHeight - intervalHeight;
 
 		chart = LightweightCharts.createChart(chartElem, { width: chartDivWidth, height: chartDivHeight });
 		
 		window.onresize = () => {
-			chartDivWidth = tradingRowElem.offsetWidth * 0.618;
-			chartDivHeight = chartElem.offsetHeight;
+			chartDivWidth = tradingRowElem.offsetWidth - sidebarWidth;
+			chartDivHeight = chartElem.offsetHeight - intervalHeight;
 			//console.log('chartDivWidth', chartDivWidth, chartDivHeight);
 			chart.resize(chartDivWidth, chartDivHeight);
 		};
 
 		chart.applyOptions({
+			layout: {
+			    background: {
+			        type: LightweightCharts.ColorType.Solid,
+			        color: '#1A1A1A',
+			    },
+			    textColor: '#707070'
+			},
+			grid: {
+		        vertLines: {
+		            color: '#292929',
+		            style: 1,
+		            visible: true,
+		        },
+		        horzLines: {
+		            color: '#292929',
+		            style: 1,
+		            visible: true,
+		        },
+		    },
 			timeScale: {
 				timeVisible: true
 			}
@@ -98,12 +120,12 @@ export function applyWatermark() {
 	if (!_product) return;
 	chart && chart.applyOptions({
 	    watermark: {
-	        color: 'rgba(11, 94, 29, 0.4)',
+	        color: '#292929',
 	        visible: true,
 	        text: _product,
-	        fontSize: 24,
-	        horzAlign: 'left',
-	        vertAlign: 'top',
+	        fontSize: 48,
+	        horzAlign: 'center',
+	        vertAlign: 'center',
 	    },
 	});
 }

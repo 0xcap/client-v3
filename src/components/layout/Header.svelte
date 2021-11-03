@@ -4,12 +4,17 @@
 
 <style>
 
+	header {
+		height: var(--header-height);
+		background-color: var(--eerie-black);
+	}
+
 </style>
 
 
 <header>
-	<div class='logo'>Cap</div>
 	<nav>
+		<span class='logo'>Cap</span>
 		<a href='/'>Home</a> | 
 		<a href='#/trade'>Trade</a> | 
 		<a href='#/pool'>Pool</a>

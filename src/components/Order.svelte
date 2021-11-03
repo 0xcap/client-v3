@@ -1,27 +1,17 @@
 <script>
 
 /* TODO
-- order form, form elements
-- order details
-- modal products
-- modal leverage
-- modal currency - with balance of each
-- chart with resolutions and product selection
-- positions list 
-- modal position details
-- modal close position
-- modal add margin
-- history list
-- modal trade details
-- pools list
-- pool deposit modal
-- pool withdraw modal
+- place order
+- positions
+- history
+- ticker
+- chart
+- pools
 - nav
 - wallet, network, & disconnect
 - toasts
 - disconnected state
 - homepage
-- design and branding
 */
 
 	import { onMount } from 'svelte'
@@ -74,9 +64,6 @@
 <style>
 
 	.order {
-		padding: var(--base-padding);
-		border: 1px solid var(--green);
-		border-radius: var(--base-radius);
 	}
 
 	.split-row {
@@ -108,28 +95,14 @@
 
 		<div class='box'>
 
-			<div class='label-row'>
-				<div class='label'>Product</div>
-				<div class='tool'></div>
-			</div>
+			Place order
 
-			<div class='selector selector-product' on:click={() => {showModal('Products')}} data-intercept="true">
-				<img src={PRODUCTS[$productId].logo} alt={`${$product.symbol} logo`}>
-				<span>{shortSymbol($product.symbol)}</span>
-				{@html CARET_DOWN}
-			</div>
-
-		</div>
-
-		<div class='box'>
-
-			<div class='label-row'>
-				<div class='label'>Leverage</div>
-				<div class='tool'></div>
+			<div class='selector selector-currency' on:click={() => {showModal('Currencies')}} data-intercept="true">
+				<span>{$currencyLabel}</span>
 			</div>
 
 			<div class='selector selector-leverage' on:click={() => {showModal('Leverage')}} data-intercept="true">
-				<span>{$leverage}×</span>{@html CARET_DOWN}
+				<span>{$leverage}×</span>
 			</div>
 
 		</div>
@@ -139,33 +112,15 @@
 	<div class='size-row'>
 
 		<div class='label-row'>
-			<div class='label'>Trade Size</div>
-			{#if $currencyLabel == 'weth'}
-			<div class='tool'>${formatToDisplay($prices[1] * $size, 2)}</div>
-			{/if}
+			<div class='label'>Size</div>
 		</div>
 
 		<div class='input-wrap'>
 
 			<input id='size' type='number' step="0.0001" bind:value={$size} min="0" max="1000000" maxlength="10" spellcheck="false" placeholder={`0.0`} autocomplete="off" autocorrect="off" inputmode="decimal" lang="en">
 
-			<div class='selector selector-currency' on:click={() => {showModal('Currencies')}} data-intercept="true">
-				<span>{$currencyLabel}</span>{@html CARET_DOWN}
-			</div>
-
 		</div>
 
-	</div>
-
-	<div class='order-details'>
-		<div class='row'>
-			<div class='detail-label'>Margin</div>
-			<div class='detail-value'>{$margin} {$currencyLabel}</div>
-		</div>
-		<div class='row'>
-			<div class='detail-label'>Fee rebate</div>
-			<div class='detail-value'></div>
-		</div>
 	</div>
 
 	<div class='split-row'>
@@ -174,6 +129,21 @@
 		{:else}
 		<Button isRed={true} isLoading={$isSubmittingShort} label='Short' onClick={() => {_submitNewPosition(false)}} /> <Button isLoading={$isSubmittingLong} label='Long' onClick={() => {_submitNewPosition(true)}} />
 		{/if}
+	</div>
+
+	<div class='order-details'>
+		<div class='row'>
+			<div class='detail-label'>Margin</div>
+			<div class='detail-value'>{$margin} {$currencyLabel}</div>
+		</div>
+		<div class='row'>
+			<div class='detail-label'>Size in USD</div>
+			<div class='detail-value'>${formatToDisplay($prices[1] * $size, 2)}</div>
+		</div>
+		<div class='row'>
+			<div class='detail-label'>Fee rebate</div>
+			<div class='detail-value'></div>
+		</div>
 	</div>
 
 </div>

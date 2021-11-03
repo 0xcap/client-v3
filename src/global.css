@@ -52,7 +52,6 @@ input[type='number'],input[type='range'],input[type='text'] {
   outline: none;
   border: none;
   background-color: transparent;
-  width: 100%;
 }
 
 input::placeholder {

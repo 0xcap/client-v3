@@ -5,7 +5,6 @@
 	import Modals from './components/layout/Modals.svelte'
 	import Toasts from './components/layout/Toasts.svelte'
 	import Header from './components/layout/Header.svelte'
-	import Footer from './components/layout/Footer.svelte'
 
 	import { initWebsocket } from './lib/stream'
 	import { component } from './lib/stores'
@@ -55,17 +54,11 @@
 		--base-radius: 4px;
 		--container-width: 2100px;
 
-	}
+		--chart-height: 440px;
+		--header-height: 60px;
+		--ticker-height: 70px;
+		--grid-gap: 1px;
 
-	main {
-		width: 100%;
-		max-width: var(--container-width);
-		padding: var(--base-padding);
-		margin: 0 auto;
-		box-sizing: border-box;
-		display: grid;
-		grid-auto-flow: row;
-		grid-gap: 60px;
 	}
 
 </style>
@@ -73,8 +66,5 @@
 <Modals />
 <Toasts />
 
-<main>
-	<Header />
-	<svelte:component this={$component}/>
-	<Footer />
-</main>
+<Header />
+<svelte:component this={$component}/>

@@ -57,8 +57,6 @@
 
 <div class='positions'>
 
-	<h2>Positions</h2>
-
 	<div class='columns'>
 
 	</div>
