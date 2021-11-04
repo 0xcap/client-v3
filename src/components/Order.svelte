@@ -84,6 +84,10 @@
 		height: var(--ticker-height);
 	}
 
+	.title {
+		font-weight: 700;
+	}
+
 	.pills {
 		display: flex;
 		align-items: center;

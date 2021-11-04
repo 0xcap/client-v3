@@ -4,7 +4,7 @@
 
 	import { getAllowance, collectPoolReward, collectCAPReward, approveCurrency } from '../lib/methods'
 
-	import { showModal } from '../lib/utils'
+	import { showModal, formatCurrency, formatToDisplay } from '../lib/utils'
 
 	async function _approveCurrency(_currencyLabel) {
 		const result = await approveCurrency(_currencyLabel, _currencyLabel == 'cap' ? 'capPool' : 'pool' + _currencyLabel);
@@ -26,12 +26,36 @@
 
 <style>
 
-	.position {
-		display: flex;
+	.pools {
+		
+	}
+
+	.columns {
+		padding: 0 var(--base-padding);
+		color: var(--sonic-silver);
+	}
+
+	.pool {
+		padding: 0 var(--base-padding);
+		background-color: var(--eerie-black);
+		margin-bottom: 12px;
 	}
 
 	.column {
 
+	}
+
+	.columns, .info, .row {
+		display: flex;
+		align-items: center;
+		height: 54px;
+	}
+
+	.info {
+		border-bottom: 1px solid var(--jet);
+	}
+	.info .column-asset {
+		font-weight: 700;
 	}
 
 	.column-asset {
@@ -46,6 +70,14 @@
 	.column-tvl {
 		flex: 1;
 		text-align: right;
+	}
+
+	.my-share {
+
+	}
+
+	.label {
+		color: var(--sonic-silver);
 	}
 
 </style>
@@ -64,30 +96,30 @@
 		<div class='pool'>
 
 			<div class='info'>
-				<div class='column column-asset'>{_currencyLabel}</div>
+				<div class='column column-asset'>{formatCurrency(_currencyLabel)}</div>
 				<div class='column column-apr'>100%+</div>
-				<div class='column column-tvl'>{poolInfo.tvl}</div>
+				<div class='column column-tvl'>{formatToDisplay(poolInfo.tvl)}</div>
 			</div>
 
 			<div class='my-share'>
 
 				<div class='row'>
-					<div class='label'>My Share</div>
-					<div class='value'>{poolInfo.userShare} {_currencyLabel} ({100*poolInfo.stakedBalance/poolInfo.clpSupply}%)</div>
-					<div class='tools'>
+					<div class='column-asset label'>My Share</div>
+					<div class='column-apr'>{formatToDisplay(poolInfo.userBalance)} {formatCurrency(_currencyLabel)} ({poolInfo.tvl == 0 ? 0 : 100*poolInfo.userBalance/poolInfo.tvl}%)</div>
+					<div class='column-tvl'>
 						{#if $allowances[_currencyLabel] && $allowances[_currencyLabel]['pool' + _currencyLabel] * 1 == 0}
 							<a on:click={() => {_approveCurrency(_currencyLabel)}}>Approve</a>
 						{:else}
-						<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: _currencyLabel})}}>Deposit</a> | <a data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: _currencyLabel})}}>Withdraw</a>
+						<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: _currencyLabel})}}>Deposit</a>, <a data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: _currencyLabel})}}>Withdraw</a>
 						{/if}
 					</div>
 				</div>
 
 				<div class='row'>
-					<div class='label'>My Rewards</div>
-					<div class='value'>{poolInfo.claimableReward} {_currencyLabel}</div>
-					<div class='tools'>
-						<a on:click={() => {collectPoolReward(_currencyLabel)}}>Collect rewards</a>
+					<div class='column-asset label'>My Rewards</div>
+					<div class='column-apr'>{formatToDisplay(poolInfo.claimableReward)} {formatCurrency(_currencyLabel)}</div>
+					<div class='column-tvl'>
+						<a on:click={() => {collectPoolReward(_currencyLabel)}}>Collect</a>
 					</div>
 				</div>
 
@@ -96,46 +128,39 @@
 		</div>
     {/each}
 
-
-    <h2>Cap Staking</h2>
-
     <div class='pool'>
 
     	<div class='info'>
     		<div class='column column-asset'>CAP</div>
     		<div class='column column-apr'>100%+</div>
-    		<div class='column column-tvl'>{$capPool.stakedSupply}</div>
+    		<div class='column column-tvl'>{$capPool.supply}</div>
     	</div>
 
     	<div class='my-share'>
 
     		<div class='row'>
-    			<div class='label'>My Share</div>
-    			<div class='value'>{$capPool.stakedBalance}</div>
-    			<div class='tools'>
+    			<div class='column-asset label'>My Share</div>
+    			<div class='column-apr'>{formatToDisplay($capPool.userBalance)}</div>
+    			<div class='column-tvl'>
     				{#if $allowances['cap'] && $allowances['cap']['capPool'] * 1 == 0}
     					<a on:click={() => {_approveCurrency('cap')}}>Approve</a>
     				{:else}
-    					<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: 'cap'})}}>Deposit</a> | <a data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: 'cap'})}}>Withdraw</a>
+    					<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: 'cap'})}}>Deposit</a>, <a data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: 'cap'})}}>Withdraw</a>
     				{/if}
     			</div>
     		</div>
 
-    		<h3>My rewards</h3>
-
     		{#each Object.entries($capPool.claimableRewards || {}) as [_currencyLabel, reward]}
 
     			<div class='row'>
-    				<div class='label'>{_currencyLabel}</div>
-    				<div class='value'>{reward}</div>
-    				<div class='tools'>
-    					<a on:click={() => {collectCAPReward(_currencyLabel)}}>Collect rewards</a>
+    				<div class='column-asset label'>{formatCurrency(_currencyLabel)} Rewards</div>
+    				<div class='column-apr'>{formatToDisplay(reward)}</div>
+    				<div class='column-tvl'>
+    					<a on:click={() => {collectCAPReward(_currencyLabel)}}>Collect</a>
     				</div>
     			</div>
 
     		{/each}
-
-    		
 
     	</div>
 

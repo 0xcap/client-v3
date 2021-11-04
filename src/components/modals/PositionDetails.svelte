@@ -89,7 +89,7 @@
 			},
 			{
 				label: 'Liquidation Price',
-				value: "~" + formatToDisplay(liquidationPrice),
+				value: formatToDisplay(liquidationPrice),
 				hasError: liquidatingSoon
 			});
 		}

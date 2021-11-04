@@ -3,10 +3,6 @@
 
 </script>
 
-<div class='Pool'>
-
-	<div>Pool</div>
-
+<div class='pool'>
 	<Pools />
-
 </div>

@@ -2,7 +2,7 @@
 
 	import { onMount } from 'svelte'
 
-	import { formatToDisplay } from '../../lib/utils'
+	import { formatToDisplay, formatCurrency, hideModal } from '../../lib/utils'
 	
 	import { withdraw, withdrawCAP } from '../../lib/methods'
 	
@@ -36,6 +36,7 @@
 			);
 		}
 		submitIsPending = false;
+		hideModal();
 	}
 
 	onMount(async () => {
@@ -56,7 +57,7 @@
 <style>
 </style>
 
-<Modal showHeader={true} title={`Withdraw from ${data.currencyLabel} pool`}>
+<Modal>
 	<DataList data={rows} bind:value={amount} />
-	<Button isDisabled={!canSubmit} isPending={submitIsPending} onClick={_submit} label='Withdraw' />
+	<Button wrap={true} isDisabled={!canSubmit || submitIsPending} onClick={_submit} label={`Withdraw from ${formatCurrency(data.currencyLabel)} pool`} />
 </Modal>

@@ -5,6 +5,7 @@
 	export let onClick = null;
 	export let label;
 	export let wrap = false;
+	export let small = false;
 
 </script>
 
@@ -17,6 +18,10 @@
 		font-weight: 700;
 		color: var(--green-dark);
 		background-color: var(--green);
+	}
+
+	button.small {
+		height: 36px;
 	}
 
 	button.red {
@@ -39,8 +44,8 @@
 
 {#if wrap}
 <div class='wrap'>
-	<button class:loading={isLoading} class:red={isRed} class:disabled={isDisabled} on:click={onClick}>{label}</button>
+	<button class:loading={isLoading} class:red={isRed} class:disabled={isDisabled} on:click={onClick} data-intercept='true'>{label}</button>
 </div>
 {:else}
-<button class:loading={isLoading} class:red={isRed} class:disabled={isDisabled} on:click={onClick}>{label}</button>
+<button class:small={small} class:loading={isLoading} class:red={isRed} class:disabled={isDisabled} on:click={onClick} data-intercept='true'>{label}</button>
 {/if}

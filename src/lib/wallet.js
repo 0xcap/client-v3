@@ -36,7 +36,11 @@ export async function connectMetamask(resume) {
 
 	provider.set(_provider);
 
-	if (accounts.length) handleAccountsChanged();
+	if (accounts.length) {
+		handleAccountsChanged();
+	} else {
+		hydrateData();
+	}
 	metamask.on('accountsChanged', handleAccountsChanged);
 
 }

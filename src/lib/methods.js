@@ -16,6 +16,7 @@ export async function getProduct(productId) {
 	if (productCache[productId]) return productCache[productId];
 	
 	const contract = await getContract('trading');
+	console.log('c', contract);
 	if (!contract) return {};
 
 	productCache[productId] = formatProduct(productId, await contract.getProduct(productId));
@@ -26,6 +27,7 @@ export async function getProduct(productId) {
 
 export async function selectProduct(productId) {
 	
+	console.log('selectProduct', productId);
 	if (!productId) productId = get(Stores.productId);
 
 	const product = await getProduct(productId);
@@ -148,6 +150,9 @@ export async function getUserPoolBalance(currencyLabel) {
 	const contract = await getContract('pool', false, currencyLabel);
 	if (!contract) return 0;
 
+	// TEST TEST
+	return 0;
+
 	return formatUnits(await contract.getCurrencyBalance(address));
 
 }
@@ -169,6 +174,8 @@ export async function getPoolInfo(currencyLabel) {
 			userBalance,
 			claimableReward
 		};
+
+		console.log('info', info);
 	} catch(e) {}
 
 	Stores.pools.update((x) => {

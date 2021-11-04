@@ -50,11 +50,11 @@
 	$: rows = [
 		{
 			label: 'Liquidation Price (Long)',
-			value: `~${formatToDisplay(liquidationPriceLong, 0, true)} (${displayPricePercentChange(liquidationPriceLong, $prices[$productId])})`
+			value: `${formatToDisplay(liquidationPriceLong, 0, true)} (${displayPricePercentChange(liquidationPriceLong, $prices[$productId])})`
 		},
 		{
 			label: 'Liquidation Price (Short)',
-			value: `~${formatToDisplay(liquidationPriceShort, 0, true)} (${displayPricePercentChange(liquidationPriceShort, $prices[$productId])})`
+			value: `${formatToDisplay(liquidationPriceShort, 0, true)} (${displayPricePercentChange(liquidationPriceShort, $prices[$productId])})`
 		}
 	];
 

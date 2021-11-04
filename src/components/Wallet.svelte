@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from 'svelte'
 
+	import Button from './layout/Button.svelte'
+
 	import { checkMetamaskSession } from '../lib/wallet'
 
 	import { address, wrongNetwork } from '../lib/stores'
@@ -24,9 +26,9 @@
 	{/if}
 
 	{#if $address}
-		<div class='address' on:click={() => {showModal('WalletDetails')}} data-intercept='true'>{shortAddress($address)}</div>
+		<div class='address'>{shortAddress($address)}</div>
 	{:else}
-		<button on:click={() => {showModal('Connect')}} data-intercept='true'>Connect Wallet</button>
+		<Button small={true} isDisabled={false} onClick={() => {showModal('Connect')}} label={`Connect Wallet`} />
 	{/if}
 
 </div>
