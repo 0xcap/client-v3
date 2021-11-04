@@ -5,8 +5,7 @@ import { monitorTx } from './monitor'
 
 import { getContract } from './contracts'
 import { loadCandles, loadPositionLines, applyWatermark } from './chart'
-import { formatUnits, formatProduct, formatPositions, parseUnits, getChainData, hideModal, showToast } from './utils'
-
+import { formatUnits, formatProduct, formatPositions, parseUnits, getChainData, hideModal, showToast, getCachedLeverage } from './utils'
 
 import * as Stores from './stores'
 
@@ -35,8 +34,16 @@ export async function selectProduct(productId) {
 	Stores.productId.set(productId);
 	localStorage.setItem('productId', productId);
 
+	// Leverage
+	const cached = getCachedLeverage(productId);
+	if (cached) {
+		Stores.leverage.set(cached);
+	} else {
+		Stores.leverage.set(product.maxLeverage);
+	}
+
 	// Chart
-	loadCandles();
+	await loadCandles();
 	applyWatermark();
 
 }

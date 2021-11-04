@@ -67,7 +67,7 @@ export function displayPricePercentChange(last, initial) {
 	if (diff >= 0) {
 		string += '+';
 	}
-	string += formatToDisplay(diff*100, 2, true) + "%" || '';
+	string += formatToDisplay(diff*100, 2, true) || '';
 	return string;
 }
 

@@ -6,7 +6,7 @@
 
 	import { selectProduct } from '../../lib/methods'
 
-	import { hideModal, shortSymbol } from '../../lib/utils'
+	import { hideModal } from '../../lib/utils'
 	import { PRODUCTS } from '../../lib/constants'
 
 	export let isActive;
@@ -36,9 +36,14 @@
 		border-bottom: none;
 	}
 
-	.row img {
-		max-width: 42px;
-		margin-right: 20px;
+	.product-wrap {
+		display: flex;
+		align-items: center;
+	}
+
+	.product-wrap img {
+		width: 32px;
+		margin-right: 10px;
 	}
 
 </style>
@@ -51,7 +56,7 @@
 
 			<div class='product-wrap'>
 				<img src={PRODUCTS[_productId].logo} alt={`${_product.symbol} logo`}>
-				<span>{shortSymbol(_product.symbol)}</span>
+				<span>{_product.symbol}</span>
 			</div>
 
 		</div>

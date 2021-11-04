@@ -1,22 +1,38 @@
 <script>
 	import { PRODUCTS } from '../lib/constants'
-	import { showModal, shortSymbol } from '../lib/utils'
-	import { productId, product } from '../lib/stores'
+	import { showModal, shortSymbol, displayPricePercentChange, formatToDisplay } from '../lib/utils'
+	import { productId, product, prices, prices24h } from '../lib/stores'
 	import { CARET_DOWN } from '../lib/icons'
+
+	let change = 0;
+	$: change = displayPricePercentChange($prices[$productId], $prices24h[$productId]);
 
 </script>
 
 <style>
 
 	.ticker {
+		padding: 0 var(--base-padding);
 		height: var(--ticker-height);
 		display: flex;
 		align-items: center;
 		background-color: var(--eerie-black);
+		justify-content: space-between;
+	}
+
+	.product-info {
+		display: flex;
+		align-items: center;
+	}
+
+	.selector {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
 	}
 
 	.selector :global(svg) {
-		margin-left: 12px;
+		margin-left: 10px;
 		height: 8px;
 		fill: transparent;
 		stroke: #fff;
@@ -24,16 +40,48 @@
 
 	.selector img {
 		width: 24px;
+		margin-right: 10px;
 	}
 
+	.item {
+		margin-right: calc(2 * var(--base-padding));
+	}
+
+	.volume {
+		text-align: right;
+	}
+
+	.label {
+		font-size: 80%;
+		color: var(--onyx);
+	}
 
 </style>
 
 
 <div class='ticker'>
-	<div class='selector selector-product' on:click={() => {showModal('Products')}} data-intercept="true">
-				<img src={PRODUCTS[$productId].logo} alt={`${$product.symbol} logo`}>
-				<span>{shortSymbol($product.symbol)}</span>
-				{@html CARET_DOWN}
-			</div> | price, 24h change | protocol volume
+		
+	<div class='product-info'>
+
+		<div class='item selector selector-product' on:click={() => {showModal('Products')}} data-intercept="true">
+			<img src={PRODUCTS[$productId].logo} alt={`${$product.symbol} logo`}>
+			<span>{$product.symbol || ''}</span>
+			{@html CARET_DOWN}
+		</div>
+
+		<div class='item price'>
+			{$prices[$productId] ? $prices[$productId].toFixed(2) : ''}
+		</div>
+
+		<div class={`item price-change ${change * 1 < 0 ? 'neg' : 'pos'}`}>
+			{change}%
+		</div>
+
+	</div>
+
+	<div class='volume'>
+		<div class='value'>$1,009,299,221</div>
+		<div class='label'>Protocol Volume</div>
+	</div>
+
 </div>

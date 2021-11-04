@@ -2,7 +2,7 @@
 
 import { get } from 'svelte/store'
 
-import { prices, productId } from './stores'
+import { prices, prices24h, productId } from './stores'
 
 import { onNewPrice } from './chart'
 
@@ -73,6 +73,11 @@ export function initWebsocket() {
 
 			prices.update((x) => {
 				x[pid] = price * 1;
+				return x;
+			});
+
+			prices24h.update((x) => {
+				x[pid] = open_24h * 1;
 				return x;
 			});
 

@@ -36,6 +36,7 @@ export const positions = writable([]);
 
 // Prices
 export const prices = writable({});
+export const prices24h = writable({});
 
 // Router
 export const component = writable();

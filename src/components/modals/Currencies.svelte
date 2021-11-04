@@ -8,7 +8,7 @@
 
 	import { selectCurrency, getBalanceOf } from '../../lib/methods'
 
-	import { hideModal, getChainData } from '../../lib/utils'
+	import { hideModal, getChainData, formatCurrency, formatToDisplay } from '../../lib/utils'
 	import { CURRENCY_LOGOS } from '../../lib/constants'
 
 	let currencies = getChainData('currencies');
@@ -32,10 +32,10 @@
 	.row {
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
 		padding: 0 var(--base-padding);
 		border-bottom: 1px solid var(--jet-dim);
 		font-size: 120%;
-		font-weight: 700;
 		cursor: pointer;
 		height: 74px;
 	}
@@ -50,9 +50,15 @@
 		border-bottom: none;
 	}
 
-	.row img {
-		max-width: 42px;
-		margin-right: 20px;
+	.currency-wrap {
+		display: flex;
+		align-items: center;
+		font-weight: 700;
+	}
+
+	.currency-wrap img {
+		width: 32px;
+		margin-right: 10px;
 	}
 
 </style>
@@ -65,11 +71,11 @@
 
 			<div class='currency-wrap'>
 				<img src={CURRENCY_LOGOS[_currencyLabel]} alt={`${_currencyLabel} logo`}>
-				<span>{_currencyLabel}</span>
+				<span>{formatCurrency(_currencyLabel)}</span>
 			</div>
 
 			<div class='balance'>
-				{balances[_currencyLabel]}
+				{formatToDisplay(balances[_currencyLabel])} 
 			</div>
 
 		</div>

@@ -1,6 +1,7 @@
 <script>
 
 	import Ticker from '../Ticker.svelte'
+	import ChartResolution from '../ChartResolution.svelte'
 	import Chart from '../Chart.svelte'
 	import Order from '../Order.svelte'
 	import Positions from '../Positions.svelte'
@@ -33,7 +34,7 @@
 		display: grid;
 		grid-gap: var(--grid-gap);
 		grid-auto-flow: row;
-		grid-template-rows: var(--ticker-height) var(--chart-height) auto;
+		grid-template-rows: var(--ticker-height) var(--chart-resolution-height) var(--chart-height) auto;
 	}
 
 	.sidebar {
@@ -46,8 +47,7 @@
 	}
 
 	.chart {
-		flex: 1 1 auto;
-		background-color: var(--eerie-black);
+
 	}
 
 	.account-nav {
@@ -83,9 +83,8 @@
 
 		<Ticker />
 
-		<div class='chart'>
-			<Chart/>
-		</div>
+		<ChartResolution />
+		<Chart/>
 
 		<div class='account'>
 			<div class='account-nav'>

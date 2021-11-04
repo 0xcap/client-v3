@@ -15,13 +15,15 @@ let isLoadingCandles = false;
 
 // how much history to load for each resolution (in ms)
 const lookbacks = {
+	60: 300 * 60 * 1000,
 	300: 24 * 60 * 60 * 1000,
 	900: 48 * 60 * 60 * 1000,
-	3600: 12 * 24 * 60 * 60 * 1000
+	3600: 12 * 24 * 60 * 60 * 1000,
+	21600: 6 * 12 * 24 * 60 * 60 * 1000,
+	86400: 24 * 12 * 24 * 60 * 60 * 1000,
 };
 
 const sidebarWidth = 280;
-const intervalHeight = 30;
 
 export function initChart() {
 
@@ -36,13 +38,13 @@ export function initChart() {
 		let chartElem = document.getElementById('chart');
 		let tradingRowElem = document.getElementById('trade');
 		let chartDivWidth = tradingRowElem.offsetWidth - sidebarWidth;
-		let chartDivHeight = chartElem.offsetHeight - intervalHeight;
+		let chartDivHeight = chartElem.offsetHeight;
 
 		chart = LightweightCharts.createChart(chartElem, { width: chartDivWidth, height: chartDivHeight });
 		
 		window.onresize = () => {
 			chartDivWidth = tradingRowElem.offsetWidth - sidebarWidth;
-			chartDivHeight = chartElem.offsetHeight - intervalHeight;
+			chartDivHeight = chartElem.offsetHeight;
 			//console.log('chartDivWidth', chartDivWidth, chartDivHeight);
 			chart.resize(chartDivWidth, chartDivHeight);
 		};

@@ -6,9 +6,9 @@
 - history
 - ticker
 - chart
+- modals
+- header, nav, wallet, network, & disconnect
 - pools
-- nav
-- wallet, network, & disconnect
 - toasts
 - disconnected state
 - homepage
@@ -97,6 +97,9 @@
 		cursor: pointer;
 		margin-left: 6px;
 	}
+	.pill:hover {
+		background-color: var(--dim-gray);
+	}
 
 	.input-wrap {
 		position: relative;
@@ -107,7 +110,7 @@
 		background-color: var(--onyx);
 		border-radius: var(--base-radius);
 		border: 1px solid var(--onyx);
-		padding: 11px 55px;
+		padding: 11px 62px;
 		width: 100%;
 		box-sizing: border-box;
 		text-align: right;

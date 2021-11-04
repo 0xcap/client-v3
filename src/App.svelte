@@ -54,7 +54,8 @@
 		--base-radius: 4px;
 		--container-width: 2100px;
 
-		--chart-height: 440px;
+		--chart-resolution-height: 40px;
+		--chart-height: 400px;
 		--header-height: 60px;
 		--ticker-height: 60px;
 		--grid-gap: 1px;
