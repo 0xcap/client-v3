@@ -37,8 +37,8 @@
 				value: formatToDisplay(data.price),
 			},
 			{
-				label: 'Trade Size',
-				value: `${formatToDisplay(data.amount, 0, true)}`,
+				label: 'Size',
+				value: `${formatToDisplay(data.size, 0, true)}`,
 			},
 			{
 				label: 'Margin',
@@ -50,7 +50,7 @@
 			},
 			{
 				label: 'Profit or Loss',
-				value: `${formatPnl(data.pnl, data.pnlIsNegative)} (${formatPnl(100*data.pnl/data.margin, data.pnlIsNegative, true)}%)`
+				value: `${formatPnl(data.pnl)} (${formatPnl(100*data.pnl/data.margin, true)}%)`
 			},
 			{
 				label: 'Was Liquidated',

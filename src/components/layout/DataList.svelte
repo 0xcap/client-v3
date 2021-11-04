@@ -48,6 +48,7 @@
 
 	input {
 		text-align: right;
+		width: 100%;
 	}
 
 	.input-wrap {

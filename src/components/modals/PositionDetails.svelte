@@ -62,7 +62,7 @@
 				value: formatToDisplay(_prices[data.productId])
 			},
 			{
-				label: 'Trade Size',
+				label: 'Size',
 				value: `${formatToDisplay(data.size, 0, true)}`,
 			},
 			{
@@ -80,7 +80,7 @@
 		if (data.price * 1 > 0) {
 			rows.push({
 				label: 'Unrealized P/L',
-				value: `${formatPnl(upl)} (${formatPnl(100*upl/data.margin, upl < 0, true)}%)`,
+				value: `${formatPnl(upl)} (${formatPnl(100*upl/data.margin, true)}%)`,
 				hasError: liquidatingSoon
 			},
 			{

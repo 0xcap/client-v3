@@ -38,6 +38,7 @@ export function addrLink(addr) {
 	return `${explorer}/address/${addr}`; 
 }
 export function formatCurrency(_currencyLabel) {
+	if (!_currencyLabel) return;
 	if (_currencyLabel.toLowerCase() == 'weth') return 'ETH';
 	if (_currencyLabel.toLowerCase() == 'usdc') return 'USDC';
 }
@@ -183,6 +184,7 @@ export function formatPositions(positions) {
 			isLong: p.isLong,
 			margin: formatUnits(p.margin),
 			size: formatUnits(p.size),
+			leverage: formatUnits(p.size) * 1 / (formatUnits(p.margin) * 1),
 			price: formatUnits(p.price),
 			productId: p.productId,
 			closeOrderId: p.closeOrderId,
@@ -205,7 +207,7 @@ export function formatTrades(trades) {
 			currency: t.currency,
 			currencyLabel: getCurrencyLabelFromAddress(t.currency),
 			productId: t.productId,
-			product: PRODUCTS(t.productId).symbol,
+			product: PRODUCTS[t.productId].symbol,
 			price: formatUnits(t.closePrice || t.price),
 			entryPrice: formatUnits(t.entryPrice),
 			margin: formatUnits(t.margin),
@@ -214,7 +216,6 @@ export function formatTrades(trades) {
 			timestamp: t.timestamp,
 			isLong: t.isLong,
 			pnl: formatUnits(t.pnl),
-			pnlIsNegative: t.pnlIsNegative,
 			isFullClose: t.isFullClose,
 			wasLiquidated: t.wasLiquidated,
 			txHash: t.txHash,
@@ -223,12 +224,10 @@ export function formatTrades(trades) {
 	}
 	return formattedTrades;
 }
-export function formatPnl(pnl, pnlIsNegative, isPercent) {
+export function formatPnl(pnl, isPercent) {
 	let string = '';
 	if (pnl == undefined) return string;
-	if (pnlIsNegative == undefined) {
-		pnlIsNegative = pnl < 0;
-	}
+	let pnlIsNegative = pnl < 0;
 	if (!pnlIsNegative) {
 		string += '+';
 	} else if (pnl > 0) {
@@ -245,6 +244,7 @@ export function getChainData(label) {
 	return CHAINDATA[_chainId][label];
 }
 export function getCurrencyLabelFromAddress(_address) {
+	if (!_address) return;
 	const _chainId = get(chainId);
 	if (!_chainId || !CHAINDATA[_chainId]) return;
 	const currencies = getChainData('currencies');

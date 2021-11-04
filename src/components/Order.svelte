@@ -162,7 +162,7 @@
 		<div class='title'>Place Order</div>
 		<div class='pills'>
 			<div class='pill' on:click={() => {showModal('Currencies')}} data-intercept="true">{formatCurrency($currencyLabel)}</div>
-			<div class='pill' on:click={() => {showModal('Leverage')}} data-intercept="true">{$leverage}×</div>
+			<div class='pill' on:click={() => {showModal('Leverage')}} data-intercept="true">{formatToDisplay($leverage)}×</div>
 		</div>
 
 	</div>
@@ -196,7 +196,7 @@
 		</div>
 		{/if}
 		<div class='row'>
-			<div class='detail-label'>Available</div>
+			<div class='detail-label'>Buying Power</div>
 			<div class='detail-value'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
 		</div>
 	</div>

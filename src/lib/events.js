@@ -2,6 +2,7 @@
 import { get } from 'svelte/store'
 import { getContract } from './contracts'
 import { getUserPositions } from './methods'
+import { getUserHistory } from './graph'
 
 import { address } from './stores'
 

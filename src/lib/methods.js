@@ -380,6 +380,8 @@ export async function submitNewPosition(isLong) {
 
 export async function submitCloseOrder(positionId, productId, size, currencyLabel) {
 
+	console.log('sco', positionId, productId, size, currencyLabel);
+
 	const contract = await getContract('trading', true);
 	if (!contract) return;
 
@@ -388,7 +390,10 @@ export async function submitCloseOrder(positionId, productId, size, currencyLabe
 	if (currencyLabel == 'weth') {
 
 		const product = await getProduct(productId);
-		const fee = size * product.fee * 1.003;
+		const fee = size * product.fee * 1.003 / 100;
+
+		console.log('size', size);
+		console.log('fee', product.fee, fee);
 
 		tx = await contract.submitCloseOrder(
 			positionId,

@@ -61,6 +61,13 @@
 
 	}
 
+	:global(.pos) {
+		color: var(--green);
+	}
+	:global(.neg) {
+		color: var(--red);
+	}
+
 </style>
 
 <Modals />

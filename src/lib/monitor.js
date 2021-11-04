@@ -23,7 +23,9 @@ export async function monitorTx(hash, type, details) {
 
 async function handleTxComplete(type, details) {
 
-	if (type == 'submitted-new-position') {
+	if (type == 'submit-new-position') {
+		await getUserPositions();
+	} else if (type == 'submit-close-order') {
 		await getUserPositions();
 	} else if (type == 'approve') {
 		await getAllowance(details.currencyLabel, details.spenderName);

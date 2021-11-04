@@ -2,7 +2,7 @@
 
 	import { submitCloseOrder } from '../../lib/methods'
 	
-	import { formatToDisplay } from '../../lib/utils'
+	import { formatToDisplay, formatCurrency, hideModal } from '../../lib/utils'
 
 	import Modal from './Modal.svelte'
 	
@@ -11,50 +11,48 @@
 	
 	export let data;
 
-	let amount;
+	let size;
 	let entire = false;
 
-	let prior_amount;
-
-	let closePercent = 0, newAmount = data.amount;
+	let closePercent = 0, newAmount = data.size;
 
 	function calculateAmounts() {
-		if (!amount*1) {
+		if (!size*1) {
 			closePercent = 0;
-			newAmount = data.amount;
+			newAmount = data.size;
 			return;
 		}
-		closePercent = 100 * amount * 1 / (data.amount * 1);
+		closePercent = 100 * size * 1 / (data.size * 1);
 		if (closePercent > 100) closePercent = 100;
-		newAmount = data.amount * 1 - amount * 1;
+		newAmount = data.size * 1 - size * 1;
 		if (newAmount < 0) newAmount = 0;
 	}
 
 	function setMaxAmount(_entire) {
-		amount = formatToDisplay(data.margin * data.leverage);
+		size = formatToDisplay(data.size);
 		calculateAmounts();
 	}
 
 	let canSubmit;
-	$: canSubmit = amount*1 > 0;
+	$: canSubmit = size*1 > 0;
 
 	let submitIsPending = false;
 	async function _submitOrder() {
-		let marginToSubmit;
+		let sizeToSubmit;
 		if (closePercent >= 100) {
-			marginToSubmit = data.margin * 1.01;
+			sizeToSubmit = data.size * 1.001;
 		} else {
-			marginToSubmit = (amount*1)/(data.leverage*1);
+			sizeToSubmit = size*1;
 		}
 		submitIsPending = true;
 		const error = await submitCloseOrder(
 			data.positionId,
 			data.productId,
-			marginToSubmit,
-			data.leverage,
+			sizeToSubmit,
 			data.currencyLabel
 		);
 		submitIsPending = false;
+		hideModal();
 	}
 
 	let rows;
@@ -66,7 +64,7 @@
 		},
 		{
 			label: 'Current Position Size',
-			value: `${formatToDisplay(data.amount)} ${data.currencyLabel}`,
+			value: `${formatToDisplay(data.size)} ${formatCurrency(data.currencyLabel)}`,
 			dim: true,
 			onclick: setMaxAmount
 		},
@@ -77,8 +75,8 @@
 		},
 		{
 			label: 'Position Size after Closing',
-			value: `${formatToDisplay(newAmount)} ${data.currencyLabel}`,
-			isEmpty: newAmount * 1 == data.amount * 1
+			value: `${formatToDisplay(newAmount)} ${formatCurrency(data.currencyLabel)}`,
+			isEmpty: newAmount * 1 == data.size * 1
 		},
 	];
 
@@ -89,6 +87,6 @@
 </style>
 
 <Modal title='Close'>
-	<DataList data={rows} bind:value={amount} />
-	<Button isDisabled={!canSubmit} isPending={submitIsPending} onClick={_submitOrder} label='Close' />
+	<DataList data={rows} bind:value={size} />
+	<Button wrap={true} isDisabled={!canSubmit} isPending={submitIsPending} onClick={_submitOrder} label='Close' />
 </Modal>

@@ -4,7 +4,7 @@
 
 	import { CANCEL_ICON } from '../lib/icons'
 
-	import { formatPnl, showModal, getUPL } from '../lib/utils'
+	import { formatPnl, showModal, getUPL, formatCurrency, formatToDisplay } from '../lib/utils'
 
 	let upls = {};
 	let upls_percent = {};
@@ -31,8 +31,43 @@
 
 <style>
 
+	.positions {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+
+	.columns {
+		display: flex;
+		align-items: center;
+		height: 40px;
+		padding: 0 var(--base-padding);
+		color: var(--sonic-silver);
+		font-size: 90%;
+		border-bottom: 1px solid var(--jet-dim);
+	}
+
+	.positions-list {
+		overflow-y: scroll;
+		position: absolute;
+		top: 40px;
+		bottom: 0;
+		left: 0;
+		right: 0;
+	}
+
 	.position {
 		display: flex;
+		align-items: center;
+		height: 48px;
+		cursor: pointer;
+		padding: 0 var(--base-padding);
+		border-bottom: 1px solid var(--jet-dim);
+	}
+	.position:hover {
+		background-color: var(--jet-dim);
 	}
 
 	.column {
@@ -42,15 +77,47 @@
 	.column-product {
 		width: 15%;
 	}
+	.column-price {
+		width: 15%;
+	}
+	.column-size {
+		width: 15%;
+	}
+	.column-margin {
+		width: 15%;
+	}
+	.column-leverage {
+		width: 15%;
+	}
+	.column-pnl {
+		width: 15%;
+	}
 
-	.column-tools {
+	.column-close {
 		flex: 1;
 		text-align: right;
 	}
 
-	.column-tools :global(svg) {
-		width: 24px;
-		fill:  #fff;
+	.column-close :global(svg) {
+		width: 16px;
+		fill: currentColor;
+		margin-bottom: -2px;
+	}
+	.column-close a {
+		color: var(--sonic-silver);
+	}
+	.column-close a:hover {
+		color: #fff;
+	}
+
+	.status {
+		color: var(--onyx);
+	}
+
+	.empty {
+		padding: var(--base-padding);
+		color: var(--onyx);
+		text-align: center;
 	}
 
 </style>
@@ -59,39 +126,59 @@
 
 	<div class='columns'>
 
+		<div class='column column-product'>Product</div>
+		<div class='column column-price'>Price</div>
+		<div class='column column-size'>Size</div>
+		<div class='column column-margin'>Margin</div>
+		<div class='column column-leverage'>Leverage</div>
+		<div class='column column-pnl'>P/L</div>
+		<div class='column column-close'></div>
+
 	</div>
 
-	{#each $positions as position}
-		<div class='position' on:click={() => {showModal('PositionDetails', position)}} data-intercept="true">
+	<div class='positions-list no-scrollbar'>
 
-			<div class='column column-product'>{position.isLong ? '↑' : '↓'} {position.product}</div>
-			<div class='column column-price'>{position.price}</div>
-			<div class='column column-amount'>{position.size} {position.currencyLabel}</div>
-			<div class='column column-pnl'>
-				<div class={`upl-wrap ${upls[position.positionId] * 1 > 0 ? 'pos' : 'neg'}`}>
-					<div class='upl'>
-						{formatPnl(upls[position.positionId])}
+		{#if $positions.length == 0}
+			<div class='empty'>No positions to show.</div>
+		{:else}
+			{#each $positions as position}
+				<div class='position' on:click={() => {showModal('PositionDetails', position)}} data-intercept="true">
+
+					<div class='column column-product'>{position.isLong ? '↑' : '↓'} {position.product}</div>
+					<div class='column column-price'>
+
+						{#if position.price * 1 == 0}
+							<span class='status'>Settling</span>
+						{:else}
+							{formatToDisplay(position.price)}
+						{/if}
+
 					</div>
+					<div class='column column-size'>{formatToDisplay(position.size)} {formatCurrency(position.currencyLabel)}</div>
+					<div class='column column-margin'>{formatToDisplay(position.margin)} {formatCurrency(position.currencyLabel)}</div>
+					<div class='column column-leverage'>{formatToDisplay(position.leverage)}×</div>
+					<div class={`column column-pnl ${upls[position.positionId] * 1 < 0 ? 'neg' : 'pos'}`}>
+						{formatPnl(upls[position.positionId]) || '-'}
+					</div>
+
+					<div class='column column-close'>
+
+						{#if position.closeOrderId > 0}
+							<span class='status'>Closing</span>
+						{:else if position.price * 1 > 0}
+						<a class='close' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">
+							{@html CANCEL_ICON}
+						</a>
+						{/if}
+
+					</div>
+
 				</div>
-			</div>
 
-			<div class='column column-tools'>
+			{/each}
 
-				{#if position.price * 1 == 0}
-						Settling
-				{/if}
+		{/if}
 
-				{#if position.closeOrderId > 0}
-						Closing
-				{/if}
-
-				<a class='close' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">
-					{@html CANCEL_ICON}
-				</a>
-			</div>
-
-		</div>
-
-	{/each}
+	</div>
 
 </div>

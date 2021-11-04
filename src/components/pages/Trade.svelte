@@ -41,6 +41,7 @@
 	}
 
 	.account {
+		position: relative;
 		background-color: var(--eerie-black);
 	}
 
@@ -49,9 +50,29 @@
 		background-color: var(--eerie-black);
 	}
 
-	.active {
+	.account-nav {
+		padding: 0 var(--base-padding);
+		display: flex;
+		height: 42px;
+		align-items: center;
+		border-bottom: 1px solid var(--jet-dim);
+	}
+
+	.account-list {
+		position: absolute;
+		top: 42px;
+		bottom: 0;
+		left: 0;
+		right: 0;
+	}
+
+	.account-nav a {
+		color: var(--sonic-silver);
+		margin-right: var(--base-padding);
+	}
+	.account-nav a.active {
 		color: var(--green);
-		text-decoration: underline;
+		font-weight: 600;
 	}
 
 </style>
@@ -68,16 +89,18 @@
 
 		<div class='account'>
 			<div class='account-nav'>
-				<a class:active={panel == 'positions'} on:click={() => {selectPanel('positions')}}>Positions</a> |
+				<a class:active={panel == 'positions'} on:click={() => {selectPanel('positions')}}>Positions</a>
 				<a class:active={panel == 'history'} on:click={() => {selectPanel('history')}}>History</a>
 			</div>
 
-			{#if panel == 'positions'}
-				<Positions />
-			{/if}
-			{#if panel == 'history'}
-				<History />
-			{/if}
+			<div class='account-list'>
+				{#if panel == 'positions'}
+					<Positions />
+				{/if}
+				{#if panel == 'history'}
+					<History />
+				{/if}
+			</div>
 		</div>
 
 	</div>

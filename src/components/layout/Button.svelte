@@ -4,6 +4,7 @@
 	export let isDisabled = false;
 	export let onClick = null;
 	export let label;
+	export let wrap = false;
 
 </script>
 
@@ -30,6 +31,16 @@
 		cursor: default;
 	}
 
+	.wrap {
+		padding: var(--base-padding);
+	}
+
 </style>
 
+{#if wrap}
+<div class='wrap'>
+	<button class:loading={isLoading} class:red={isRed} class:disabled={isDisabled} on:click={onClick}>{label}</button>
+</div>
+{:else}
 <button class:loading={isLoading} class:red={isRed} class:disabled={isDisabled} on:click={onClick}>{label}</button>
+{/if}

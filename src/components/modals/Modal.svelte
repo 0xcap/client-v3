@@ -35,7 +35,7 @@
 	}
 
 	.modal {
-		width: 460px;
+		width: 420px;
 		border: 1px solid var(--jet-dim);
 		border-radius: var(--base-radius);
 		background-color: var(--eerie-black);

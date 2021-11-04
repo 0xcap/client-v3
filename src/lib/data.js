@@ -1,7 +1,6 @@
 import { get } from 'svelte/store'
 
 import { selectProduct, selectCurrency, getUserPositions, getPoolInfo, getCapPoolInfo } from './methods'
-import { getUserHistory } from './graph'
 
 import { currentPage } from './stores'
 
@@ -18,7 +17,6 @@ export function hydrateData() {
 		selectProduct();
 		selectCurrency();
 		getUserPositions();
-		getUserHistory();
 	} else if (_currentPage == 'pool') {
 		getPoolInfo('weth');
 		getPoolInfo('usdc');

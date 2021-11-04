@@ -85,7 +85,7 @@
 		border: none;
 		height: 18px;
 		border-radius: var(--base-radius);
-		max-width: 100%;
+		width: 100%;
 		overflow: hidden;
 		transition: box-shadow 0.6s ease-in-out;
 	}
@@ -130,7 +130,7 @@
 
 	<div class='leverage-select'>
 		<div class='value'>
-			{$leverage}×
+			{formatToDisplay($leverage)}×
 		</div>
 		<div class='range-container'>
 			<input class='range' id='range' type=range bind:value={$leverage} min=1 max={maxLeverage}> 

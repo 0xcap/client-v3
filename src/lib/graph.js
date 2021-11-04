@@ -1,6 +1,8 @@
 // Subgraph interaction
 import { get } from 'svelte/store'
 
+import { getContract } from './contracts'
+
 import { formatUnits, formatTrades } from './utils'
 import { history, address } from './stores'
 
@@ -10,6 +12,20 @@ export async function getUserHistory() {
 
 	const _address = get(address);
 	if (!_address) return;
+
+	// From events (local test)
+	const contract = await getContract('trading');
+	if (!contract) return;
+
+	const filter = contract.filters.ClosePosition(null, _address);
+	const _events = await contract.queryFilter(filter, -1000);
+
+	history.set(formatTrades(_events.map((e) => {return e.args;})));
+	return;
+
+	////////
+
+	
 
 	const response = await fetch(graph_url, {
 		method: 'POST',
@@ -37,7 +53,6 @@ export async function getUserHistory() {
 				    closePrice,
 				    isLong,
 				    pnl,
-				    pnlIsNegative,
 				    timestamp,
 				    blockNumber,
 				    wasLiquidated,
