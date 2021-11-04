@@ -21,7 +21,7 @@
 		border-radius: var(--base-radius);
 		display: flex;
 		justify-content: space-between;
-		padding: 12px;
+		padding: 10px;
 		max-width: 420px;
 	}
 

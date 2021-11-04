@@ -1,16 +1,6 @@
 <script>
 
 /* TODO
-- place order
-- positions
-- history
-- ticker
-- chart
-- modals
-- header, nav, wallet, network, & disconnect
-- pools
-- toasts
-- disconnected state
 - homepage
 */
 
