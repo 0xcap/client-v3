@@ -26,7 +26,6 @@ export async function getProduct(productId) {
 
 export async function selectProduct(productId) {
 	
-	console.log('selectProduct', productId);
 	if (!productId) productId = get(Stores.productId);
 
 	const product = await getProduct(productId);
