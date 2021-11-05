@@ -82,7 +82,7 @@
 		<div class='benefits-title'>For Traders</div>
 
 		<div class='item'>
-			<div class='title'>Blazing Fast</div>
+			<div class='title'>Fast</div>
 			<div class='description'>Trades are executed and confirmed in seconds.</div>
 		</div>
 
@@ -93,7 +93,7 @@
 
 		<div class='item'>
 			<div class='title'>Leverage</div>
-			<div class='description'>Adjust leverage from 1x to 100x on each trade.</div>
+			<div class='description'>Adjust leverage from 1x to 50x on each trade.</div>
 		</div>
 
 	</div>
@@ -104,12 +104,12 @@
 
 		<div class='item'>
 			<div class='title'>Sustainable APR</div>
-			<div class='description'>Pool funds to back trader profits and receive their losses plus fees.</div>
+			<div class='description'>Pool funds to back trader profits and receive their losses.</div>
 		</div>
 
 		<div class='item'>
 			<div class='title'>Rewards</div>
-			<div class='description'>Get rewards directly in ETH and USDC, not inflation tokens.</div>
+			<div class='description'>Get fee rewards directly in ETH and USDC, not inflation tokens.</div>
 		</div>
 
 		<div class='item'>
@@ -129,7 +129,7 @@
 
 		<div class='item'>
 			<div class='title'>Passive Income</div>
-			<div class='description'>Receive platform fee rewards without risk.</div>
+			<div class='description'>Receive protocol fee rewards without risk.</div>
 		</div>
 
 		<div class='item'>
