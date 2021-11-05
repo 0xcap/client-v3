@@ -151,7 +151,7 @@ export async function getUserPoolBalance(currencyLabel) {
 	if (!contract) return 0;
 
 	// TEST TEST
-	return 0;
+	//return 0;
 
 	return formatUnits(await contract.getCurrencyBalance(address));
 

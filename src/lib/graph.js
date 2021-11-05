@@ -8,6 +8,32 @@ import { history, address } from './stores'
 
 const graph_url = 'https://api.thegraph.com/subgraphs/name/0xcap/capv3';
 
+export async function getVolume() {
+
+	// v1 and v2 volume should already be added in graph call 
+
+	const response = await fetch(graph_url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			query: `
+				query {
+					data(id: 1) {
+						cumulativeVolumeUSD
+					}
+				}
+			`
+		})
+	});
+	const json = await response.json();
+	if (!json.data) return {volume: 1099876787};
+	return {
+		volume: formatUnits(1 * json.data.data.cumulativeVolumeUSD)
+	};
+}
+
 export async function getUserHistory() {
 
 	const _address = get(address);

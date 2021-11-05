@@ -1,4 +1,7 @@
 <script>
+
+	import Volume from './Volume.svelte'
+
 	import { PRODUCTS } from '../lib/constants'
 	import { showModal, shortSymbol, displayPricePercentChange, formatToDisplay } from '../lib/utils'
 	import { productId, product, prices, prices24h } from '../lib/stores'
@@ -80,7 +83,7 @@
 	</div>
 
 	<div class='volume'>
-		<div class='value'>$1,009,299,221</div>
+		<div class='value'><Volume/></div>
 		<div class='label'>Protocol Volume</div>
 	</div>
 

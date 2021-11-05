@@ -1,9 +1,5 @@
 <script>
 
-/* TODO
-- homepage
-*/
-
 	import { onMount } from 'svelte'
 
 	import Input from './layout/Input.svelte'

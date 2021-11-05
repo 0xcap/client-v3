@@ -1,95 +1,153 @@
+<script>
+	import Volume from '../Volume.svelte'
 
+</script>
 <style>
+
+	.home {
+		background-color: var(--eerie-black);
+		padding: var(--base-padding);
+		display: grid;
+		grid-auto-flow: row;
+		grid-gap: 48px;
+	}
+
+	.hero {
+		display: grid;
+		grid-auto-flow: row;
+		grid-gap: 22px;
+	}
+
+	.volume .label {
+		color: var(--sonic-silver);
+		margin-top: 8px;
+		font-size: 90%;
+	}
+
+	.volume .value {
+		font-weight: 700;
+	}
+
+	.button {
+		padding: 8px var(--base-padding);
+		border-radius: var(--base-radius);
+		font-weight: 700;
+		color: var(--green-dark);
+		background-color: var(--green);
+		display: inline-block;
+	}
+
+	.button svg {
+		height: 26px;
+	}
+
+	.benefits {
+		display: grid;
+		grid-auto-flow: row;
+		grid-gap: 16px;
+	}
+
+	.benefits-title {
+		color: var(--green);
+		font-weight: 700;
+		font-size: 120%;
+	}
+
+	.item .title {
+		font-weight: 700;
+		margin-bottom: 8px;
+	}
 
 </style>
 
-<div class='hero'>
+<div class='home'>
+
+	<div class='hero'>
+			
+		<div class='tagline'>The fastest and cheapest way to trade.</div>
 		
-	<div class='left'>
-		<h2>The fastest and cheapest way to trade.</h2>
-		<a href='#/trade'>Trade</a>
+		<div class='button-wrap'>
+			<a class='button' href='#/trade'>Trade</a>
+		</div>
+
+		<div class='volume'>
+			<div class='value'><Volume/></div>
+			<div class='label'>Protocol Volume</div>
+		</div>
+
 	</div>
 
-	<div class='right'></div>
+	<div class='benefits'>
 
-</div>
+		<div class='benefits-title'>For Traders</div>
 
-<div class='item'>
-	<div class='title'>Community-led</div>
-	<div class='description'>Cap is a decentralized, community-funded project. Find us on Telegram and Twitter.</div>
-</div>
+		<div class='item'>
+			<div class='title'>Blazing Fast</div>
+			<div class='description'>Trades are executed and confirmed in seconds.</div>
+		</div>
 
-<div class='benefits'>
+		<div class='item'>
+			<div class='title'>Permissionless</div>
+			<div class='description'>Trade directly from your wallet — no account needed.</div>
+		</div>
 
-	<h3>For traders</h3>
+		<div class='item'>
+			<div class='title'>Leverage</div>
+			<div class='description'>Adjust leverage from 1x to 100x on each trade.</div>
+		</div>
 
-	<div class='item'>
-		<div class='title'>Blazing fast</div>
-		<div class='description'>Trades are executed and confirmed in seconds.</div>
 	</div>
 
-	<div class='item'>
-		<div class='title'>Permissionless</div>
-		<div class='description'>Trade directly from your wallet — no account needed.</div>
+	<div class='benefits'>
+
+		<div class='benefits-title'>For Liquidity Providers</div>
+
+		<div class='item'>
+			<div class='title'>Sustainable APR</div>
+			<div class='description'>Pool funds to back trader profits and receive their losses plus fees.</div>
+		</div>
+
+		<div class='item'>
+			<div class='title'>Rewards</div>
+			<div class='description'>Get rewards directly in ETH and USDC, not inflation tokens.</div>
+		</div>
+
+		<div class='item'>
+			<div class='title'>Flexible</div>
+			<div class='description'>Deposit and withdraw without time constraints.</div>
+		</div>
+
+		<div class='button-wrap'>
+			<a class='button' href='#/pool'>Pool</a>
+		</div>
+
 	</div>
 
-	<div class='item'>
-		<div class='title'>Leverage</div>
-		<div class='description'>Adjust leverage from 1x to 100x on each trade.</div>
+	<div class='benefits'>
+
+		<div class='benefits-title'>For CAP Holders</div>
+
+		<div class='item'>
+			<div class='title'>Passive Income</div>
+			<div class='description'>Receive platform fee rewards without risk.</div>
+		</div>
+
+		<div class='item'>
+			<div class='title'>Fixed Supply</div>
+			<div class='description'>CAP's supply is fixed at 100,000 with no inflation.</div>
+		</div>
+
+		<div class='item'>
+			<div class='title'>Participate</div>
+			<div class='description'>Join other CAP holders in deciding the protocol's future.</div>
+		</div>
+
+		<div class='button-wrap'>
+			<a class='button' href=''>Buy CAP</a>
+		</div>
+
 	</div>
 
-	<div class='button'>
-		<a href='#/trade'>Trade</a>
-	</div>
-
-</div>
-
-<div class='benefits'>
-
-	<h3>For liquidity providers</h3>
-
-	<div class='item'>
-		<div class='title'>High APR</div>
-		<div class='description'>Pool funds to back trader profits and receive their losses plus fees.</div>
-	</div>
-
-	<div class='item'>
-		<div class='title'>Hard currency rewards</div>
-		<div class='description'>Get rewards directly in ETH and USDC, not inflation tokens.</div>
-	</div>
-
-	<div class='item'>
-		<div class='title'>Flexible</div>
-		<div class='description'>Deposit and withdraw without time constraints.</div>
-	</div>
-
-	<div class='button'>
-		<a href='#/pool'>Pool</a>
-	</div>
-
-</div>
-
-<div class='benefits'>
-
-	<h3>For CAP holders</h3>
-
-	<div class='item'>
-		<div class='title'>Passive income</div>
-		<div class='description'>Receive platform fee rewards without risk.</div>
-	</div>
-
-	<div class='item'>
-		<div class='title'>Fixed supply</div>
-		<div class='description'>CAP's supply is fixed at 100,000 with no inflation.</div>
-	</div>
-
-	<div class='item'>
-		<div class='title'>Participate</div>
-		<div class='description'>Join other CAP holders in deciding the protocol's future.</div>
-	</div>
-
-	<div class='button'>
-		<a href=''>Buy CAP</a>
-	</div>
+	<div class='community'>Cap is a decentralized, community-funded project. Find us on <a href='https://t.me/capfin' target='_blank'>Telegram</a> and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
 
 </div>
