@@ -30,8 +30,7 @@
 	}
 
 	button.loading {
-		background-color: var(--jet);
-		color: var(--dim-gray);
+		opacity: 0.5;
 		pointer-events: none;
 		cursor: default;
 	}

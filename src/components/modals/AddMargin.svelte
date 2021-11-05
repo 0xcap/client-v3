@@ -44,7 +44,8 @@
 		const error = await addMargin(
 			data.positionId,
 			margin,
-			data.productId
+			data.productId,
+			data.currencyLabel
 		);
 		submitIsPending = false;
 	}

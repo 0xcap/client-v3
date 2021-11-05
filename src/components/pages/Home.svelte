@@ -67,7 +67,7 @@
 
 		<div class='benefits-title'>Cap</div>
 			
-		<div class='tagline'>The fastest and cheapest way to trade.</div>
+		<div class='tagline'>Fast and cheap decentralized trading.</div>
 		
 		<div class='button-wrap'>
 			<a class='button' href='#/trade'>Trade</a>

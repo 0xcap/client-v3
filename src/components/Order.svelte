@@ -66,7 +66,7 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 0 var(--base-padding);
-		border-bottom: 1px solid var(--onyx);
+		border-bottom: 1px solid var(--onyx-dim);
 		height: var(--ticker-height);
 	}
 
@@ -83,7 +83,7 @@
 	.pill {
 		padding: 4px 8px;
 		border-radius: var(--base-radius);
-		background-color: var(--onyx);
+		background-color: var(--onyx-dim);
 		cursor: pointer;
 		margin-left: 6px;
 	}
@@ -97,9 +97,9 @@
 	}
 
 	input {
-		background-color: var(--onyx);
+		background-color: var(--onyx-dim);
 		border-radius: var(--base-radius);
-		border: 1px solid var(--onyx);
+		border: 1px solid var(--onyx-dim);
 		padding: 11px 62px;
 		width: 100%;
 		box-sizing: border-box;
@@ -177,7 +177,7 @@
 
 	<div class='buttons'>
 		{#if $currencyLabel != 'weth' && $allowances[$currencyLabel] && $allowances[$currencyLabel]['trading'] * 1 == 0}
-		<Button label={`Approve ${$currencyLabel}`} onClick={() => {_approveCurrency()}} />
+		<Button label={`Approve ${formatCurrency($currencyLabel)}`} onClick={() => {_approveCurrency()}} />
 		{:else}
 		<Button isRed={true} isLoading={$isSubmittingShort} label='Short' onClick={() => {_submitNewPosition(false)}} /> <Button isLoading={$isSubmittingLong} label='Long' onClick={() => {_submitNewPosition(true)}} />
 		{/if}

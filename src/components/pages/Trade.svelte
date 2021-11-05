@@ -40,7 +40,7 @@
 
 	.sidebar {
 		order: 2;
-		background-color: var(--jet);
+		background-color: var(--jet-dim);
 	}
 
 	.account {

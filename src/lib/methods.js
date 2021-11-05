@@ -16,7 +16,6 @@ export async function getProduct(productId) {
 	if (productCache[productId]) return productCache[productId];
 	
 	const contract = await getContract('trading');
-	console.log('c', contract);
 	if (!contract) return {};
 
 	productCache[productId] = formatProduct(productId, await contract.getProduct(productId));
