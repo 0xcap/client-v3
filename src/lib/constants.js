@@ -34,7 +34,7 @@ export const ABIS = {
 	],
 	trading: [
 		"function getProduct(uint256 productId) view returns(tuple(address feed, uint256 maxLeverage, uint256 oracleMaxDeviation, uint256 liquidationThreshold, uint256 fee, uint256 interest))",
-		"function getUserPositions(address user) view returns(tuple(uint256 closeOrderId, uint256 productId, uint256 size, uint256 price, uint256 margin, bool isLong, address owner, uint256 timestamp, address currency, uint256 fee, uint256 positionId)[] _positions)",
+		"function getUserPositions(address user) view returns(tuple(bool isLong, address user, address currency, uint256 closeOrderId, uint256 productId, uint256 size, uint256 price, uint256 margin, uint256 timestamp, uint256 fee, uint256 positionId)[] _positions)",
 
 		"function submitNewPosition(address currency, uint256 productId, uint256 margin, uint256 size, bool isLong) payable",
 		"function addMargin(uint256 positionId, uint256 margin) payable",
@@ -43,14 +43,14 @@ export const ABIS = {
 		"function cancelOrder(uint256 orderId)",
 
 		"event NewPosition(uint256 indexed positionId, address indexed user, uint256 indexed productId, address currency, bool isLong, uint256 price, uint256 margin, uint256 size, uint256 fee)",
-		"event ClosePosition(uint256 positionId, address indexed user, uint256 indexed productId, uint256 price, uint256 margin, uint256 size, uint256 fee, int256 pnl, bool wasLiquidated)"
+		"event ClosePosition(uint256 indexed positionId, address indexed user, uint256 indexed productId, uint256 price, uint256 margin, uint256 size, uint256 fee, int256 pnl, bool wasLiquidated)"
 	],
 	pool: [
 		"function getBalance(address account) view returns(uint256)",
 		"function getCurrencyBalance(address account) view returns(uint256)",
 		"function totalSupply() view returns(uint256)",
 
-		"function deposit(uint256 amount)",
+		"function deposit(uint256 amount) payable",
 		"function withdraw(uint256 amount)"
 	],
 	rewards: [
@@ -72,13 +72,13 @@ export const ABIS = {
 export const CHAINDATA = {
 	31337: {
 		label: 'localhost',
-		router: '0x3155755b79aA083bd953911C92705B7aA82a18F9',
+		router: '0x56D13Eb21a625EdA8438F55DF2C31dC3632034f5',
 		explorer: 'http://localhost:8545',
 		currencies: {
-			weth: '0xab16A69A5a8c12C732e0DEFF4BE56A70bb64c926',
-			usdc: '0x1f10F3Ba7ACB61b2F50B9d6DdCf91a6f787C0E82'
+			weth: '0xe70f935c32dA4dB13e7876795f1e175465e6458e',
+			usdc: '0xccf1769D8713099172642EB55DDFFC0c5A444FE9'
 		},
-		cap: '0xE3011A37A904aB90C8881a99BD1F6E21401f1522'
+		cap: '0x3C15538ED063e688c8DF3d571Cb7a0062d2fB18D'
 	},
 	42161: {
 		label: 'Arbitrum',

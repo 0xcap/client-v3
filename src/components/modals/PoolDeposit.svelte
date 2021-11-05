@@ -2,7 +2,7 @@
 
 	import { onMount } from 'svelte'
 
-	import { formatToDisplay, formatCurrency } from '../../lib/utils'
+	import { formatToDisplay, formatCurrency, hideModal } from '../../lib/utils'
 	
 	import { deposit, depositCAP } from '../../lib/methods'
 	
@@ -17,9 +17,6 @@
 	async function calculateShare() {
 		
 	}
-
-	let canSubmit;
-	$: canSubmit = true;
 
 	let submitIsPending = false;
 	async function _submit() {
@@ -59,5 +56,5 @@
 
 <Modal>
 	<DataList data={rows} bind:value={amount} />
-	<Button wrap={true} isDisabled={!canSubmit || submitIsPending} onClick={_submit} label={`Deposit into ${formatCurrency(data.currencyLabel)} pool`} />
+	<Button wrap={true} isLoading={!amount || submitIsPending} onClick={_submit} label={`Deposit into ${formatCurrency(data.currencyLabel)} pool`} />
 </Modal>

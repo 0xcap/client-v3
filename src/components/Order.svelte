@@ -2,7 +2,6 @@
 
 	import { onMount } from 'svelte'
 
-	import Input from './layout/Input.svelte'
 	import Button from './layout/Button.svelte'
 
 	import { submitNewPosition, approveCurrency, getBalanceOf } from '../lib/methods'
@@ -11,7 +10,7 @@
 	import { showModal, shortSymbol, getCachedLeverage, formatToDisplay, formatCurrency } from '../lib/utils'
 	import { CARET_DOWN } from '../lib/icons'
 
-	import { productId, product, currencyLabel, leverage, size, margin, marginPlusFee, isSubmittingShort, isSubmittingLong, prices, allowances } from '../lib/stores'
+	import { address, productId, product, currencyLabel, leverage, size, margin, marginPlusFee, isSubmittingShort, isSubmittingLong, prices, allowances } from '../lib/stores'
 
 	// functions
 
@@ -22,11 +21,12 @@
 
 	async function _submitNewPosition(isLong) {
 		if (!$size) return focusAmount();
-		const result = await submitNewPosition(isLong);
-		if (result) {
-			size.set();
-		} else {
+		const error = await submitNewPosition(isLong);
+		if (error) {
 			focusAmount();
+		} else {
+			available -= $size * 1;
+			size.set();
 		}
 	}
 
@@ -34,25 +34,27 @@
 		const result = await approveCurrency($currencyLabel, 'trading');
 	}
 
-	function setInitialLeverage(_product) {
-		if (!_product) return;
-		const cached = getCachedLeverage(_product.id);
-		if (cached) return leverage.set(cached);
-		leverage.set(_product.maxLeverage);
+	function setInitialLeverage(_product, _productId) {
+		if (!_product || !_productId) return;
+		const cached = getCachedLeverage(_productId);
+		if (cached) {
+			leverage.set(cached);
+		} else {
+			leverage.set(_product.maxLeverage);
+		}
 	}
 
-	$: setInitialLeverage($product, $productId);
+	$: setInitialLeverage($product, $productId);	
 
 	let available = 0;
 
-	async function getBalance(_currencyLabel, _leverage) {
+	async function getBalance(_currencyLabel, _leverage, _address) {
+		if (!_leverage || !_currencyLabel || !_address) return;
 		let balance = await getBalanceOf(_currencyLabel);
 		available = balance * _leverage * 1;
 	}
 
-	$: getBalance($currencyLabel, $leverage);
-
-	//$: console.log('cp1', $productId, $product, $currency);
+	$: getBalance($currencyLabel, $leverage, $address);
 
 </script>
 

@@ -2,8 +2,6 @@
 
 	import { onMount } from 'svelte'
 
-	import Input from './Input.svelte'
-
 	import { showModal } from '../../lib/utils'
 
 	export let data;

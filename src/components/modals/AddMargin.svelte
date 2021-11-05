@@ -90,5 +90,5 @@
 
 <Modal title='Add Margin'>
 	<DataList data={rows} bind:value={margin} />
-	<Button wrap={true} isDisabled={!canSubmit} isPending={submitIsPending} onClick={_submitOrder} label='Add Margin' />
+	<Button wrap={true} isLoading={!canSubmit || submitIsPending} onClick={_submitOrder} label='Add Margin' />
 </Modal>

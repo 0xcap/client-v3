@@ -59,5 +59,5 @@
 
 <Modal>
 	<DataList data={rows} bind:value={amount} />
-	<Button wrap={true} isDisabled={!canSubmit || submitIsPending} onClick={_submit} label={`Withdraw from ${formatCurrency(data.currencyLabel)} pool`} />
+	<Button wrap={true} isLoading={!amount || submitIsPending} onClick={_submit} label={`Withdraw from ${formatCurrency(data.currencyLabel)} pool`} />
 </Modal>

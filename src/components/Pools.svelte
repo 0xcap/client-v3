@@ -109,7 +109,7 @@
 
 				<div class='row'>
 					<div class='column-asset label'>My Share</div>
-					<div class='column-apr'>{formatToDisplay(poolInfo.userBalance) || 0} {formatCurrency(_currencyLabel)} ({!poolInfo.tvl ? 0 : 100*poolInfo.userBalance/poolInfo.tvl}%)</div>
+					<div class='column-apr'>{formatToDisplay(poolInfo.userBalance) || 0} {formatCurrency(_currencyLabel)} ({formatToDisplay(poolInfo.tvl*1 == 0 ? 0 : 100*poolInfo.userBalance/poolInfo.tvl)}%)</div>
 					<div class='column-tvl'>
 						{#if $allowances[_currencyLabel] && $allowances[_currencyLabel]['pool' + _currencyLabel] * 1 == 0}
 							<a on:click={() => {_approveCurrency(_currencyLabel)}}>Approve {formatCurrency(_currencyLabel)}</a>
@@ -144,7 +144,7 @@
 
     		<div class='row'>
     			<div class='column-asset label'>My Share</div>
-    			<div class='column-apr'>{formatToDisplay($capPool.userBalance)}</div>
+    			<div class='column-apr'>{formatToDisplay($capPool.userBalance)} ({formatToDisplay($capPool.supply*1 == 0 ? 0 : 100*$capPool.userBalance/$capPool.supply)}%)</div>
     			<div class='column-tvl'>
     				{#if $allowances['cap'] && $allowances['cap']['capPool'] * 1 == 0}
     					<a on:click={() => {_approveCurrency('cap')}}>Approve CAP</a>

@@ -127,7 +127,7 @@
 					<div class='column column-product'>{trade.isLong ? '↑' : '↓'} {trade.product}</div>
 					<div class='column column-price'>{formatToDisplay(trade.price)}</div>
 					<div class='column column-size'>{formatToDisplay(trade.size)} {formatCurrency(trade.currencyLabel)}</div>
-					<div class='column column-leverage'>{formatToDisplay(trade.leverage)}</div>
+					<div class='column column-leverage'>{formatToDisplay(trade.leverage)}×</div>
 					<div class={`column column-pnl ${trade.pnl * 1 < 0 ? 'neg' : 'pos'}`}>{formatPnl(trade.pnl)}</div>
 
 				</div>

@@ -8,8 +8,6 @@
 
 	import { hideModal } from '../../lib/utils'
 	import { PRODUCTS } from '../../lib/constants'
-
-	export let isActive;
 	
 </script>
 
@@ -48,7 +46,7 @@
 
 </style>
 
-<Modal isActive={isActive}>
+<Modal>
 
 	{#each Object.entries(PRODUCTS) as [_productId, _product]}
 

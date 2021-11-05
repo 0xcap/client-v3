@@ -11,6 +11,8 @@ import * as Stores from './stores'
 
 let productCache = {};
 
+// TODO: errors and toasts
+
 export async function getProduct(productId) {
 	
 	if (productCache[productId]) return productCache[productId];
@@ -109,9 +111,13 @@ export async function approveCurrency(currencyLabel, spenderName) {
 
 	const spenderAddress = spenderContract.address;
 
-	const tx = await contract.approve(spenderAddress, parseUnits(10 * 10**9, 18));
-
-	monitorTx(tx.hash, 'approve', {currencyLabel, spenderName});
+	try {
+		const tx = await contract.approve(spenderAddress, parseUnits(10 * 10**9, 18));
+		monitorTx(tx.hash, 'approve', {currencyLabel, spenderName});
+	} catch(e) {
+		showToast(e);
+		return e;
+	}
 
 }
 
@@ -121,7 +127,7 @@ export async function getBalanceOf(currencyLabel, address, forceWETH) {
 	
 	if (!address) {
 		address = get(Stores.address);
-		if (!address) return;
+		if (!address) return 0;
 	}
 
 	let balance;
@@ -130,7 +136,7 @@ export async function getBalanceOf(currencyLabel, address, forceWETH) {
 		balance = await get(Stores.provider).getBalance(address);
 	} else {
 		const contract = await getContract(currencyLabel);
-		if (!contract) return;
+		if (!contract) return 0;
 		balance = await contract.balanceOf(address);
 	}
 	
@@ -166,6 +172,8 @@ export async function getPoolInfo(currencyLabel) {
 		const poolBalance = await getBalanceOf(currencyLabel, contract.address, true);
 		const userBalance = await getUserPoolBalance(currencyLabel);
 		const claimableReward = await getClaimableReward(currencyLabel);
+
+		console.log('poolBalance', currencyLabel, contract.address, poolBalance);
 
 		info = {
 			tvl: poolBalance,
@@ -270,7 +278,7 @@ export async function depositCAP(amount) {
 	const contract = await getContract('capPool', true);
 	if (!contract) return;
 
-	let tx = await contract.stake(parseUnits(amount));
+	let tx = await contract.deposit(parseUnits(amount));
 
 	monitorTx(tx.hash, 'cap-deposit');
 

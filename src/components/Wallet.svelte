@@ -38,7 +38,7 @@
 	{#if $address}
 		<div class='address'>{shortAddress($address)}</div>
 	{:else}
-		<Button small={true} isDisabled={false} onClick={() => {showModal('Connect')}} label={`Connect Wallet`} />
+		<Button small={true} onClick={() => {showModal('Connect')}} label={`Connect Wallet`} />
 	{/if}
 
 </div>
