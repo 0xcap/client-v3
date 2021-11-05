@@ -17,12 +17,22 @@
 
 <style>
 
+	.wallet {
+		display: flex;
+		align-items: center;
+	}
+
+	.wrong-network {
+		color: var(--orange);
+		padding-right: var(--base-padding);
+	}
+
 </style>
 
 <div class='wallet'>
 
 	{#if $wrongNetwork}
-	Wrong network
+	<div class='wrong-network'>Switch to Arbitrum</div>
 	{/if}
 
 	{#if $address}

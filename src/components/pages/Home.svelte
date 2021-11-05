@@ -35,6 +35,7 @@
 		color: var(--green-dark);
 		background-color: var(--green);
 		display: inline-block;
+		margin-right: 10px;
 	}
 
 	.button svg {
@@ -63,6 +64,8 @@
 <div class='home'>
 
 	<div class='hero'>
+
+		<div class='benefits-title'>Cap</div>
 			
 		<div class='tagline'>The fastest and cheapest way to trade.</div>
 		
@@ -143,7 +146,8 @@
 		</div>
 
 		<div class='button-wrap'>
-			<a class='button' href=''>Buy CAP</a>
+			<a class='button' href='https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x43044f861ec040db59a7e324c40507addb673142'>Buy CAP (Ethereum)</a>
+			<a class='button' href='https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x031d35296154279dc1984dcd93e392b1f946737b'>Buy CAP (Arbitrum)</a>
 		</div>
 
 	</div>

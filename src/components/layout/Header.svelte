@@ -30,13 +30,26 @@
 		font-weight: 700;
 	}
 
+	img {
+		height: 11px;
+		filter: grayscale(1);
+		opacity: 0.5;
+	}
+
+	.active img {
+		filter: grayscale(0);
+		opacity: 1;
+	}
+
 </style>
 
 
 <header>
 
 	<div class='left'>
-		<a class:active={$currentPage == 'home' || !$currentPage} href='/'>Cap</a>
+		<a class:active={$currentPage == 'home' || !$currentPage} href='/'>
+			<img src='/logo.svg' title='Cap logo' alt='Cap logo' />
+		</a>
 		<a class:active={$currentPage == 'trade'} href='#/trade'>Trade</a>
 		<a class:active={$currentPage == 'pool'} href='#/pool'>Pool</a>
 	</div>
