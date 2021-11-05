@@ -23,7 +23,7 @@ const lookbacks = {
 	86400: 24 * 12 * 24 * 60 * 60 * 1000,
 };
 
-const sidebarWidth = 280;
+let sidebarWidth = 280;
 
 export function initChart() {
 
@@ -37,6 +37,10 @@ export function initChart() {
 
 		let chartElem = document.getElementById('chart');
 		let tradingRowElem = document.getElementById('trade');
+
+		// mobile
+		if (tradingRowElem.offsetWidth <= 600) sidebarWidth = 0;
+		
 		let chartDivWidth = tradingRowElem.offsetWidth - sidebarWidth;
 		let chartDivHeight = chartElem.offsetHeight;
 

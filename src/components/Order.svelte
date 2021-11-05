@@ -145,6 +145,13 @@
 		justify-content: space-between;
 		padding-bottom: 10px;
 	}
+	.row:last-child {
+		padding-bottom: 0;
+	}
+
+	.detail-label {
+		color: var(--sonic-silver);
+	}
 
 </style>
 
@@ -180,18 +187,23 @@
 	<div class='details'>
 		{#if $margin * 1 > 0}
 		<div class='row'>
+			<div class='detail-label'>Size in USD</div>
+			<div class='detail-value'>${formatToDisplay($prices[1] * $size, 2)}</div>
+		</div>
+		<div class='row'>
 			<div class='detail-label'>Margin</div>
 			<div class='detail-value'>{formatToDisplay($marginPlusFee)} {formatCurrency($currencyLabel)}</div>
 		</div>
 		<div class='row'>
-			<div class='detail-label'>Size in USD</div>
-			<div class='detail-value'>${formatToDisplay($prices[1] * $size, 2)}</div>
+			<div class='detail-label'>Fee</div>
+			<div class='detail-value'>{$product.fee}%</div>
 		</div>
-		{/if}
+		{:else}
 		<div class='row'>
 			<div class='detail-label'>Buying Power</div>
 			<div class='detail-value'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
 		</div>
+		{/if}
 	</div>
 	
 

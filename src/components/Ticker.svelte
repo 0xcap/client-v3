@@ -59,6 +59,18 @@
 		color: var(--onyx);
 	}
 
+	@media (max-width: 600px) {
+
+		.volume {
+			display: none;
+		}
+
+		.item {
+			margin-right: var(--base-padding);
+		}
+
+	}
+
 </style>
 
 

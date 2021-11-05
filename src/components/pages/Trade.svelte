@@ -31,6 +31,7 @@
 	}
 
 	.core {
+		order: 1;
 		display: grid;
 		grid-gap: var(--grid-gap);
 		grid-auto-flow: row;
@@ -38,6 +39,7 @@
 	}
 
 	.sidebar {
+		order: 2;
 		background-color: var(--jet);
 	}
 
@@ -75,9 +77,34 @@
 		font-weight: 600;
 	}
 
+	@media (max-width: 600px) {
+		
+		.trade {
+			display: grid;
+			grid-gap: var(--grid-gap);
+			grid-auto-flow: row;
+			grid-template-rows: auto;
+			grid-template-columns: unset;
+			overflow-y: scroll;
+		}
+
+		.core {
+			order: 2;
+		}
+
+		.sidebar {
+			order: 1;
+		}
+
+		.account-list {
+			min-height: 300px;
+		}
+
+	}
+
 </style>
 
-<div class='trade' id='trade'>
+<div class='trade no-scrollbar' id='trade'>
 
 	<div class='core'>
 
@@ -87,6 +114,7 @@
 		<Chart/>
 
 		<div class='account'>
+
 			<div class='account-nav'>
 				<a class:active={panel == 'positions'} on:click={() => {selectPanel('positions')}}>Positions</a>
 				<a class:active={panel == 'history'} on:click={() => {selectPanel('history')}}>History</a>

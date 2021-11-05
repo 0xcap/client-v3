@@ -120,6 +120,27 @@
 		text-align: center;
 	}
 
+	@media (max-width: 600px) {
+
+		.column-leverage, .column-margin {
+			display: none;
+		}
+
+		.column-product {
+			width: 30%;
+		}
+		.column-price {
+			width: 20%;
+		}
+		.column-size {
+			width: 15%;
+		}
+		.column-pnl {
+			width: 25%;
+		}
+
+	}
+
 </style>
 
 <div class='positions'>
