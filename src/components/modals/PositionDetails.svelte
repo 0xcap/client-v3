@@ -5,7 +5,7 @@
 	import Modal from './Modal.svelte'
 	import DataList from '../layout/DataList.svelte'
 
-	import { getUPL, getInterest, calculateLiquidationPrice, formatToDisplay, formatPnl } from '../../lib/utils'
+	import { getUPL, getInterest, calculateLiquidationPrice, formatToDisplay, formatPnl, formatCurrency } from '../../lib/utils'
 	import { cancelPosition, cancelOrder } from '../../lib/methods'
 
 	import { prices } from '../../lib/stores'
@@ -48,6 +48,10 @@
 			{
 				label: 'Product',
 				value: data.product
+			},
+			{
+				label: 'Currency',
+				value: formatCurrency(data.currencyLabel)
 			},
 			{
 				label: 'Direction',

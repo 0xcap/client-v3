@@ -4,7 +4,7 @@
 	import DataList from '../layout/DataList.svelte'
 
 	import { EXTERNAL_ICON } from '../../lib/icons'
-	import { txLink, formatToDisplay, formatPnl } from '../../lib/utils'
+	import { txLink, formatToDisplay, formatPnl, formatCurrency } from '../../lib/utils'
 
 	export let data;
 	export let isActive;
@@ -23,6 +23,10 @@
 			{
 				label: 'Product',
 				value: data.product
+			},
+			{
+				label: 'Currency',
+				value: formatCurrency(data.currencyLabel)
 			},
 			{
 				label: 'Direction',
