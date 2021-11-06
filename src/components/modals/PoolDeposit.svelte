@@ -2,7 +2,7 @@
 
 	import { onMount } from 'svelte'
 
-	import { formatToDisplay, formatCurrency, hideModal } from '../../lib/utils'
+	import { formatToDisplay, formatCurrency } from '../../lib/utils'
 	
 	import { deposit, depositCAP } from '../../lib/methods'
 	
@@ -33,7 +33,6 @@
 			);
 		}
 		submitIsPending = false;
-		hideModal();
 	}
 
 	onMount(async () => {

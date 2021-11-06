@@ -2,7 +2,7 @@
 
 	import { submitCloseOrder } from '../../lib/methods'
 	
-	import { formatToDisplay, formatCurrency, hideModal } from '../../lib/utils'
+	import { formatToDisplay, formatCurrency } from '../../lib/utils'
 
 	import Modal from './Modal.svelte'
 	
@@ -52,7 +52,6 @@
 			data.currencyLabel
 		);
 		submitIsPending = false;
-		hideModal();
 	}
 
 	let rows;

@@ -199,10 +199,12 @@ export async function getPoolInfo(currencyLabel) {
 		tvl: 0,
 		userBalance: 0,
 		claimableReward: 0,
-		poolShare: 50
+		poolShare: 50,
+		withdrawFee: 0.15
 	};
 
 	const contract = await getContract('pool', false, currencyLabel);
+
 	if (!contract) {
 		Stores.pools.update((x) => {
 			x[currencyLabel] = info;
@@ -216,12 +218,14 @@ export async function getPoolInfo(currencyLabel) {
 		const userBalance = await getUserPoolBalance(currencyLabel);
 		const claimableReward = await getClaimableReward(currencyLabel);
 		const poolShare = await getPoolShare(currencyLabel);
+		const withdrawFee = formatUnits(await contract.withdrawFee(), 2);
 
 		info = {
 			tvl: poolBalance,
 			userBalance,
 			claimableReward,
-			poolShare
+			poolShare,
+			withdrawFee
 		};
 
 	} catch(e) {}
@@ -248,6 +252,7 @@ export async function deposit(currencyLabel, amount) {
 		}
 
 		monitorTx(tx.hash, 'pool-deposit', {currencyLabel});
+		hideModal();
 	} catch(e) {
 		showToast(e);
 		return e;
@@ -263,6 +268,7 @@ export async function withdraw(currencyLabel, amount) {
 	try {
 		let tx = await contract.withdraw(parseUnits(amount));
 		monitorTx(tx.hash, 'pool-withdraw', {currencyLabel});
+		hideModal();
 	} catch(e) {
 		showToast(e);
 		return e;
@@ -349,6 +355,7 @@ export async function depositCAP(amount) {
 	try {
 		let tx = await contract.deposit(parseUnits(amount));
 		monitorTx(tx.hash, 'cap-deposit');
+		hideModal();
 	} catch(e) {
 		showToast(e);
 		return e;
@@ -364,6 +371,7 @@ export async function withdrawCAP(amount) {
 	try {
 		let tx = await contract.withdraw(parseUnits(amount));
 		monitorTx(tx.hash, 'cap-withdraw');
+		hideModal();
 	} catch(e) {
 		showToast(e);
 		return e;

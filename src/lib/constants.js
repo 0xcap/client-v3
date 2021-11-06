@@ -50,6 +50,7 @@ export const ABIS = {
 		"function getBalance(address account) view returns(uint256)",
 		"function getCurrencyBalance(address account) view returns(uint256)",
 		"function totalSupply() view returns(uint256)",
+		"function withdrawFee() view returns(uint256)",
 
 		"function deposit(uint256 amount) payable",
 		"function withdraw(uint256 amount)"
