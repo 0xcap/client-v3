@@ -168,7 +168,7 @@ export function formatProduct(id, product) {
 		maxLeverage: formatUnits(product.maxLeverage),
 		liquidationThreshold: formatUnits(product.liquidationThreshold, 2),
 		fee: formatUnits(product.fee, 4),
-		interest: formatUnits(product.fee, 2)
+		interest: formatUnits(product.interest, 2)
 	};
 }
 export function formatPositions(positions) {

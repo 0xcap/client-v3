@@ -6,6 +6,8 @@ import { provider } from './stores'
 
 import { getUserPositions, getAllowance, getPoolInfo, getCapPoolInfo } from './methods'
 
+import { showToast } from './utils'
+
 export async function monitorTx(hash, type, details) {
 
 	let i = 0;
@@ -21,17 +23,44 @@ export async function monitorTx(hash, type, details) {
 
 }
 
+// Todo: show success toasts
+
 async function handleTxComplete(type, details) {
 
 	if (type == 'submit-new-position') {
+		showToast('Order submitted.', 'success');
 		await getUserPositions();
 	} else if (type == 'submit-close-order') {
+		showToast('Close order submitted.', 'success');
+		await getUserPositions();
+	} else if (type == 'add-margin') {
+		showToast('Margin added.', 'success');
+		await getUserPositions();
+	} else if (type == 'cancel-position') {
+		showToast('Position cancelled.', 'success');
+		await getUserPositions();
+	} else if (type == 'cancel-order') {
+		showToast('Close order cancelled.', 'success');
 		await getUserPositions();
 	} else if (type == 'approve') {
 		await getAllowance(details.currencyLabel, details.spenderName);
-	} else if (type == 'pool-deposit' || type == 'pool-withdraw' || type == 'pool-collect') {
+	} else if (type == 'pool-deposit') {
+		showToast('Deposited into pool.', 'success');
 		await getPoolInfo(details.currencyLabel);
-	} else if (type == 'cap-deposit' || type == 'cap-withdraw' || type == 'cap-collect') {
+	} else if (type == 'pool-withdraw') {
+		showToast('Withdrawed from pool.', 'success');
+		await getPoolInfo(details.currencyLabel);
+	} else if (type == 'pool-collect') {
+		showToast('Collected rewards from pool.', 'success');
+		await getPoolInfo(details.currencyLabel);
+	} else if (type == 'cap-deposit') {
+		showToast('Deposited CAP into pool.', 'success');
+		await getCapPoolInfo();
+	} else if (type == 'cap-withdraw') {
+		showToast('Withdrawed CAP from pool.', 'success');
+		await getCapPoolInfo();
+	} else if (type == 'cap-collect') {
+		showToast('Collected rewards from CAP pool.', 'success');
 		await getCapPoolInfo();
 	}
 

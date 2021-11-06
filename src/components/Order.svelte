@@ -56,6 +56,19 @@
 
 	$: getBalance($currencyLabel, $leverage, $address);
 
+	let sizeInUSD = 0;
+
+	async function getSizeInUSD(_currencyLabel, _prices, _size) {
+		if (!_prices || !_currencyLabel || !_size) return 0;
+		if (_currencyLabel == 'weth') {
+			sizeInUSD = _prices[1] * _size;
+		} else if (_currencyLabel == 'usdc') {
+			sizeInUSD = _size;
+		}
+	}
+
+	$: getSizeInUSD($currencyLabel, $prices, $size);
+
 </script>
 
 <style>
@@ -190,7 +203,7 @@
 		{#if $margin * 1 > 0}
 		<div class='row'>
 			<div class='detail-label'>Size in USD</div>
-			<div class='detail-value'>${formatToDisplay($prices[1] * $size, 2)}</div>
+			<div class='detail-value'>${formatToDisplay(sizeInUSD, 2)}</div>
 		</div>
 		<div class='row'>
 			<div class='detail-label'>Margin</div>

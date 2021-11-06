@@ -46,7 +46,9 @@ export async function getUserHistory() {
 	const filter = contract.filters.ClosePosition(null, _address);
 	const _events = await contract.queryFilter(filter, -1000);
 
-	history.set(formatTrades(_events.map((e) => {return e.args;})));
+	let evs = _events.map((e) => {return e.args;});
+	evs.reverse();
+	history.set(formatTrades(evs));
 	return;
 
 	////////

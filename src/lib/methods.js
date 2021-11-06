@@ -196,15 +196,20 @@ export async function deposit(currencyLabel, amount) {
 	const contract = await getContract('pool', true, currencyLabel);
 	if (!contract) return;
 
-	let tx;
+	try {
+		let tx;
 
-	if (currencyLabel == 'weth') {
-		tx = await contract.deposit(amount, {value: parseUnits(amount)});
-	} else {
-		tx = await contract.deposit(parseUnits(amount));
+		if (currencyLabel == 'weth') {
+			tx = await contract.deposit(amount, {value: parseUnits(amount)});
+		} else {
+			tx = await contract.deposit(parseUnits(amount));
+		}
+
+		monitorTx(tx.hash, 'pool-deposit', {currencyLabel});
+	} catch(e) {
+		showToast(e);
+		return e;
 	}
-
-	monitorTx(tx.hash, 'pool-deposit', {currencyLabel});
 
 }
 
@@ -213,9 +218,13 @@ export async function withdraw(currencyLabel, amount) {
 	const contract = await getContract('pool', true, currencyLabel);
 	if (!contract) return;
 
-	let tx = await contract.withdraw(parseUnits(amount));
-
-	monitorTx(tx.hash, 'pool-withdraw', {currencyLabel});
+	try {
+		let tx = await contract.withdraw(parseUnits(amount));
+		monitorTx(tx.hash, 'pool-withdraw', {currencyLabel});
+	} catch(e) {
+		showToast(e);
+		return e;
+	}
 
 }
 
@@ -224,9 +233,13 @@ export async function collectPoolReward(currencyLabel) {
 	const contract = await getContract('poolrewards', true, currencyLabel);
 	if (!contract) return;
 
-	let tx = await contract.collectReward();
-
-	monitorTx(tx.hash, 'pool-collect', {currencyLabel});
+	try {
+		let tx = await contract.collectReward();
+		monitorTx(tx.hash, 'pool-collect', {currencyLabel});
+	} catch(e) {
+		showToast(e);
+		return e;
+	}
 
 }
 
@@ -278,9 +291,13 @@ export async function depositCAP(amount) {
 	const contract = await getContract('capPool', true);
 	if (!contract) return;
 
-	let tx = await contract.deposit(parseUnits(amount));
-
-	monitorTx(tx.hash, 'cap-deposit');
+	try {
+		let tx = await contract.deposit(parseUnits(amount));
+		monitorTx(tx.hash, 'cap-deposit');
+	} catch(e) {
+		showToast(e);
+		return e;
+	}
 
 }
 
@@ -289,9 +306,13 @@ export async function withdrawCAP(amount) {
 	const contract = await getContract('capPool', true);
 	if (!contract) return;
 
-	let tx = await contract.withdraw(parseUnits(amount));
-
-	monitorTx(tx.hash, 'cap-withdraw');
+	try {
+		let tx = await contract.withdraw(parseUnits(amount));
+		monitorTx(tx.hash, 'cap-withdraw');
+	} catch(e) {
+		showToast(e);
+		return e;
+	}
 
 }
 
@@ -300,9 +321,13 @@ export async function collectCAPReward(currencyLabel) {
 	const contract = await getContract('caprewards', true, currencyLabel);
 	if (!contract) return;
 
-	let tx = await contract.collectReward();
-
-	monitorTx(tx.hash, 'cap-collect', {currencyLabel});
+	try {
+		let tx = await contract.collectReward();
+		monitorTx(tx.hash, 'cap-collect', {currencyLabel});
+	} catch(e) {
+		showToast(e);
+		return e;
+	}
 
 }
 
@@ -360,41 +385,48 @@ export async function submitNewPosition(isLong) {
 		Stores.isSubmittingShort.set(true);
 	}
 
-	let tx;
+	try {
 
-	if (currencyLabel == 'weth') {
+		let tx;
 
-		// Add fee to margin
-		const product = get(Stores.product);
-		const fee = product.fee * 1;
-		margin += size * fee / 100;
+		if (currencyLabel == 'weth') {
 
-		tx = await contract.submitNewPosition(
-			currency,
-			productId,
-			0,
-			parseUnits(size),
-			isLong,
-			{value: parseUnits(margin)}
-		);
+			// Add fee to margin
+			const product = get(Stores.product);
+			const fee = product.fee * 1;
+			margin += size * fee / 100;
 
-	} else {
+			tx = await contract.submitNewPosition(
+				currency,
+				productId,
+				0,
+				parseUnits(size),
+				isLong,
+				{value: parseUnits(margin)}
+			);
 
-		// ERC20, should be pre-approved
-		tx = await contract.submitNewPosition(
-			currency,
-			productId,
-			parseUnits(margin),
-			parseUnits(size),
-			isLong
-		);
+		} else {
 
+			// ERC20, should be pre-approved
+			tx = await contract.submitNewPosition(
+				currency,
+				productId,
+				parseUnits(margin),
+				parseUnits(size),
+				isLong
+			);
+
+		}
+
+		Stores.isSubmittingLong.set(false);
+		Stores.isSubmittingShort.set(false);
+
+		monitorTx(tx.hash, 'submit-new-position');
+
+	} catch(e) {
+		showToast(e);
+		return e;
 	}
-
-	Stores.isSubmittingLong.set(false);
-	Stores.isSubmittingShort.set(false);
-
-	monitorTx(tx.hash, 'submit-new-position');
 
 }
 
@@ -405,32 +437,38 @@ export async function submitCloseOrder(positionId, productId, size, currencyLabe
 	const contract = await getContract('trading', true);
 	if (!contract) return;
 
-	let tx;
+	try {
+		let tx;
 
-	if (currencyLabel == 'weth') {
+		if (currencyLabel == 'weth') {
 
-		const product = await getProduct(productId);
-		const fee = size * product.fee * 1.003 / 100;
+			const product = await getProduct(productId);
+			const fee = size * product.fee * 1.003 / 100;
 
-		console.log('size', size);
-		console.log('fee', product.fee, fee);
+			console.log('size', size);
+			console.log('fee', product.fee, fee);
 
-		tx = await contract.submitCloseOrder(
-			positionId,
-			parseUnits(size),
-			{value: parseUnits(fee)}
-		);
+			tx = await contract.submitCloseOrder(
+				positionId,
+				parseUnits(size),
+				{value: parseUnits(fee)}
+			);
 
-	} else {
+		} else {
 
-		tx = await contract.submitCloseOrder(
-			positionId,
-			parseUnits(size)
-		);
+			tx = await contract.submitCloseOrder(
+				positionId,
+				parseUnits(size)
+			);
 
+		}
+
+		monitorTx(tx.hash, 'submit-close-order');
+
+	} catch(e) {
+		showToast(e);
+		return e;
 	}
-
-	monitorTx(tx.hash, 'submit-close-order');
 
 }
 
