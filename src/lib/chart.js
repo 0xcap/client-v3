@@ -91,7 +91,7 @@ export function initChart() {
 	            // try to load additional historical data and prepend it to the series data
 	            // use setData with additional data prepended
 	            if (isLoadingCandles) return;
-	            console.log('load additional data to the left');
+	            // console.log('load additional data to the left');
 	            isLoadingCandles = true;
 	            await loadCandles(resolution, start - lookbacks[resolution], end - lookbacks[resolution], true);
 	            isLoadingCandles = false;

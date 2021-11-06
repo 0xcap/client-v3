@@ -15,6 +15,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		pointer-events: none;
 	}
 
 	.toast {
@@ -23,6 +24,7 @@
 		justify-content: space-between;
 		padding: 10px;
 		max-width: 420px;
+		pointer-events: auto;
 	}
 
 	.toast.error {

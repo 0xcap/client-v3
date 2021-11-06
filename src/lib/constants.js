@@ -26,6 +26,7 @@ export const CURRENCY_LOGOS = {
 export const ABIS = {
 	router: [
 		"function trading() view returns(address)",
+		"function treasury() view returns(address)",
 		"function capPool() view returns(address)",
 
 		"function getPool(address currency) view returns(address)",
@@ -57,6 +58,10 @@ export const ABIS = {
 		"function getClaimableReward() view returns(uint256)",
 
 		"function collectReward()"
+	],
+	treasury: [
+		"function getPoolShare(address currency) view returns(uint256)",
+		"function getCapShare(address currency) view returns(uint256)"
 	],
 	erc20: [
 		"function totalSupply() view returns (uint256)",

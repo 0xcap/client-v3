@@ -212,6 +212,10 @@
 	<div class='details'>
 		{#if $margin * 1 > 0}
 		<div class='row'>
+			<div class='detail-label'>Product</div>
+			<div class='detail-value'>{$product.symbol}</div>
+		</div>
+		<div class='row'>
 			<div class='detail-label'>Size in USD</div>
 			<div class='detail-value'>${formatToDisplay(sizeInUSD, 2)}</div>
 		</div>

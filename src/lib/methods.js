@@ -146,6 +146,34 @@ export async function getBalanceOf(currencyLabel, address, forceWETH) {
 
 // Pool
 
+export async function getPoolShare(currencyLabel) {
+
+	const contract = await getContract('treasury');
+	if (!contract) return 0;
+
+	const currencies = getChainData('currencies');
+	if (!currencies) return;
+
+	const currency = currencies[currencyLabel];
+
+	return formatUnits(await contract.getPoolShare(currency), 2);
+
+}
+
+export async function getCapPoolShare(currencyLabel) {
+
+	const contract = await getContract('treasury');
+	if (!contract) return 0;
+
+	const currencies = getChainData('currencies');
+	if (!currencies) return;
+
+	const currency = currencies[currencyLabel];
+
+	return formatUnits(await contract.getCapShare(currency), 2);
+
+}
+
 export async function getUserPoolBalance(currencyLabel) {
 	
 	const address = get(Stores.address);
@@ -172,16 +200,15 @@ export async function getPoolInfo(currencyLabel) {
 		const poolBalance = await getBalanceOf(currencyLabel, contract.address, true);
 		const userBalance = await getUserPoolBalance(currencyLabel);
 		const claimableReward = await getClaimableReward(currencyLabel);
-
-		console.log('poolBalance', currencyLabel, contract.address, poolBalance);
+		const poolShare = await getPoolShare(currencyLabel);
 
 		info = {
 			tvl: poolBalance,
 			userBalance,
-			claimableReward
+			claimableReward,
+			poolShare
 		};
 
-		console.log('info', info);
 	} catch(e) {}
 
 	Stores.pools.update((x) => {
@@ -200,7 +227,7 @@ export async function deposit(currencyLabel, amount) {
 		let tx;
 
 		if (currencyLabel == 'weth') {
-			tx = await contract.deposit(amount, {value: parseUnits(amount)});
+			tx = await contract.deposit(0, {value: parseUnits(amount)});
 		} else {
 			tx = await contract.deposit(parseUnits(amount));
 		}
@@ -272,14 +299,17 @@ export async function getCapPoolInfo() {
 	if (!currencies) return;
 
 	let claimableRewards = {};
+	let poolShares = {};
 	for (const currencyLabel in currencies) {
 		claimableRewards[currencyLabel] = await getClaimableReward(currencyLabel, true);
+		poolShares[currencyLabel] = await getCapPoolShare(currencyLabel);
 	}
 
 	const info = {
 		supply: await getCapSupply(),
 		userBalance: await getUserCapBalance(),
-		claimableRewards
+		claimableRewards,
+		poolShares
 	};
 
 	Stores.capPool.set(info);
@@ -423,7 +453,7 @@ export async function submitNewPosition(isLong) {
 
 export async function submitCloseOrder(positionId, productId, size, currencyLabel) {
 
-	console.log('sco', positionId, productId, size, currencyLabel);
+	//console.log('sco', positionId, productId, size, currencyLabel);
 
 	const contract = await getContract('trading', true);
 	if (!contract) return;
@@ -436,8 +466,8 @@ export async function submitCloseOrder(positionId, productId, size, currencyLabe
 			const product = await getProduct(productId);
 			const fee = size * product.fee * 1.003 / 100;
 
-			console.log('size', size);
-			console.log('fee', product.fee, fee);
+			// console.log('size', size);
+			// console.log('fee', product.fee, fee);
 
 			tx = await contract.submitCloseOrder(
 				positionId,

@@ -2,15 +2,13 @@
 
 	import { pools, capPool, allowances } from '../lib/stores'
 
-	import { getAllowance, collectPoolReward, collectCAPReward, approveCurrency } from '../lib/methods'
+	import { getAllowance, collectPoolReward, collectCAPReward, approveCurrency, getPoolShare } from '../lib/methods'
 
 	import { showModal, formatCurrency, formatToDisplay } from '../lib/utils'
 
 	async function _approveCurrency(_currencyLabel) {
 		const result = await approveCurrency(_currencyLabel, _currencyLabel == 'cap' ? 'capPool' : 'pool' + _currencyLabel);
 	}
-
-	$: console.log('$allowances', $allowances);
 
 	async function getAllowances(_pools) {
 		if (!_pools) return;
@@ -27,7 +25,7 @@
 <style>
 
 	.pools {
-		max-width: 660px;
+		max-width: 720px;
 		margin: 0 auto;
 	}
 
@@ -75,6 +73,15 @@
 		text-align: right;
 	}
 
+	.description {
+		padding: var(--base-padding);
+		background-color: var(--eerie-black);
+		padding-top: 0;
+		line-height: 1.618;
+		font-size: 80%;
+		color: var(--sonic-silver);
+	}
+
 	.my-share {
 		padding: 0 var(--base-padding);
 		background-color: var(--jet-dim);
@@ -82,6 +89,16 @@
 
 	.label {
 		color: var(--sonic-silver);
+	}
+
+	.sub-label {
+		font-size: 80%;
+		opacity: 0.75;
+	}
+
+	.sep {
+		color: var(--dim-gray);
+		margin: 0 6px;
 	}
 
 </style>
@@ -105,6 +122,8 @@
 				<div class='column column-tvl'>{formatToDisplay(poolInfo.tvl) || 0}</div>
 			</div>
 
+			<div class='description'>This pool backs trader profits and receives trader losses plus <strong>{formatToDisplay(poolInfo.poolShare)}%</strong> of {formatCurrency(_currencyLabel)} fees as rewards.</div>
+
 			<div class='my-share'>
 
 				<div class='row'>
@@ -114,7 +133,7 @@
 						{#if $allowances[_currencyLabel] && $allowances[_currencyLabel]['pool' + _currencyLabel] * 1 == 0}
 							<a on:click={() => {_approveCurrency(_currencyLabel)}}>Approve {formatCurrency(_currencyLabel)}</a>
 						{:else}
-						<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: _currencyLabel})}}>Deposit</a>, <a data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: _currencyLabel})}}>Withdraw</a>
+						<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: _currencyLabel})}}>Deposit</a><span class='sep'>|</span><a data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: _currencyLabel})}}>Withdraw</a>
 						{/if}
 					</div>
 				</div>
@@ -140,6 +159,8 @@
     		<div class='column column-tvl'>{$capPool.supply}</div>
     	</div>
 
+    	<div class='description'>This pool receives protocol fees as rewards.</div>
+
     	<div class='my-share'>
 
     		<div class='row'>
@@ -149,7 +170,7 @@
     				{#if $allowances['cap'] && $allowances['cap']['capPool'] * 1 == 0}
     					<a on:click={() => {_approveCurrency('cap')}}>Approve CAP</a>
     				{:else}
-    					<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: 'cap'})}}>Deposit</a>, <a data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: 'cap'})}}>Withdraw</a>
+    					<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: 'cap'})}}>Deposit</a><span class='sep'>|</span><a data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: 'cap'})}}>Withdraw</a>
     				{/if}
     			</div>
     		</div>
@@ -157,7 +178,9 @@
     		{#each Object.entries($capPool.claimableRewards || {}) as [_currencyLabel, reward]}
 
     			<div class='row'>
-    				<div class='column-asset label'>{formatCurrency(_currencyLabel)} Rewards</div>
+    				<div class='column-asset label'>{formatCurrency(_currencyLabel)} Rewards
+    					<div class='sub-label'>Receives <strong>{formatToDisplay($capPool.poolShares[_currencyLabel])}%</strong> of fees</div>
+    				</div>
     				<div class='column-apr'>{formatToDisplay(reward)}</div>
     				<div class='column-tvl'>
     					<a on:click={() => {collectCAPReward(_currencyLabel)}}>Collect</a>
