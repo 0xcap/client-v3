@@ -22,7 +22,6 @@ const ERROR_STRINGS = {
 	'!empty': "The pool is empty",
 	'!utilization': "Utilization ratio is too high. Please try again later.",
 	'!available-balance': "Not enough free balance is currently available. Please try again later.",
-	'!balance': "You don't have enough funds in the pool to withdraw this amount",
 	'!max-cap': "Maximum pool cap has been reached.",
 	'!clp-amount': "Minted amount is too low.",
 	'gas': "Insufficient funds or gas. Deposit more funds into your wallet or try adjusting the gas limit.",

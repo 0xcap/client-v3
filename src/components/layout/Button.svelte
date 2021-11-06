@@ -29,13 +29,15 @@
 	}
 
 	button.loading {
-		opacity: 0.5;
 		pointer-events: none;
 		cursor: default;
+		color: var(--sonic-silver);
+		background-color: var(--onyx);
 	}
 
 	.wrap {
 		padding: var(--base-padding);
+		border-top: 1px solid var(--jet-dim);
 	}
 
 </style>

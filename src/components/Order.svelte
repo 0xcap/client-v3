@@ -139,7 +139,6 @@
 		top: 50%;
 		left: 26px;
 		transform: translateY(-50%);
-		color: #888;
 		pointer-events: none;
 	}
 

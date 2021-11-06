@@ -7,7 +7,6 @@
 	export let data;
 	export let value = '';
 
-	let amountIsFocused = false;
 	onMount(() => {
 		document.getElementById('amount') && document.getElementById('amount').focus();
 	});
@@ -32,25 +31,31 @@
 	}
 
 	.input-row {
-		border-bottom: 2px solid var(--jet-dim);
+		position: relative;
+		padding: var(--base-padding);
+		border-bottom: 1px solid var(--jet-dim);
 	}
 
-	.input-row .label {
-		font-weight: 700;
-		color: #fff !important;
+	.input-label {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		pointer-events: none;
+		left: calc(2 * var(--base-padding));
 	}
 
-	.input-row.focused {
+	input:hover, input:focus {
 		border-color: var(--green);
 	}
 
 	input {
-		text-align: right;
+		background-color: var(--onyx-dim);
+		border-radius: var(--base-radius);
+		border: 1px solid var(--onyx-dim);
+		padding: 12px var(--base-padding);
 		width: 100%;
-	}
-
-	.input-wrap {
-		flex: 1 1 auto;
+		box-sizing: border-box;
+		text-align: right;
 	}
 
 	.label {
@@ -84,11 +89,9 @@
 <div class='data-list'>
 	{#each data as row}
 		{#if row.type == 'input'}
-			<div class='row input-row' class:focused={amountIsFocused}>
-				<div class='label'>{row.label}</div>
-				<div class='value input-wrap'>
-					<input id='amount' type='number' step="0.0001" bind:value={value} min="0" max="1000000" maxlength="10" spellcheck="false" placeholder={`0.0`} autocomplete="off" autocorrect="off" inputmode="decimal" on:keyup={row.onKeyUp} lang="en">
-				</div>
+			<div class='input-row'>
+				<div class='input-label'>{row.label}</div>
+				<input id='amount' type='number' step="0.0001" bind:value={value} min="0" max="1000000" maxlength="10" spellcheck="false" placeholder={`0.0`} autocomplete="off" autocorrect="off" inputmode="decimal" on:keyup={row.onKeyUp} lang="en">
 			</div>
 		{:else}
 			{#if row.value !== null}

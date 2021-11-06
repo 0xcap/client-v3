@@ -81,13 +81,13 @@
 	}
 
 	.column-apr {
-		flex: 1;
+		flex: 1.5;
 		text-align: right;
 		margin-right: 10px;
 	}
 
 	.column-tvl {
-		flex: 1;
+		flex: 1.5;
 		text-align: right;
 	}
 

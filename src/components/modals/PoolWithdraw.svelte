@@ -56,7 +56,7 @@
 <style>
 	.info {
 		color: var(--sonic-silver);
-		padding: 0 var(--base-padding);
+		padding: var(--base-padding);
 		font-size: 90%;
 	}
 </style>

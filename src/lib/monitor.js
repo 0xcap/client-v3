@@ -48,7 +48,7 @@ async function handleTxComplete(type, details) {
 		showToast('Deposited into pool.', 'success');
 		await getPoolInfo(details.currencyLabel);
 	} else if (type == 'pool-withdraw') {
-		showToast('Withdrawed from pool.', 'success');
+		showToast('Withdrew from pool.', 'success');
 		await getPoolInfo(details.currencyLabel);
 	} else if (type == 'pool-collect') {
 		showToast('Collected rewards from pool.', 'success');
@@ -57,7 +57,7 @@ async function handleTxComplete(type, details) {
 		showToast('Deposited CAP into pool.', 'success');
 		await getCapPoolInfo();
 	} else if (type == 'cap-withdraw') {
-		showToast('Withdrawed CAP from pool.', 'success');
+		showToast('Withdrew CAP from pool.', 'success');
 		await getCapPoolInfo();
 	} else if (type == 'cap-collect') {
 		showToast('Collected rewards from CAP pool.', 'success');

@@ -77,7 +77,7 @@
 			hasError: newLeverage * 1 < 1
 		},
 		{
-			label: 'Current / New Liquidation Price',
+			label: 'Current / New Liq. Price',
 			value: `${formatToDisplay(currentLiquidationPrice)} / ${formatToDisplay(newLiquidationPrice)}`,
 			hasError: newLiquidationPrice * 1 <= 0
 		}
