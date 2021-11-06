@@ -318,7 +318,7 @@ export async function getCapPoolInfo() {
 	};
 
 	const currencies = getChainData('currencies');
-	if (!currencies) {
+	if (!currencies || !get(Stores.address)) {
 		Stores.capPool.set(info);
 		return;
 	}
@@ -391,7 +391,7 @@ export async function collectCAPReward(currencyLabel) {
 export async function getClaimableReward(currencyLabel, forCAP) {
 	
 	const contractName = forCAP ? 'caprewards' : 'poolrewards';
-	const contract = await getContract(contractName, false, currencyLabel);
+	const contract = await getContract(contractName, true, currencyLabel);
 	if (!contract) return;
 
 	return formatUnits(await contract.getClaimableReward());
