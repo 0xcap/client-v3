@@ -518,7 +518,8 @@ export async function submitCloseOrder(positionId, productId, size, currencyLabe
 		}
 
 		monitorTx(tx.hash, 'submit-close-order');
-
+		hideModal();
+		
 	} catch(e) {
 		showToast(e);
 		return e;

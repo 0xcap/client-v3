@@ -1,6 +1,6 @@
 <script>
 
-	import { submitCloseOrder } from '../../lib/methods'
+	import { submitCloseOrder, getProduct } from '../../lib/methods'
 	
 	import { formatToDisplay, formatCurrency } from '../../lib/utils'
 
@@ -54,30 +54,43 @@
 		submitIsPending = false;
 	}
 
-	let rows;
-	$: rows = [
-		{
-			type: 'input',
-			label: 'Amount to Close',
-			onKeyUp: calculateAmounts
-		},
-		{
-			label: 'Current Position Size',
-			value: `${formatToDisplay(data.size)} ${formatCurrency(data.currencyLabel)}`,
-			dim: true,
-			onclick: setMaxAmount
-		},
-		{
-			label: 'Closing % of Total',
-			value: `${formatToDisplay(closePercent, 2)}%`,
-			isEmpty: closePercent == 0
-		},
-		{
-			label: 'Position Size after Closing',
-			value: `${formatToDisplay(newAmount)} ${formatCurrency(data.currencyLabel)}`,
-			isEmpty: newAmount * 1 == data.size * 1
-		},
-	];
+	let rows = [];
+
+	async function calculateRows() {
+
+		const product = await getProduct(data.productId);
+
+		rows = [
+			{
+				type: 'input',
+				label: 'Size to Close (' + formatCurrency(data.currencyLabel) + ')',
+				onKeyUp: calculateAmounts
+			},
+			{
+				label: 'Current Position Size',
+				value: `${formatToDisplay(data.size)} ${formatCurrency(data.currencyLabel)}`,
+				dim: true,
+				onclick: setMaxAmount
+			},
+			{
+				label: 'Closing % of Total',
+				value: `${formatToDisplay(closePercent, 2)}%`,
+				isEmpty: closePercent == 0
+			},
+			{
+				label: 'Position Size after Closing',
+				value: `${formatToDisplay(newAmount)} ${formatCurrency(data.currencyLabel)}`,
+				isEmpty: newAmount * 1 == data.size * 1
+			},
+			{
+				label: 'Fee',
+				value: `${product && product.fee || 0}%`
+			},
+		];
+
+	}
+
+	$: calculateRows(newAmount)
 
 </script>
 

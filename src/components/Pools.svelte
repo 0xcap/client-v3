@@ -124,6 +124,11 @@
 		pointer-events: none;
 	}
 
+	a.disabled {
+		pointer-events: none;
+		color: var(--dim-gray);
+	}
+
 	.reload {
 		margin-left: 10px;
 		font-size: 85%;
@@ -175,7 +180,7 @@
 					<div class='column column-asset label'>My Rewards</div>
 					<div class='column column-apr'>{formatToDisplay(poolInfo.claimableReward) || 0} {formatCurrency(_currencyLabel)}</div>
 					<div class='column column-tvl'>
-						<a on:click={() => {collectPoolReward(_currencyLabel)}}>Collect</a>
+						<a class:disabled={poolInfo.claimableReward == 0} on:click={() => {collectPoolReward(_currencyLabel)}}>Collect</a>
 					</div>
 				</div>
 
@@ -216,7 +221,7 @@
     				</div>
     				<div class='column column-apr'>{formatToDisplay(reward)}</div>
     				<div class='column column-tvl'>
-    					<a on:click={() => {collectCAPReward(_currencyLabel)}}>Collect</a>
+    					<a class:disabled={reward == 0} on:click={() => {collectCAPReward(_currencyLabel)}}>Collect</a>
     				</div>
     			</div>
 

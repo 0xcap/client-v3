@@ -2,7 +2,7 @@
 
 	import { onMount } from 'svelte'
 
-	import { calculateLiquidationPrice, formatToDisplay } from '../../lib/utils'
+	import { calculateLiquidationPrice, formatToDisplay, formatCurrency } from '../../lib/utils'
 	
 	import { addMargin } from '../../lib/methods'
 	
@@ -64,7 +64,7 @@
 	$: rows = [
 		{
 			type: 'input',
-			label: 'Margin to Add',
+			label: 'Add Margin (' + formatCurrency(data.currencyLabel) + ')',
 			onKeyUp: calculateAmounts
 		},
 		{

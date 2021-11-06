@@ -46,7 +46,7 @@
 	$: rows = [
 		{
 			type: 'input',
-			label: 'Amount',
+			label: 'Amount (' + formatCurrency(data.currencyLabel) + ')',
 			onKeyUp: calculateShare
 		}
 	];
