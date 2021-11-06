@@ -21,6 +21,13 @@
 
 	async function _submitNewPosition(isLong) {
 		if (!$size) return focusAmount();
+
+		if (isLong) {
+			isSubmittingLong.set(true);
+		} else {
+			isSubmittingShort.set(true);
+		}
+
 		const error = await submitNewPosition(isLong);
 		if (error) {
 			focusAmount();
@@ -28,6 +35,9 @@
 			available -= $size * 1;
 			size.set();
 		}
+
+		isSubmittingLong.set(false);
+		isSubmittingShort.set(false);
 	}
 
 	async function _approveCurrency() {

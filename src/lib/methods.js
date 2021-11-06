@@ -379,12 +379,6 @@ export async function submitNewPosition(isLong) {
 
 	let margin = size / leverage;
 
-	if (isLong) {
-		Stores.isSubmittingLong.set(true);
-	} else {
-		Stores.isSubmittingShort.set(true);
-	}
-
 	try {
 
 		let tx;
@@ -417,9 +411,6 @@ export async function submitNewPosition(isLong) {
 			);
 
 		}
-
-		Stores.isSubmittingLong.set(false);
-		Stores.isSubmittingShort.set(false);
 
 		monitorTx(tx.hash, 'submit-new-position');
 
