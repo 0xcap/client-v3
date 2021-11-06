@@ -66,6 +66,7 @@
 	.column-apr {
 		flex: 1;
 		text-align: right;
+		margin-right: 10px;
 	}
 
 	.column-tvl {
@@ -98,7 +99,7 @@
 
 	.sep {
 		color: var(--dim-gray);
-		margin: 0 6px;
+		margin: 0 4px;
 	}
 
 </style>
@@ -127,9 +128,9 @@
 			<div class='my-share'>
 
 				<div class='row'>
-					<div class='column-asset label'>My Share</div>
-					<div class='column-apr'>{formatToDisplay(poolInfo.userBalance) || 0} {formatCurrency(_currencyLabel)} ({formatToDisplay(poolInfo.tvl*1 == 0 ? 0 : 100*poolInfo.userBalance/poolInfo.tvl)}%)</div>
-					<div class='column-tvl'>
+					<div class='column column-asset label'>My Share</div>
+					<div class='column column-apr'>{formatToDisplay(poolInfo.userBalance) || 0} {formatCurrency(_currencyLabel)} ({formatToDisplay(poolInfo.tvl*1 == 0 ? 0 : 100*poolInfo.userBalance/poolInfo.tvl)}%)</div>
+					<div class='column column-tvl'>
 						{#if $allowances[_currencyLabel] && $allowances[_currencyLabel]['pool' + _currencyLabel] * 1 == 0}
 							<a on:click={() => {_approveCurrency(_currencyLabel)}}>Approve {formatCurrency(_currencyLabel)}</a>
 						{:else}
@@ -139,9 +140,9 @@
 				</div>
 
 				<div class='row'>
-					<div class='column-asset label'>My Rewards</div>
-					<div class='column-apr'>{formatToDisplay(poolInfo.claimableReward) || 0} {formatCurrency(_currencyLabel)}</div>
-					<div class='column-tvl'>
+					<div class='column column-asset label'>My Rewards</div>
+					<div class='column column-apr'>{formatToDisplay(poolInfo.claimableReward) || 0} {formatCurrency(_currencyLabel)}</div>
+					<div class='column column-tvl'>
 						<a on:click={() => {collectPoolReward(_currencyLabel)}}>Collect</a>
 					</div>
 				</div>
@@ -159,14 +160,14 @@
     		<div class='column column-tvl'>{$capPool.supply}</div>
     	</div>
 
-    	<div class='description'>This pool receives protocol fees as rewards.</div>
+    	<div class='description'>This pool receives trading fees as rewards.</div>
 
     	<div class='my-share'>
 
     		<div class='row'>
-    			<div class='column-asset label'>My Share</div>
-    			<div class='column-apr'>{formatToDisplay($capPool.userBalance)} ({formatToDisplay($capPool.supply*1 == 0 ? 0 : 100*$capPool.userBalance/$capPool.supply)}%)</div>
-    			<div class='column-tvl'>
+    			<div class='column column-asset label'>My Share</div>
+    			<div class='column column-apr'>{formatToDisplay($capPool.userBalance)} ({formatToDisplay($capPool.supply*1 == 0 ? 0 : 100*$capPool.userBalance/$capPool.supply)}%)</div>
+    			<div class='column column-tvl'>
     				{#if $allowances['cap'] && $allowances['cap']['capPool'] * 1 == 0}
     					<a on:click={() => {_approveCurrency('cap')}}>Approve CAP</a>
     				{:else}
@@ -178,11 +179,11 @@
     		{#each Object.entries($capPool.claimableRewards || {}) as [_currencyLabel, reward]}
 
     			<div class='row'>
-    				<div class='column-asset label'>{formatCurrency(_currencyLabel)} Rewards
+    				<div class='column column-asset label'>My {formatCurrency(_currencyLabel)} Rewards
     					<div class='sub-label'>Receives <strong>{formatToDisplay($capPool.poolShares[_currencyLabel])}%</strong> of fees</div>
     				</div>
-    				<div class='column-apr'>{formatToDisplay(reward)}</div>
-    				<div class='column-tvl'>
+    				<div class='column column-apr'>{formatToDisplay(reward)}</div>
+    				<div class='column column-tvl'>
     					<a on:click={() => {collectCAPReward(_currencyLabel)}}>Collect</a>
     				</div>
     			</div>

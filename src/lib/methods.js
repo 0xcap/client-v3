@@ -30,7 +30,11 @@ export async function selectProduct(productId) {
 	
 	if (!productId) productId = get(Stores.productId);
 
-	const product = await getProduct(productId);
+	let product = await getProduct(productId);
+
+	if (!product.symbol) {
+		product = {symbol: 'ETH-USD', productId: 1, maxLeverage: 50};
+	}
 
 	Stores.product.set(product);
 	Stores.productId.set(productId);
@@ -191,10 +195,21 @@ export async function getUserPoolBalance(currencyLabel) {
 
 export async function getPoolInfo(currencyLabel) {
 
-	const contract = await getContract('pool', false, currencyLabel);
-	if (!contract) return {};
+	let info = {
+		tvl: 0,
+		userBalance: 0,
+		claimableReward: 0,
+		poolShare: 50
+	};
 
-	let info = {};
+	const contract = await getContract('pool', false, currencyLabel);
+	if (!contract) {
+		Stores.pools.update((x) => {
+			x[currencyLabel] = info;
+			return x;
+		});
+		return;
+	}
 
 	try {
 		const poolBalance = await getBalanceOf(currencyLabel, contract.address, true);
@@ -295,8 +310,18 @@ export async function getCapSupply() {
 
 export async function getCapPoolInfo() {
 	
+	let info = {
+		supply: 0,
+		userBalance: 0,
+		claimableRewards: {},
+		poolShares: {}
+	};
+
 	const currencies = getChainData('currencies');
-	if (!currencies) return;
+	if (!currencies) {
+		Stores.capPool.set(info);
+		return;
+	}
 
 	let claimableRewards = {};
 	let poolShares = {};
@@ -305,7 +330,7 @@ export async function getCapPoolInfo() {
 		poolShares[currencyLabel] = await getCapPoolShare(currencyLabel);
 	}
 
-	const info = {
+	info = {
 		supply: await getCapSupply(),
 		userBalance: await getUserCapBalance(),
 		claimableRewards,

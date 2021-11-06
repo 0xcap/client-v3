@@ -24,7 +24,8 @@ export const margin = derived([size, leverage], ([$size, $leverage]) => {
 export const marginPlusFee = derived([size, leverage, product], ([$size, $leverage, $product]) => {
 	if (!$size || !$leverage) return 0;
 	if (!$product) return 0;
-	return $size * $product.fee * 1 / 100 + ($size || 0) / $leverage;
+	let fee = $product.fee || 0;
+	return $size * fee * 1 / 100 + ($size || 0) / $leverage;
 }, 0);
 
 // Pools

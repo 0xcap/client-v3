@@ -9,6 +9,8 @@ export function hydrateData() {
 
 	const _currentPage = get(currentPage);
 
+	//console.log('hydrateData', _currentPage);
+
 	if (!_currentPage || _currentPage == 'home') {
 		//selectProduct();
 	} else if (_currentPage == 'trade') {

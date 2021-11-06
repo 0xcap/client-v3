@@ -141,11 +141,11 @@ export async function setResolution(_resolution) {
 	await loadCandles(_resolution);
 }
 
-export async function loadCandles(_resolution, _start, _end, prepend) {
+export async function loadCandles(_resolution, _start, _end, prepend, productOverride) {
 
 	//console.log('called loadCandles', _resolution, _start, _end, prepend);
 
-	let _product = get(product).symbol;
+	let _product = productOverride || get(product).symbol;
 
 	//console.log('candlestickSeries', candlestickSeries);
 	//console.log('_product', _product);
@@ -154,8 +154,8 @@ export async function loadCandles(_resolution, _start, _end, prepend) {
 		// try again
 		console.log('attempting chart again...');
 		setTimeout(() => {
-			loadCandles(_resolution, _start, _end);
-		}, 1000);
+			loadCandles(_resolution, _start, _end, false, !_product ? 'ETH-USD' : false);
+		}, 2000);
 		return;
 	}
 

@@ -5,7 +5,7 @@
 
 	import { checkMetamaskSession } from '../lib/wallet'
 
-	import { address, wrongNetwork } from '../lib/stores'
+	import { address, wrongNetwork, currentPage } from '../lib/stores'
 
 	import { shortAddress, showModal } from '../lib/utils'
 
@@ -25,20 +25,23 @@
 	.wrong-network {
 		color: var(--orange);
 		padding-right: var(--base-padding);
+		white-space: nowrap;
 	}
 
 </style>
 
 <div class='wallet'>
 
-	{#if $wrongNetwork}
+	{#if $address && $wrongNetwork}
 	<div class='wrong-network'>Switch to Arbitrum</div>
 	{/if}
 
 	{#if $address}
 		<div class='address'>{shortAddress($address)}</div>
 	{:else}
+		{#if $currentPage != 'home'}
 		<Button small={true} onClick={() => {showModal('Connect')}} label={`Connect Wallet`} />
+		{/if}
 	{/if}
 
 </div>
