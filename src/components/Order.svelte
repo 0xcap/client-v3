@@ -73,7 +73,7 @@
 		if (_currencyLabel == 'weth') {
 			sizeInUSD = _prices[1] * _size;
 		} else if (_currencyLabel == 'usdc') {
-			sizeInUSD = _size;
+			sizeInUSD = 0;
 		}
 	}
 
@@ -214,10 +214,12 @@
 			<div class='detail-label'>Product</div>
 			<div class='detail-value'>{$product.symbol}</div>
 		</div>
+		{#if sizeInUSD}
 		<div class='row'>
 			<div class='detail-label'>Size in USD</div>
 			<div class='detail-value'>${formatToDisplay(sizeInUSD, 2)}</div>
 		</div>
+		{/if}
 		<div class='row'>
 			<div class='detail-label'>Margin</div>
 			<div class='detail-value'>{formatToDisplay($marginPlusFee || 0)} {formatCurrency($currencyLabel)}</div>

@@ -165,7 +165,7 @@
 			{#each $positions as position}
 				<div class='position' on:click={() => {showModal('PositionDetails', position)}} data-intercept="true">
 
-					<div class='column column-product'>{position.isLong ? '↑' : '↓'} {position.product}</div>
+					<div class='column column-product'>{#if position.isLong}<span class='pos'>↑</span>{:else}<span class='neg'>↓</span>{/if} {position.product}</div>
 					<div class='column column-price'>
 
 						{#if position.price * 1 == 0}

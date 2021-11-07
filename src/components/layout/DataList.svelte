@@ -8,7 +8,9 @@
 	export let value = '';
 
 	onMount(() => {
-		document.getElementById('amount') && document.getElementById('amount').focus();
+		setTimeout(() => {
+			document.getElementById('amount') && document.getElementById('amount').focus();
+		}, 100);
 	});
 
 </script>

@@ -134,17 +134,18 @@ export async function getBalanceOf(currencyLabel, address, forceWETH) {
 		if (!address) return 0;
 	}
 
-	let balance;
+	let balance, decimals;
 	if (currencyLabel == 'weth' && !forceWETH) {
 		// get ETH balance
 		balance = await get(Stores.provider).getBalance(address);
 	} else {
 		const contract = await getContract(currencyLabel);
 		if (!contract) return 0;
+		decimals = await contract.decimals();
 		balance = await contract.balanceOf(address);
 	}
 	
-	return formatUnits(balance);
+	return formatUnits(balance, decimals || 18);
 
 }
 

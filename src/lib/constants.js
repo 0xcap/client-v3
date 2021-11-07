@@ -66,6 +66,7 @@ export const ABIS = {
 	],
 	erc20: [
 		"function totalSupply() view returns (uint256)",
+		"function decimals() view returns (uint8)",
 		"function balanceOf(address account) view returns (uint256)",
 		"function transfer(address recipient, uint256 amount) returns (bool)",
 		"function allowance(address owner, address spender) view returns (uint256)",
@@ -78,13 +79,13 @@ export const ABIS = {
 export const CHAINDATA = {
 	31337: {
 		label: 'localhost',
-		router: '0x8E45C0936fa1a65bDaD3222bEFeC6a03C83372cE',
+		router: '0x0355B7B8cb128fA5692729Ab3AAa199C1753f726',
 		explorer: 'http://localhost:8545',
 		currencies: {
-			weth: '0x10e38eE9dd4C549b61400Fc19347D00eD3edAfC4',
-			usdc: '0xd710a67624Ad831683C86a48291c597adE30F787'
+			weth: '0x4EE6eCAD1c2Dae9f525404De8555724e3c35d07B',
+			usdc: '0xD84379CEae14AA33C123Af12424A37803F885889'
 		},
-		cap: '0xd753c12650c280383Ce873Cc3a898F6f53973d16'
+		cap: '0xBEc49fA140aCaA83533fB00A2BB19bDdd0290f25'
 	},
 	42161: {
 		label: 'Arbitrum',

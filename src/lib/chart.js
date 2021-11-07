@@ -265,11 +265,13 @@ let pricelines = [];
 
 export function loadPositionLines() {
 
+	return; // disabled for now
+	
 	//console.log('loadPositionLines');
 
 	if (!candlestickSeries) {
 		//console.log('nope2');
-		setTimeout(loadPositionLines, 1000);
+		setTimeout(loadPositionLines, 2000);
 		return;
 	}
 

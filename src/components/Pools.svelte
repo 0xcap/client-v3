@@ -194,7 +194,7 @@
     	<div class='info'>
     		<div class='column column-asset flex'>CAP <div title='Reload' class='reload' on:click={() => {reloadPoolInfo('cap')}}>&#8635;</div></div>
     		<div class='column column-apr'></div>
-    		<div class='column column-tvl'>{$capPool.supply}</div>
+    		<div class='column column-tvl'>{formatToDisplay($capPool.supply) || 0}</div>
     	</div>
 
     	<div class='description'>This pool receives trading fees as rewards.</div>
@@ -203,7 +203,7 @@
 
     		<div class='row'>
     			<div class='column column-asset label'>My Share</div>
-    			<div class='column column-apr'>{formatToDisplay($capPool.userBalance)} ({formatToDisplay($capPool.supply*1 == 0 ? 0 : 100*$capPool.userBalance/$capPool.supply)}%)</div>
+    			<div class='column column-apr'>{formatToDisplay($capPool.userBalance)} CAP ({formatToDisplay($capPool.supply*1 == 0 ? 0 : 100*$capPool.userBalance/$capPool.supply)}%)</div>
     			<div class='column column-tvl'>
     				{#if $allowances['cap'] && $allowances['cap']['capPool'] * 1 == 0}
     					<a on:click={() => {_approveCurrency('cap')}}>Approve CAP</a>
@@ -219,7 +219,7 @@
     				<div class='column column-asset label'>My {formatCurrency(_currencyLabel)} Rewards
     					<div class='sub-label'>Receives <strong>{formatToDisplay($capPool.poolShares[_currencyLabel])}%</strong> of fees</div>
     				</div>
-    				<div class='column column-apr'>{formatToDisplay(reward)}</div>
+    				<div class='column column-apr'>{formatToDisplay(reward)} {formatCurrency(_currencyLabel)}</div>
     				<div class='column column-tvl'>
     					<a class:disabled={reward == 0} on:click={() => {collectCAPReward(_currencyLabel)}}>Collect</a>
     				</div>

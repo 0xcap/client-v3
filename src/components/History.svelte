@@ -124,7 +124,7 @@
 
 				<div class='trade' on:click={() => {showModal('TradeDetails', trade)}} data-intercept="true">
 
-					<div class='column column-product'>{trade.isLong ? '↑' : '↓'} {trade.product}</div>
+					<div class='column column-product'>{#if trade.isLong}<span class='pos'>↑</span>{:else}<span class='neg'>↓</span>{/if} {trade.product}</div>
 					<div class='column column-price'>{formatToDisplay(trade.price)}</div>
 					<div class='column column-size'>{formatToDisplay(trade.size)} {formatCurrency(trade.currencyLabel)}</div>
 					<div class='column column-leverage'>{formatToDisplay(trade.leverage)}×</div>

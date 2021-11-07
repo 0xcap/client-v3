@@ -72,7 +72,7 @@
 			{
 				label: 'Margin',
 				value: `${formatToDisplay(data.margin, 0, true)}`,
-				addMargin: true,
+				addMargin: data.price * 1 > 0 ? true : false,
 				data: data
 			},
 			{
