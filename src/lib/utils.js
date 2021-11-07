@@ -17,7 +17,9 @@ import { component, currentPage, activeModal, toast, chainId } from './stores'
 
 // Price title
 export function setTitle(product, price) {
-	document.title = `${shortSymbol(product)} ${price} | Cap`;
+	if (get(currentPage) == 'trade') {
+		document.title = `${product} ${price} | Cap`;
+	}
 }
 
 // Text utils
@@ -137,12 +139,15 @@ export function loadRoute(path, isInitial) {
 	if (!path || path == '/') {
 		component.set(Home);
 		currentPage.set('home');
+		document.title = `Cap`;
 	} else if (path.includes('/trade')) {
 		component.set(Trade);
 		currentPage.set('trade');
+		document.title = `Trade | Cap`;
 	} else if (path.includes('/pool')) {
 		component.set(Pool);
 		currentPage.set('pool');
+		document.title = `Pool | Cap`;
 	}
 	if (!isInitial) hydrateData();
 }

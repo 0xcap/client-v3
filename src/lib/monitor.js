@@ -6,7 +6,7 @@ import { provider } from './stores'
 
 import { getUserPositions, getAllowance, getPoolInfo, getCapPoolInfo } from './methods'
 
-import { showToast } from './utils'
+import { showToast, formatCurrency } from './utils'
 
 export async function monitorTx(hash, type, details) {
 
@@ -45,13 +45,13 @@ async function handleTxComplete(type, details) {
 	} else if (type == 'approve') {
 		await getAllowance(details.currencyLabel, details.spenderName);
 	} else if (type == 'pool-deposit') {
-		showToast('Deposited into pool.', 'success');
+		showToast(`Deposited into ${formatCurrency(details.currencyLabel)} pool.`, 'success');
 		await getPoolInfo(details.currencyLabel);
 	} else if (type == 'pool-withdraw') {
-		showToast('Withdrew from pool.', 'success');
+		showToast(`Withdrew from ${formatCurrency(details.currencyLabel)} pool.`, 'success');
 		await getPoolInfo(details.currencyLabel);
 	} else if (type == 'pool-collect') {
-		showToast('Collected rewards from pool.', 'success');
+		showToast(`Collected rewards from ${formatCurrency(details.currencyLabel)} pool.`, 'success');
 		await getPoolInfo(details.currencyLabel);
 	} else if (type == 'cap-deposit') {
 		showToast('Deposited CAP into pool.', 'success');
