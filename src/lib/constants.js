@@ -100,4 +100,10 @@ export const CHAINDATA = {
 	}
 }
 
+// Languages
 
+export const LANG = {
+	EN: "EN",
+};
+
+export const LANG_DEFAULT = LANG.EN;

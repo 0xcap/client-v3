@@ -1,5 +1,7 @@
 import { writable, derived } from 'svelte/store'
 
+import { LANG_DEFAULT } from './constants'
+
 // History
 export const history = writable([]);
 
@@ -61,3 +63,6 @@ export const address = writable(null);
 export const allowances = writable({});
 
 export const wrongNetwork = writable(false);
+
+// Language
+export const language = writable(LANG_DEFAULT);
