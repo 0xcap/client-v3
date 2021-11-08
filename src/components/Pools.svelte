@@ -32,6 +32,9 @@
 		poolIsLoading[_currencyLabel] = false;
 	}
 
+	let poolEntries = [];
+	$: poolEntries = Object.entries($pools).sort((a,b) => {return a[0] > b[0] ? -1 : 1});
+
 </script>
 
 <style>
@@ -151,7 +154,7 @@
 
 	</div>
 
-	{#each Object.entries($pools) as [_currencyLabel, poolInfo]}
+	{#each poolEntries as [_currencyLabel, poolInfo]}
 		<div class='pool' class:loading={poolIsLoading[_currencyLabel]}>
 
 			<div class='info'>

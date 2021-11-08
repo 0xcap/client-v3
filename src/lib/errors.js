@@ -5,7 +5,7 @@ const DEFAULT_ERROR = "Unidentified error. Check your browser console for more d
 const ERROR_STRINGS = {
 	'User denied': null,
 	'User rejected': null,
-	'exceeds balance': "Insufficient funds to complete this transaction.",
+	'exceeds balance': "You have insufficient funds to complete this transaction.",
 	'!position': 'Position not found.',
 	'!size': "Trade size is too low.",
 	'!currency': "Currency is not supported.",
