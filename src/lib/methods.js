@@ -201,7 +201,10 @@ export async function getPoolInfo(currencyLabel) {
 		userBalance: 0,
 		claimableReward: 0,
 		poolShare: 50,
-		withdrawFee: 0.15
+		withdrawFee: 0.15,
+		utilization: 0,
+		openInterest: 0,
+		utilizationMultiplier: 0.1
 	};
 
 	const contract = await getContract('pool', false, currencyLabel);
@@ -220,13 +223,19 @@ export async function getPoolInfo(currencyLabel) {
 		const claimableReward = await getClaimableReward(currencyLabel);
 		const poolShare = await getPoolShare(currencyLabel);
 		const withdrawFee = formatUnits(await contract.withdrawFee(), 2);
+		const utilization = formatUnits(await contract.getUtilization(), 2);
+		const openInterest = formatUnits(await contract.openInterest());
+		const utilizationMultiplier = formatUnits(await contract.utilizationMultiplier(), 2);
 
 		info = {
 			tvl: poolBalance,
 			userBalance,
 			claimableReward,
 			poolShare,
-			withdrawFee
+			withdrawFee,
+			utilization,
+			openInterest,
+			utilizationMultiplier
 		};
 
 	} catch(e) {}

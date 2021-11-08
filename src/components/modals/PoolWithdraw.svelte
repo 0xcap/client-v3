@@ -62,7 +62,7 @@
 </style>
 
 <Modal>
-	<DataList data={rows} bind:value={amount} />
+	<DataList data={rows} bind:value={amount} onSubmit={_submit} />
 	{#if data.withdrawFee}
 		<div class='info'>A {data.withdrawFee}% fee is retained on withdrawals.</div>
 	{/if}

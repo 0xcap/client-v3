@@ -89,6 +89,6 @@
 </style>
 
 <Modal title='Add Margin'>
-	<DataList data={rows} bind:value={margin} />
+	<DataList data={rows} bind:value={margin} onSubmit={_submitOrder} />
 	<Button wrap={true} isLoading={!canSubmit || submitIsPending} onClick={_submitOrder} label='Add Margin' />
 </Modal>

@@ -5,6 +5,7 @@
 	import { showModal } from '../../lib/utils'
 
 	export let data;
+	export let onSubmit = null;
 	export let value = '';
 
 	onMount(() => {
@@ -93,7 +94,9 @@
 		{#if row.type == 'input'}
 			<div class='input-row'>
 				<div class='input-label'>{row.label}</div>
-				<input id='amount' type='number' step="0.0001" bind:value={value} min="0" max="1000000" maxlength="10" spellcheck="false" placeholder={`0.0`} autocomplete="off" autocorrect="off" inputmode="decimal" on:keyup={row.onKeyUp} lang="en">
+				<form on:submit|preventDefault={onSubmit}>
+					<input id='amount' type='number' step="0.0001" bind:value={value} min="0" max="1000000" maxlength="10" spellcheck="false" placeholder={`0.0`} autocomplete="off" autocorrect="off" inputmode="decimal" on:keyup={row.onKeyUp} lang="en">
+				</form>
 			</div>
 		{:else}
 			{#if row.value !== null}

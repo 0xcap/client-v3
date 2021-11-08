@@ -47,10 +47,13 @@ export const ABIS = {
 		"event ClosePosition(uint256 indexed positionId, address indexed user, uint256 indexed productId, uint256 price, uint256 margin, uint256 size, uint256 fee, int256 pnl, bool wasLiquidated)"
 	],
 	pool: [
+		"function getUtilization() view returns(uint256)",
 		"function getBalance(address account) view returns(uint256)",
 		"function getCurrencyBalance(address account) view returns(uint256)",
 		"function totalSupply() view returns(uint256)",
 		"function withdrawFee() view returns(uint256)",
+		"function openInterest() view returns(uint256)",
+		"function utilizationMultiplier() view returns(uint256)",
 
 		"function deposit(uint256 amount) payable",
 		"function withdraw(uint256 amount)"
@@ -79,13 +82,13 @@ export const ABIS = {
 export const CHAINDATA = {
 	31337: {
 		label: 'localhost',
-		router: '0x0355B7B8cb128fA5692729Ab3AAa199C1753f726',
+		router: '0x4eaB29997D332A666c3C366217Ab177cF9A7C436',
 		explorer: 'http://localhost:8545',
 		currencies: {
-			weth: '0x4EE6eCAD1c2Dae9f525404De8555724e3c35d07B',
-			usdc: '0xD84379CEae14AA33C123Af12424A37803F885889'
+			weth: '0x8E45C0936fa1a65bDaD3222bEFeC6a03C83372cE',
+			usdc: '0xC32609C91d6B6b51D48f2611308FEf121B02041f'
 		},
-		cap: '0xBEc49fA140aCaA83533fB00A2BB19bDdd0290f25'
+		cap: '0xBEe6FFc1E8627F51CcDF0b4399a1e1abc5165f15'
 	},
 	42161: {
 		label: 'Arbitrum',

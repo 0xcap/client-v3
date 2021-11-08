@@ -132,7 +132,7 @@
 
 		<div class='item'>
 			<div class='title'>Passive Income</div>
-			<div class='description'>Receive protocol fee rewards without risk.</div>
+			<div class='description'>Receive a share of protocol fees as rewards.</div>
 		</div>
 
 		<div class='item'>
@@ -152,6 +152,6 @@
 
 	</div>
 
-	<div class='community'>Cap is a decentralized, community-funded project. Find us on <a href='https://t.me/capfin' target='_blank'>Telegram</a> and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
+	<div class='community'>Cap is a community-funded project. Find us on <a href='https://t.me/capfin' target='_blank'>Telegram</a> and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
 
 </div>
