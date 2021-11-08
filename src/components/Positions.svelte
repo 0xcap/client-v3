@@ -111,7 +111,7 @@
 	}
 
 	.status {
-		color: var(--onyx);
+		color: var(--dim-gray);
 	}
 
 	.empty {
@@ -167,13 +167,11 @@
 
 					<div class='column column-product'>{#if position.isLong}<span class='pos'>↑</span>{:else}<span class='neg'>↓</span>{/if} {position.product}</div>
 					<div class='column column-price'>
-
-						{#if position.price * 1 == 0}
-							<span class='status'>Settling</span>
+						{#if position.price == 0}
+						-
 						{:else}
 							{formatToDisplay(position.price)}
 						{/if}
-
 					</div>
 					<div class='column column-size'>{formatToDisplay(position.size)} {formatCurrency(position.currencyLabel)}</div>
 					<div class='column column-margin'>{formatToDisplay(position.margin)} {formatCurrency(position.currencyLabel)}</div>
@@ -186,10 +184,12 @@
 
 						{#if position.closeOrderId > 0}
 							<span class='status'>Closing</span>
-						{:else if position.price * 1 > 0}
-						<a class='close' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">
-							{@html CANCEL_ICON}
-						</a>
+						{:else if position.price == 0}
+							<span class='status'>Settling</span>
+						{:else}
+							<a class='close' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">
+								{@html CANCEL_ICON}
+							</a>
 						{/if}
 
 					</div>

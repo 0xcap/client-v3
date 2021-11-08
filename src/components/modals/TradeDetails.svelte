@@ -25,10 +25,6 @@
 				value: data.product
 			},
 			{
-				label: 'Currency',
-				value: formatCurrency(data.currencyLabel)
-			},
-			{
 				label: 'Direction',
 				value: data.isLong ? 'Close Long' : 'Close Short'
 			},
@@ -42,11 +38,11 @@
 			},
 			{
 				label: 'Size',
-				value: `${formatToDisplay(data.size, 0, true)}`,
+				value: `${formatToDisplay(data.size, 0, true)} ${formatCurrency(data.currencyLabel)}`,
 			},
 			{
 				label: 'Margin',
-				value: `${formatToDisplay(data.margin, 0, true)}`,
+				value: `${formatToDisplay(data.margin, 0, true)} ${formatCurrency(data.currencyLabel)}`,
 			},
 			{
 				label: 'Leverage',
@@ -54,7 +50,7 @@
 			},
 			{
 				label: 'Profit or Loss',
-				value: `${formatPnl(data.pnl)} (${formatPnl(100*data.pnl/data.margin, true)}%)`
+				value: `${formatPnl(data.pnl)} ${formatCurrency(data.currencyLabel)} (${formatPnl(100*data.pnl/data.margin, true)}%)`
 			},
 			{
 				label: 'Was Liquidated',

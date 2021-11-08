@@ -50,10 +50,6 @@
 				value: data.product
 			},
 			{
-				label: 'Currency',
-				value: formatCurrency(data.currencyLabel)
-			},
-			{
 				label: 'Direction',
 				value: data.isLong ? 'Long' : 'Short'
 			},
@@ -67,11 +63,11 @@
 			},
 			{
 				label: 'Size',
-				value: `${formatToDisplay(data.size, 0, true)}`,
+				value: `${formatToDisplay(data.size, 0, true)} ${formatCurrency(data.currencyLabel)}`,
 			},
 			{
 				label: 'Margin',
-				value: `${formatToDisplay(data.margin, 0, true)}`,
+				value: `${formatToDisplay(data.margin, 0, true)} ${formatCurrency(data.currencyLabel)}`,
 				addMargin: data.price * 1 > 0 ? true : false,
 				data: data
 			},
@@ -84,12 +80,12 @@
 		if (data.price * 1 > 0) {
 			rows.push({
 				label: 'Unrealized P/L',
-				value: `${formatPnl(upl)} (${formatPnl(100*upl/data.margin, true)}%)`,
+				value: `${formatPnl(upl)} ${formatCurrency(data.currencyLabel)} (${formatPnl(100*upl/data.margin, true)}%)`,
 				hasError: liquidatingSoon
 			},
 			{
-				label: 'Accrued Interest',
-				value: interest ? formatToDisplay(interest) : '0'
+				label: 'Interest',
+				value: interest ? `${formatToDisplay(interest)}  ${formatCurrency(data.currencyLabel)}` : '0'
 			},
 			{
 				label: 'Liquidation Price',

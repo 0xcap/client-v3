@@ -57,14 +57,15 @@
 	.info {
 		color: var(--sonic-silver);
 		padding: var(--base-padding);
-		font-size: 90%;
+		font-size: 85%;
+		text-align: center;
 	}
 </style>
 
 <Modal>
 	<DataList data={rows} bind:value={amount} onSubmit={_submit} />
 	{#if data.withdrawFee}
-		<div class='info'>A {data.withdrawFee}% fee is retained on withdrawals.</div>
+		<div class='info'>{data.withdrawFee}% is retained and awarded to the rest of the pool.</div>
 	{/if}
 	<Button wrap={true} isLoading={!amount || submitIsPending} onClick={_submit} label={`Withdraw from ${formatCurrency(data.currencyLabel)} pool`} />
 </Modal>

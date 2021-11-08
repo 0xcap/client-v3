@@ -119,7 +119,7 @@ export function showToast(data, type) {
 	if (!message) return;
 	toast.set({message: message, type});
 	clearTimeout(timer);
-	timer = setTimeout(() => {hideToast()}, 10*1000);
+	timer = setTimeout(() => {hideToast()}, 7*1000);
 }
 export function hideToast() {
 	clearTimeout(timer);
@@ -274,14 +274,7 @@ export async function getUPL(position, latestPrice) {
 			upl = position.margin * position.leverage * (position.price * 1 - latestPrice * 1) / position.price;
 		}
 		// Add interest
-		let interest;
-		let now = parseInt(Date.now() / 1000);
-		if (position.isSettling || now < position.timestamp * 1 + 1800) {
-			interest = 0;
-		} else {
-			interest = position.margin * position.leverage * ((productInfo.interest * 1 || 0) / 100) * (now - position.timestamp * 1) / (360 * 24 * 3600);
-		}
-		if (interest < 0) interest = 0;
+		let interest = await getInterest(position);
 		upl -= interest;
 	}
 	return upl;
@@ -292,7 +285,7 @@ export async function getInterest(position) {
 		let interest;
 		let now = parseInt(Date.now() / 1000);
 		const productInfo = await getProduct(position.productId);
-		if (position.isSettling || now < position.timestamp * 1 + 1800) {
+		if (!position.price || now < position.timestamp * 1 + 900) {
 			interest = 0;
 		} else {
 			interest = position.margin * position.leverage * ((productInfo.interest * 1 || 0) / 100) * (now - position.timestamp * 1) / (360 * 24 * 3600);
