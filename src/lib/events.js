@@ -24,25 +24,27 @@ export async function initEventListeners() {
 	oracleContract.on(oracleContract.filters.SettlementError(), console.log);
 }
 
-function handleEvent() {
+async function handleEvent() {
 
 	const ev = arguments[arguments.length - 1];
 
 	console.log('got event', ev);
 
 	if (ev.event == 'NewOrder') {
-		getUserOrders();
+		await getUserOrders();
 	}
 
 	if (ev.event == 'PositionUpdated') {
 		// From listener only - oracle triggered
-		getUserPositions();
+		await getUserOrders();
+		await getUserPositions();
 	}
 
 	if (ev.event == 'ClosePosition') {
 		// From listener only - oracle triggered
-		getUserPositions();
-		getUserHistory();
+		await getUserOrders();
+		await getUserPositions();
+		await getUserHistory();
 	}
 
 }

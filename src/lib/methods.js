@@ -93,7 +93,7 @@ export async function getAllowance(currencyLabel, spenderName) {
 	const spenderContract = await getContract(spenderName);
 	if (!spenderContract) return;
 
-	const allowance = formatUnits(await contract.allowance(address, spenderContract.address));
+	const allowance = formatUnits(await contract.allowance(address, spenderContract.address), 18);
 
 	Stores.allowances.update((x) => {
 		if (!x[currencyLabel]) x[currencyLabel] = {};
@@ -143,7 +143,7 @@ export async function approveCurrency(currencyLabel, spenderName) {
 
 }
 
-export async function getBalanceOf(currencyLabel, address, forceWETH) {
+export async function getBalanceOf(currencyLabel, address) {
 	
 	if (!currencyLabel) currencyLabel = get(Stores.currencyLabel);
 	
@@ -153,7 +153,7 @@ export async function getBalanceOf(currencyLabel, address, forceWETH) {
 	}
 
 	let balance, decimals;
-	if (currencyLabel == 'weth' && !forceWETH) {
+	if (currencyLabel == 'weth') {
 		// get ETH balance
 		balance = await get(Stores.provider).getBalance(address);
 	} else {
@@ -208,7 +208,7 @@ export async function getUserPoolBalance(currencyLabel) {
 	// TEST TEST
 	//return 0;
 
-	return formatUnits(await contract.getCurrencyBalance(address));
+	return formatUnits(await contract.getCurrencyBalance(address), 18);
 
 }
 
@@ -236,13 +236,13 @@ export async function getPoolInfo(currencyLabel) {
 	}
 
 	try {
-		const poolBalance = await getBalanceOf(currencyLabel, contract.address, true);
+		const poolBalance = await getBalanceOf(currencyLabel, contract.address);
 		const userBalance = await getUserPoolBalance(currencyLabel);
 		const claimableReward = await getClaimableReward(currencyLabel);
 		const poolShare = await getPoolShare(currencyLabel);
 		const withdrawFee = formatUnits(await contract.withdrawFee(), 2);
 		const utilization = formatUnits(await contract.getUtilization(), 2);
-		const openInterest = formatUnits(await contract.openInterest());
+		const openInterest = formatUnits(await contract.openInterest(), 18);
 		const utilizationMultiplier = formatUnits(await contract.utilizationMultiplier(), 2);
 
 		info = {
@@ -274,9 +274,9 @@ export async function deposit(currencyLabel, amount) {
 		let tx;
 
 		if (currencyLabel == 'weth') {
-			tx = await contract.deposit(0, {value: parseUnits(amount)});
+			tx = await contract.deposit(0, {value: parseUnits(amount, 18)});
 		} else {
-			tx = await contract.deposit(parseUnits(amount));
+			tx = await contract.deposit(parseUnits(amount, 18));
 		}
 
 		monitorTx(tx.hash, 'pool-deposit', {currencyLabel});
@@ -294,7 +294,7 @@ export async function withdraw(currencyLabel, amount) {
 	if (!contract) return;
 
 	try {
-		let tx = await contract.withdraw(parseUnits(amount));
+		let tx = await contract.withdraw(parseUnits(amount, 18));
 		monitorTx(tx.hash, 'pool-withdraw', {currencyLabel});
 		hideModal();
 	} catch(e) {
@@ -329,7 +329,7 @@ export async function getUserCapBalance() {
 	const contract = await getContract('capPool');
 	if (!contract) return;
 
-	return formatUnits(await contract.getBalance(address));
+	return formatUnits(await contract.getBalance(address), 18);
 
 }
 
@@ -338,7 +338,7 @@ export async function getCapSupply() {
 	const contract = await getContract('capPool');
 	if (!contract) return;
 	
-	return formatUnits(await contract.totalSupply());
+	return formatUnits(await contract.totalSupply(), 18);
 
 }
 
@@ -381,7 +381,7 @@ export async function depositCAP(amount) {
 	if (!contract) return;
 
 	try {
-		let tx = await contract.deposit(parseUnits(amount));
+		let tx = await contract.deposit(parseUnits(amount, 18));
 		monitorTx(tx.hash, 'cap-deposit');
 		hideModal();
 	} catch(e) {
@@ -397,7 +397,7 @@ export async function withdrawCAP(amount) {
 	if (!contract) return;
 
 	try {
-		let tx = await contract.withdraw(parseUnits(amount));
+		let tx = await contract.withdraw(parseUnits(amount, 18));
 		monitorTx(tx.hash, 'cap-withdraw');
 		hideModal();
 	} catch(e) {
@@ -430,7 +430,7 @@ export async function getClaimableReward(currencyLabel, forCAP) {
 	const contract = await getContract(contractName, true, currencyLabel);
 	if (!contract) return;
 
-	return formatUnits(await contract.getClaimableReward());
+	return formatUnits(await contract.getClaimableReward(), 18);
 
 }
 
