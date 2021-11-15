@@ -201,7 +201,11 @@
 					<div class='column column-close'>
 
 						{#if position.price == 0}
-							<span class='status'>Settling</span>
+							{#if position.isClose}
+								<span class='status'>Closing</span>
+							{:else}
+								<span class='status'>Settling</span>
+							{/if}
 						{:else}
 							<a class='close' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">
 								{@html CANCEL_ICON}

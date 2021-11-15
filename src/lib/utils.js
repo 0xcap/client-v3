@@ -209,7 +209,6 @@ export function formatOrders(orders, info) {
 		});
 		i++;
 	}
-	formattedOrders.reverse();
 	console.log('formattedOrders', formattedOrders);
 	return formattedOrders;
 }

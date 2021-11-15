@@ -91,7 +91,7 @@ export async function getUserPositions() {
 	const filter = contract.filters.PositionUpdated(null, _address);
 	const _events = await contract.queryFilter(filter, -1000);
 
-	console.log('_events', _events);
+	// console.log('_events', _events);
 
 	let _details = {};
 	for (const ev of _events) {
@@ -100,7 +100,7 @@ export async function getUserPositions() {
 
 	let keys = _events.map((e) => {return e.args.key;});
 
-	console.log('keys', keys);
+	// console.log('keys', keys);
 
 	// uniq keys
 	let unique_keys = [];
@@ -109,10 +109,10 @@ export async function getUserPositions() {
 		unique_keys.push(k);
 	}
 
-	console.log('unique_keys', unique_keys);
+	// console.log('unique_keys', unique_keys);
 
 	let _raw_positions = await getPositions(unique_keys);
-	console.log('_raw_positions', _raw_positions);
+	// console.log('_raw_positions', _raw_positions);
 
 	let _position_info = [];
 	for (const k of unique_keys) {
