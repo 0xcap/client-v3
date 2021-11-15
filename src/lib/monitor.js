@@ -4,7 +4,8 @@ import { ethers } from 'ethers'
 
 import { provider } from './stores'
 
-import { getUserPositions, getAllowance, getPoolInfo, getCapPoolInfo } from './methods'
+import { getAllowance, getPoolInfo, getCapPoolInfo } from './methods'
+import { getUserPositions } from './graph'
 
 import { showToast, formatCurrency } from './utils'
 

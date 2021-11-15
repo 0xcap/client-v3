@@ -4,7 +4,7 @@ import { writable, derived } from 'svelte/store'
 export const history = writable([]);
 
 // New order
-export const productId = writable(localStorage.getItem('productId') || 1);
+export const productId = writable(localStorage.getItem('productId') || 'ETH-USD');
 export const product = writable({});
 
 export const currencyLabel = writable(localStorage.getItem('currencyLabel') || 'weth');
@@ -31,6 +31,9 @@ export const marginPlusFee = derived([size, leverage, product], ([$size, $levera
 // Pools
 export const pools = writable({});
 export const capPool = writable({});
+
+// Orders
+export const orders = writable([]);
 
 // Positions
 export const positions = writable([]);

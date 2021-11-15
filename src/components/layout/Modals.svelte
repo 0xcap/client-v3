@@ -7,7 +7,6 @@
 	import Currencies from '../modals/Currencies.svelte'
 	import ClosePosition from '../modals/ClosePosition.svelte'
 	import PositionDetails from '../modals/PositionDetails.svelte'
-	import AddMargin from '../modals/AddMargin.svelte'
 	import TradeDetails from '../modals/TradeDetails.svelte'
 	
 	import PoolDeposit from '../modals/PoolDeposit.svelte'
@@ -38,9 +37,6 @@
 {/if}
 {#if $activeModal && $activeModal.name == 'PositionDetails'}
 	<PositionDetails data={$activeModal.data} />
-{/if}
-{#if $activeModal && $activeModal.name == 'AddMargin'}
-	<AddMargin data={$activeModal.data} />
 {/if}
 
 {#if $activeModal && $activeModal.name == 'PoolDeposit'}

@@ -2,7 +2,6 @@
 
 	import Volume from './Volume.svelte'
 
-	import { PRODUCTS } from '../lib/constants'
 	import { showModal, shortSymbol, displayPricePercentChange, formatToDisplay } from '../lib/utils'
 	import { address, productId, product, prices, prices24h } from '../lib/stores'
 	import { CARET_DOWN } from '../lib/icons'
@@ -79,7 +78,7 @@
 	<div class='product-info'>
 
 		<div class='item selector selector-product' on:click={() => {if ($address) {showModal('Products')}}} data-intercept="true">
-			<img src={PRODUCTS[$productId].logo} alt={`${$product.symbol} logo`}>
+			<img src={$product.logo} alt={`${$product.symbol} logo`}>
 			<span>{$product.symbol || ''}</span>
 			{@html CARET_DOWN}
 		</div>

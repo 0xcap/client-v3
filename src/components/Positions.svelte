@@ -1,6 +1,6 @@
 <script>
 
-	import { positions, prices } from '../lib/stores'
+	import { positions, prices, orders } from '../lib/stores'
 
 	import { CANCEL_ICON } from '../lib/icons'
 
@@ -26,6 +26,14 @@
 	}
 
 	$: calculateUPLs($prices);
+
+	let items_to_show = [];
+
+	function displayItems(_orders, _positions) {
+		items_to_show = _orders.concat(_positions);
+	}
+
+	$: displayItems($orders, $positions);
 
 </script>
 
@@ -159,10 +167,10 @@
 
 	<div class='positions-list no-scrollbar'>
 
-		{#if $positions.length == 0}
+		{#if items_to_show.length == 0}
 			<div class='empty'>No positions to show.</div>
 		{:else}
-			{#each $positions as position}
+			{#each items_to_show as position}
 				<div class='position' on:click={() => {showModal('PositionDetails', position)}} data-intercept="true">
 
 					<div class='column column-product'>{#if position.isLong}<span class='pos'>↑</span>{:else}<span class='neg'>↓</span>{/if} {position.product}</div>

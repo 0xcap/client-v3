@@ -4,9 +4,8 @@
 
 	import Button from './layout/Button.svelte'
 
-	import { submitNewPosition, approveCurrency, getBalanceOf } from '../lib/methods'
+	import { submitOrder, approveCurrency, getBalanceOf } from '../lib/methods'
 
-	import { PRODUCTS } from '../lib/constants'
 	import { showModal, shortSymbol, getCachedLeverage, formatToDisplay, formatCurrency } from '../lib/utils'
 	import { CARET_DOWN } from '../lib/icons'
 
@@ -28,7 +27,7 @@
 			isSubmittingShort.set(true);
 		}
 
-		const error = await submitNewPosition(isLong);
+		const error = await submitOrder(isLong);
 		if (error) {
 			focusAmount();
 		} else {

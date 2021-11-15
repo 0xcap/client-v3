@@ -2,20 +2,9 @@ const ETH_LOGO = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADD
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
-export const PRODUCTS = {
-	1: {
-		symbol: 'ETH-USD',
-		logo: ETH_LOGO
-	},
-	2: {
-		symbol: 'BTC-USD',
-		logo: 'https://data-chain-link.cdn.prismic.io/data-chain-link/19a58483-b100-4d09-ab0d-7d221a491090_BTC.svg'
-	}
-};
-
-export const PRODUCTS_REVERSE = {
-	'ETH-USD': 1,
-	'BTC-USD': 2
+export const PRODUCT_LOGOS = {
+	'ETH-USD': ETH_LOGO,
+	'BTC-USD': 'https://data-chain-link.cdn.prismic.io/data-chain-link/19a58483-b100-4d09-ab0d-7d221a491090_BTC.svg'
 };
 
 export const CURRENCY_LOGOS = {
@@ -28,23 +17,24 @@ export const ABIS = {
 		"function trading() view returns(address)",
 		"function treasury() view returns(address)",
 		"function capPool() view returns(address)",
+		"function oracle() view returns(address)",
 
 		"function getPool(address currency) view returns(address)",
 		"function getPoolRewards(address currency) view returns(address)",
 		"function getCapRewards(address currency) view returns(address)"
 	],
 	trading: [
-		"function getProduct(uint256 productId) view returns(tuple(address feed, uint256 maxLeverage, uint256 oracleMaxDeviation, uint256 liquidationThreshold, uint256 fee, uint256 interest))",
-		"function getUserPositions(address user) view returns(tuple(bool isLong, address user, address currency, uint256 closeOrderId, uint256 productId, uint256 size, uint256 price, uint256 margin, uint256 timestamp, uint256 fee, uint256 positionId)[] _positions)",
+		"function getProduct(bytes32 productId) view returns(tuple(uint64 maxLeverage, uint64 liquidationThreshold, uint64 fee, uint64 interest))",
+		"function getOrders(bytes32[] keys) view returns(tuple(bool isClose, uint64 size, uint64 margin)[])",
+		"function getPositions(bytes32[] keys) view returns(tuple(uint64 size, uint64 margin, uint64 timestamp, uint64 price)[])",
 
-		"function submitNewPosition(address currency, uint256 productId, uint256 margin, uint256 size, bool isLong) payable",
-		"function addMargin(uint256 positionId, uint256 margin) payable",
-		"function submitCloseOrder(uint256 positionId, uint256 size) payable",
-		"function cancelPosition(uint256 positionId)",
-		"function cancelOrder(uint256 orderId)",
+		"function submitOrder(address currency,bytes32 productId,bool isLong,uint256 margin,uint256 size) payable",
+		"function submitCloseOrder(address currency,bytes32 productId,bool isLong,uint256 size) payable",
+		"function cancelOrder(bytes32 productId,address currency,bool isLong)",
 
-		"event NewPosition(uint256 indexed positionId, address indexed user, uint256 indexed productId, address currency, bool isLong, uint256 price, uint256 margin, uint256 size, uint256 fee)",
-		"event ClosePosition(uint256 indexed positionId, address indexed user, uint256 indexed productId, uint256 price, uint256 margin, uint256 size, uint256 fee, int256 pnl, bool wasLiquidated)"
+		"event NewOrder(bytes32 indexed key,address indexed user,bytes32 indexed productId,address currency,bool isLong,uint256 margin,uint256 size,bool isClose)",
+		"event PositionUpdated(bytes32 indexed key,address indexed user,bytes32 indexed productId,address currency,bool isLong,uint256 margin,uint256 size,uint256 price)",
+		"event ClosePosition(bytes32 indexed key,address indexed user,bytes32 indexed productId,address currency,bool isLong,uint256 price,uint256 margin,uint256 size,uint256 fee,int256 pnl,bool wasLiquidated)"
 	],
 	pool: [
 		"function getUtilization() view returns(uint256)",
@@ -67,6 +57,9 @@ export const ABIS = {
 		"function getPoolShare(address currency) view returns(uint256)",
 		"function getCapShare(address currency) view returns(uint256)"
 	],
+	oracle: [
+		"event SettlementError(uint256 indexed orderId,bool indexed isClose,string reason)"
+	],
 	erc20: [
 		"function totalSupply() view returns (uint256)",
 		"function decimals() view returns (uint8)",
@@ -82,25 +75,23 @@ export const ABIS = {
 export const CHAINDATA = {
 	31337: {
 		label: 'localhost',
-		router: '0x6e0a5725dD4071e46356bD974E13F35DbF9ef367',
+		router: '0x180FAF09AdD6a27554b11a131DCe6f6A3ddF4cBf',
 		explorer: 'http://localhost:8545',
 		currencies: {
-			weth: '0xa31F4c0eF2935Af25370D9AE275169CCd9793DA3',
-			usdc: '0xb830887eE23d3f9Ed8c27dbF7DcFe63037765475'
+			weth: ADDRESS_ZERO,
+			usdc: '0xf507F05B3F4985Ed5921b39ADAAcE5885Ee53096'
 		},
-		cap: '0xF9c0bF1CFAAB883ADb95fed4cfD60133BffaB18a'
+		cap: '0x8642500aC47424De5FA9756e16407f8bbfc1E039'
 	},
 	42161: {
 		label: 'Arbitrum',
-		router: '',
+		router: '0x6eB0306B47595d3453491A1D90081F166FeE7676',
 		explorer: 'https://arbiscan.io',
 		rpc: 'https://arb1.arbitrum.io/rpc', // for walletconnect
 		currencies: {
-			weth: '',
-			usdc: ''
+			weth: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+			usdc: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8'
 		},
-		cap: ''
+		cap: '0x031d35296154279DC1984dCD93E392b1f946737b'
 	}
 }
-
-

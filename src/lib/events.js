@@ -1,8 +1,7 @@
 // Oracle triggered events. For user tx triggered actions, use monitor
 import { get } from 'svelte/store'
 import { getContract } from './contracts'
-import { getUserPositions } from './methods'
-import { getUserHistory } from './graph'
+import { getUserOrders, getUserPositions, getUserHistory } from './graph'
 
 import { address } from './stores'
 
@@ -15,15 +14,27 @@ export async function initEventListeners() {
 	const _address = get(address);
 	if (!_address) return;
 
-	tradingContract.on(tradingContract.filters.NewPosition(null, _address), handleEvent);
+	tradingContract.on(tradingContract.filters.NewOrder(null, _address), handleEvent);
+	tradingContract.on(tradingContract.filters.PositionUpdated(null, _address), handleEvent);
 	tradingContract.on(tradingContract.filters.ClosePosition(null, _address), handleEvent);
+
+	const oracleContract = await getContract('oracle');
+	if (!oracleContract) return;
+	
+	oracleContract.on(oracleContract.filters.SettlementError(), console.log);
 }
 
 function handleEvent() {
 
 	const ev = arguments[arguments.length - 1];
 
-	if (ev.event == 'NewPosition') {
+	console.log('got event', ev);
+
+	if (ev.event == 'NewOrder') {
+		getUserOrders();
+	}
+
+	if (ev.event == 'PositionUpdated') {
 		// From listener only - oracle triggered
 		getUserPositions();
 	}

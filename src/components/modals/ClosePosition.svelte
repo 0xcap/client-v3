@@ -44,12 +44,13 @@
 		} else {
 			sizeToSubmit = size*1;
 		}
+		console.log('sizeToSubmit', sizeToSubmit);
 		submitIsPending = true;
 		const error = await submitCloseOrder(
-			data.positionId,
+			data.currencyLabel,
 			data.productId,
-			sizeToSubmit,
-			data.currencyLabel
+			data.isLong,
+			sizeToSubmit
 		);
 		submitIsPending = false;
 	}

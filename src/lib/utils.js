@@ -2,7 +2,7 @@
 import { ethers } from 'ethers'
 import { get } from 'svelte/store'
 
-import { PRODUCTS, CHAINDATA } from './constants'
+import { PRODUCT_LOGOS, CHAINDATA } from './constants'
 
 // Pages
 import Home from '../components/pages/Home.svelte'
@@ -156,48 +156,82 @@ export function navigateTo(path) {
     loadRoute(path, false);
 }
 
+export function toBytes32(string) {
+  return ethers.utils.formatBytes32String(string);
+}
+export function fromBytes32(string) {
+  return ethers.utils.parseBytes32String(string);
+}
+
 // Data formatters
 export function formatUnits(number, units) {
-  return ethers.utils.formatUnits(number || 0, units || 18);
+  return ethers.utils.formatUnits(number || 0, units || 8);
 }
 export function parseUnits(number, units) {
   if (typeof(number) == 'number') {
   	number = "" + number;
   }
-  return ethers.utils.parseUnits(number, units || 18);
+  return ethers.utils.parseUnits(number, units || 8);
 }
 export function formatProduct(id, product) {
 	return {
 		productId: id,
-		symbol: PRODUCTS[id].symbol,
+		symbol: id,
+		logo: PRODUCT_LOGOS[id],
 		maxLeverage: formatUnits(product.maxLeverage),
 		liquidationThreshold: formatUnits(product.liquidationThreshold, 2),
 		fee: formatUnits(product.fee, 4),
 		interest: formatUnits(product.interest, 2)
 	};
 }
-export function formatPositions(positions) {
-	let formattedPositions = [];
+export function formatOrders(orders, info) {
+	let formattedOrders = [];
+	console.log('order_info', info);
 	let i = 0;
-	for (const p of positions) {
-		if (!p.productId) {
+	for (const o of orders) {
+		if (!o.size.toNumber()) {
 			i++;
 			continue;
 		}
+		console.log('o', o);
+		formattedOrders.push({
+			isClose: o.isClose,
+			margin: formatUnits(o.margin),
+			size: formatUnits(o.size),
+			currency: info[i].currency,
+			isLong: info[i].isLong,
+			currencyLabel: getCurrencyLabelFromAddress(info[i].currency),
+			productId: fromBytes32(info[i].productId),
+			product: fromBytes32(info[i].productId),
+			leverage: formatUnits(o.size) * 1 / (formatUnits(o.margin) * 1),
+		});
+		i++;
+	}
+	formattedOrders.reverse();
+	console.log('formattedOrders', formattedOrders);
+	return formattedOrders;
+}
+export function formatPositions(positions, info) {
+	let formattedPositions = [];
+	console.log('position info', info);
+	let i = 0;
+	for (const p of positions) {
+		if (!p.size.toNumber()) {
+			i++;
+			continue;
+		}
+		console.log('p', p);
 		formattedPositions.push({
-			positionId: p.positionId,
-			product: PRODUCTS[p.productId].symbol,
-			timestamp: p.timestamp,
-			isLong: p.isLong,
 			margin: formatUnits(p.margin),
 			size: formatUnits(p.size),
-			leverage: formatUnits(p.size) * 1 / (formatUnits(p.margin) * 1),
 			price: formatUnits(p.price),
-			productId: p.productId,
-			closeOrderId: p.closeOrderId,
-			currency: p.currency,
-			currencyLabel: getCurrencyLabelFromAddress(p.currency),
-			fee: formatUnits(p.fee)
+			timestamp: p.timestamp.toNumber(),
+			currency: info[i].currency,
+			isLong: info[i].isLong,
+			currencyLabel: getCurrencyLabelFromAddress(info[i].currency),
+			productId: fromBytes32(info[i].productId),
+			product: fromBytes32(info[i].productId),
+			leverage: formatUnits(p.size) * 1 / (formatUnits(p.margin) * 1),
 		});
 		i++;
 	}
@@ -214,7 +248,7 @@ export function formatTrades(trades) {
 			currency: t.currency,
 			currencyLabel: getCurrencyLabelFromAddress(t.currency),
 			productId: t.productId,
-			product: PRODUCTS[t.productId].symbol,
+			product: fromBytes32(t.productId),
 			price: formatUnits(t.closePrice || t.price),
 			entryPrice: formatUnits(t.entryPrice),
 			margin: formatUnits(t.margin),
@@ -285,7 +319,7 @@ export async function getInterest(position) {
 		let interest;
 		let now = parseInt(Date.now() / 1000);
 		const productInfo = await getProduct(position.productId);
-		if (!position.price || now < position.timestamp * 1 + 900) {
+		if (!position.price || !position.timestamp || now < position.timestamp * 1 + 900) {
 			interest = 0;
 		} else {
 			interest = position.margin * position.leverage * ((productInfo.interest * 1 || 0) / 100) * (now - position.timestamp * 1) / (360 * 24 * 3600);

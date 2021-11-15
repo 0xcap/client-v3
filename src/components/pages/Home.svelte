@@ -80,6 +80,8 @@
 
 	</div>
 
+	<div class='community'>Cap is a community-funded project. Find us on <a href='https://t.me/capfin' target='_blank'>Telegram</a> and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
+
 	<div class='benefits'>
 
 		<div class='benefits-title'>For Traders</div>
@@ -151,7 +153,5 @@
 		</div>
 
 	</div>
-
-	<div class='community'>Cap is a community-funded project. Find us on <a href='https://t.me/capfin' target='_blank'>Telegram</a> and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
 
 </div>
