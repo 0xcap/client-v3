@@ -16,9 +16,9 @@
 		totalUPL = 0;
 		for (const position of $positions) {
 			const upl = await getUPL(position, _prices[position.productId]);
-			upls[position.positionId] = upl;
+			upls[position.key] = upl;
 			if (!upl) continue;
-			upls_percent[position.positionId] = (100 * upl * 1 / position.margin);
+			upls_percent[position.key] = (100 * upl * 1 / position.margin);
 			totalUPL += upl * 1;
 		}
 		if (isNaN(totalUPL)) totalUPL = 0;
@@ -183,16 +183,24 @@
 					</div>
 					<div class='column column-size'>{formatToDisplay(position.size)} {formatCurrency(position.currencyLabel)}</div>
 					<div class='column column-margin'>{formatToDisplay(position.margin)} {formatCurrency(position.currencyLabel)}</div>
-					<div class='column column-leverage'>{formatToDisplay(position.leverage)}×</div>
-					<div class={`column column-pnl ${upls[position.positionId] * 1 < 0 ? 'neg' : 'pos'}`}>
-						{formatPnl(upls[position.positionId]) || '-'}
+					<div class='column column-leverage'>
+						{#if position.leverage}
+							{formatToDisplay(position.leverage)}×
+						{:else}
+							-
+						{/if}
+					</div>
+					<div class={`column column-pnl ${upls[position.key] * 1 < 0 ? 'neg' : 'pos'}`}>
+						{#if position.price == 0}
+						-
+						{:else}
+							{formatPnl(upls[position.key]) || '-'}
+						{/if}
 					</div>
 
 					<div class='column column-close'>
 
-						{#if position.closeOrderId > 0}
-							<span class='status'>Closing</span>
-						{:else if position.price == 0}
+						{#if position.price == 0}
 							<span class='status'>Settling</span>
 						{:else}
 							<a class='close' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">

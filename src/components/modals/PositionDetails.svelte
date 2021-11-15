@@ -34,10 +34,6 @@
 
 		rows = [
 			{
-				label: 'ID',
-				value: data.positionId
-			},
-			{
 				label: 'Date',
 				value: new Date(data.timestamp * 1000).toLocaleString()
 			},

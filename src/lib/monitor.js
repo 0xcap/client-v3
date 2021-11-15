@@ -5,7 +5,7 @@ import { ethers } from 'ethers'
 import { provider } from './stores'
 
 import { getAllowance, getPoolInfo, getCapPoolInfo } from './methods'
-import { getUserPositions } from './graph'
+import { getUserOrders, getUserPositions } from './graph'
 
 import { showToast, formatCurrency } from './utils'
 
@@ -30,18 +30,15 @@ async function handleTxComplete(type, details) {
 
 	if (type == 'submit-new-position') {
 		showToast('Order submitted.', 'success');
+		await getUserOrders();
 		await getUserPositions();
 	} else if (type == 'submit-close-order') {
 		showToast('Close order submitted.', 'success');
-		await getUserPositions();
-	} else if (type == 'add-margin') {
-		showToast('Margin added.', 'success');
-		await getUserPositions();
-	} else if (type == 'cancel-position') {
-		showToast('Position cancelled.', 'success');
+		await getUserOrders();
 		await getUserPositions();
 	} else if (type == 'cancel-order') {
 		showToast('Close order cancelled.', 'success');
+		await getUserOrders();
 		await getUserPositions();
 	} else if (type == 'approve') {
 		await getAllowance(details.currencyLabel, details.spenderName);

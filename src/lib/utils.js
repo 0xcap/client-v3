@@ -195,6 +195,8 @@ export function formatOrders(orders, info) {
 		}
 		console.log('o', o);
 		formattedOrders.push({
+			key: info[i].key,
+			price: 0,
 			isClose: o.isClose,
 			margin: formatUnits(o.margin),
 			size: formatUnits(o.size),
@@ -203,7 +205,7 @@ export function formatOrders(orders, info) {
 			currencyLabel: getCurrencyLabelFromAddress(info[i].currency),
 			productId: fromBytes32(info[i].productId),
 			product: fromBytes32(info[i].productId),
-			leverage: formatUnits(o.size) * 1 / (formatUnits(o.margin) * 1),
+			leverage: o.margin.toNumber() ? formatUnits(o.size) * 1 / (formatUnits(o.margin) * 1) : 0,
 		});
 		i++;
 	}
@@ -222,6 +224,7 @@ export function formatPositions(positions, info) {
 		}
 		console.log('p', p);
 		formattedPositions.push({
+			key: info[i].key,
 			margin: formatUnits(p.margin),
 			size: formatUnits(p.size),
 			price: formatUnits(p.price),
@@ -242,12 +245,12 @@ export function formatTrades(trades) {
 	if (!trades) return [];
 	let formattedTrades = [];
 	for (const t of trades) {
+		console.log('t', t);
 		formattedTrades.push({
-			positionId: t.positionId,
-			orderId: t.orderId,
+			key: t.key,
 			currency: t.currency,
 			currencyLabel: getCurrencyLabelFromAddress(t.currency),
-			productId: t.productId,
+			productId: fromBytes32(t.productId),
 			product: fromBytes32(t.productId),
 			price: formatUnits(t.closePrice || t.price),
 			entryPrice: formatUnits(t.entryPrice),
