@@ -100,19 +100,16 @@
 </style>
 
 <Modal>
-	{#if data.price * 1 == 0}
-		{#if data.price * 1 == 0}
-			<div class='status'>
-				Status: Settling. <a on:click={_cancelOrder}>Cancel Order</a>
-			</div>
-		{/if}
+	{#if data.isSettling}
+		<div class='status'>
+			Status: Settling. <a on:click={_cancelOrder}>Cancel Order</a>
+		</div>
+	{/if}
 
-		{#if data.closeOrderId > 0}
-			<div class='status'>
-				Status: Closing. <a on:click={_cancelOrder}>Cancel Close Order</a>
-			</div>
-		{/if}
-
+	{#if data.isClosing}
+		<div class='status'>
+			Status: Closing. <a on:click={_cancelOrder}>Cancel Close Order</a>
+		</div>
 	{/if}
 	<DataList data={rows} />
 </Modal>

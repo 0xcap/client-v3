@@ -186,14 +186,14 @@ export function formatProduct(id, product) {
 }
 export function formatOrders(orders, info) {
 	let formattedOrders = [];
-	console.log('order_info', info);
+	//console.log('order_info', info);
 	let i = 0;
 	for (const o of orders) {
 		if (!o.size.toNumber()) {
 			i++;
 			continue;
 		}
-		console.log('o', o);
+		//console.log('o', o);
 		formattedOrders.push({
 			key: info[i].key,
 			price: 0,
@@ -209,19 +209,19 @@ export function formatOrders(orders, info) {
 		});
 		i++;
 	}
-	console.log('formattedOrders', formattedOrders);
+	//console.log('formattedOrders', formattedOrders);
 	return formattedOrders;
 }
 export function formatPositions(positions, info) {
 	let formattedPositions = [];
-	console.log('position info', info);
+	//console.log('position info', info);
 	let i = 0;
 	for (const p of positions) {
 		if (!p.size.toNumber()) {
 			i++;
 			continue;
 		}
-		console.log('p', p);
+		//console.log('p', p);
 		formattedPositions.push({
 			key: info[i].key,
 			margin: formatUnits(p.margin),
@@ -237,14 +237,13 @@ export function formatPositions(positions, info) {
 		});
 		i++;
 	}
-	formattedPositions.reverse();
 	return formattedPositions;
 }
 export function formatTrades(trades) {
 	if (!trades) return [];
 	let formattedTrades = [];
 	for (const t of trades) {
-		console.log('t', t);
+		//console.log('t', t);
 		formattedTrades.push({
 			key: t.key,
 			currency: t.currency,

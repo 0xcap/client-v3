@@ -1,6 +1,6 @@
 <script>
 
-	import { positions, prices, orders } from '../lib/stores'
+	import { positions, prices, orders, enhancedPositions } from '../lib/stores'
 
 	import { CANCEL_ICON } from '../lib/icons'
 
@@ -34,6 +34,8 @@
 	}
 
 	$: displayItems($orders, $positions);
+
+	$: $enhancedPositions;
 
 </script>
 
@@ -167,15 +169,15 @@
 
 	<div class='positions-list no-scrollbar'>
 
-		{#if items_to_show.length == 0}
+		{#if $enhancedPositions.length == 0}
 			<div class='empty'>No positions to show.</div>
 		{:else}
-			{#each items_to_show as position}
+			{#each $enhancedPositions as position}
 				<div class='position' on:click={() => {showModal('PositionDetails', position)}} data-intercept="true">
 
 					<div class='column column-product'>{#if position.isLong}<span class='pos'>↑</span>{:else}<span class='neg'>↓</span>{/if} {position.product}</div>
 					<div class='column column-price'>
-						{#if position.price == 0}
+						{#if position.isSettling}
 						-
 						{:else}
 							{formatToDisplay(position.price)}
@@ -184,15 +186,11 @@
 					<div class='column column-size'>{formatToDisplay(position.size)} {formatCurrency(position.currencyLabel)}</div>
 					<div class='column column-margin'>{formatToDisplay(position.margin)} {formatCurrency(position.currencyLabel)}</div>
 					<div class='column column-leverage'>
-						{#if position.leverage}
-							{formatToDisplay(position.leverage)}×
-						{:else}
-							-
-						{/if}
+						{formatToDisplay(position.leverage)}×
 					</div>
 					<div class={`column column-pnl ${upls[position.key] * 1 < 0 ? 'neg' : 'pos'}`}>
-						{#if position.price == 0}
-						-
+						{#if position.isSettling}
+							-
 						{:else}
 							{formatPnl(upls[position.key]) || '-'}
 						{/if}
@@ -200,12 +198,10 @@
 
 					<div class='column column-close'>
 
-						{#if position.price == 0}
-							{#if position.isClose}
-								<span class='status'>Closing</span>
-							{:else}
-								<span class='status'>Settling</span>
-							{/if}
+						{#if position.isClosing}
+							<span class='status'>Closing</span>
+						{:else if position.isSettling}
+							<span class='status'>Settling</span>
 						{:else}
 							<a class='close' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">
 								{@html CANCEL_ICON}

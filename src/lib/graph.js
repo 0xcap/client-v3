@@ -37,7 +37,7 @@ export async function getVolume() {
 
 export async function getUserOrders() {
 
-	console.log('called getUserOrders');
+	// console.log('called getUserOrders');
 
 	// from events only
 
@@ -73,7 +73,7 @@ export async function getUserOrders() {
 		_order_info.push(_details[k]);
 	}
 
-	console.log('_raw_orders', _raw_orders, _order_info);
+	// console.log('_raw_orders', _raw_orders, _order_info);
 	
 	orders.set(formatOrders(_raw_orders,_order_info));
 

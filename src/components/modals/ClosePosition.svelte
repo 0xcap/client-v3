@@ -44,6 +44,7 @@
 		} else {
 			sizeToSubmit = size*1;
 		}
+		sizeToSubmit = sizeToSubmit.toFixed(8);
 		console.log('sizeToSubmit', sizeToSubmit);
 		submitIsPending = true;
 		const error = await submitCloseOrder(

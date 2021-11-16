@@ -38,6 +38,39 @@ export const orders = writable([]);
 // Positions
 export const positions = writable([]);
 
+export const enhancedPositions = derived([orders, positions], ([$orders, $positions]) => {
+	// console.log('orders', $orders);
+	// console.log('positions', $positions);
+	let enhanced_positions = [];
+	let new_orders = [];
+	let used_orders = {};
+	for (let p of $positions) {
+		for (let o of $orders) {
+			if (o.key == p.key) {
+				if (o.isClose) {
+					p.isClosing = true;
+				} else {
+					p.isSettling = true;
+				}
+				used_orders[o.key] = true;
+			}
+		}
+		enhanced_positions.push(p);
+	}
+	for (let o of $orders) {
+		if (!used_orders[o.key]) {
+			o.isSettling = true;
+			new_orders.push(o);
+		}
+	}
+	enhanced_positions.sort((a,b) => {
+		if (a.timestamp > b.timestamp) return -1;
+		if (a.timestamp < b.timestamp) return 1;
+		return 0;
+	});
+	return new_orders.concat(enhanced_positions);
+}, []);
+
 // Prices
 export const prices = writable({});
 export const prices24h = writable({});
