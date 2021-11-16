@@ -37,7 +37,7 @@ export async function getVolume() {
 
 export async function getUserOrders() {
 
-	// console.log('called getUserOrders');
+	console.log('called getUserOrders');
 
 	// from events only
 
@@ -50,6 +50,8 @@ export async function getUserOrders() {
 
 	const filter = contract.filters.NewOrder(null, _address);
 	const _events = await contract.queryFilter(filter, -1000);
+
+	console.log('NewOrder _events', _events);
 
 	let _details = {};
 	for (const ev of _events) {
@@ -67,13 +69,12 @@ export async function getUserOrders() {
 
 	let _raw_orders = await getOrders(unique_keys);
 
-
 	let _order_info = [];
 	for (const k of unique_keys) {
 		_order_info.push(_details[k]);
 	}
 
-	// console.log('_raw_orders', _raw_orders, _order_info);
+	console.log('_raw_orders', _raw_orders, _order_info);
 	
 	orders.set(formatOrders(_raw_orders,_order_info));
 
@@ -91,7 +92,7 @@ export async function getUserPositions() {
 	const filter = contract.filters.PositionUpdated(null, _address);
 	const _events = await contract.queryFilter(filter, -1000);
 
-	// console.log('_events', _events);
+	console.log('_events', _events);
 
 	let _details = {};
 	for (const ev of _events) {
@@ -100,7 +101,7 @@ export async function getUserPositions() {
 
 	let keys = _events.map((e) => {return e.args.key;});
 
-	// console.log('keys', keys);
+	console.log('keys', keys);
 
 	// uniq keys
 	let unique_keys = [];
@@ -109,10 +110,10 @@ export async function getUserPositions() {
 		unique_keys.push(k);
 	}
 
-	// console.log('unique_keys', unique_keys);
+	console.log('unique_keys', unique_keys);
 
 	let _raw_positions = await getPositions(unique_keys);
-	// console.log('_raw_positions', _raw_positions);
+	console.log('_raw_positions', _raw_positions);
 
 	let _position_info = [];
 	for (const k of unique_keys) {

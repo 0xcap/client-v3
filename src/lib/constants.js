@@ -29,11 +29,11 @@ export const ABIS = {
 		"function getPositions(bytes32[] keys) view returns(tuple(uint64 size, uint64 margin, uint64 timestamp, uint64 price)[])",
 
 		"function submitOrder(address currency,bytes32 productId,bool isLong,uint256 margin,uint256 size) payable",
-		"function submitCloseOrder(address currency,bytes32 productId,bool isLong,uint256 size) payable",
+		"function submitCloseOrder(bytes32 productId,address currency,bool isLong,uint256 size) payable",
 		"function cancelOrder(bytes32 productId,address currency,bool isLong)",
 
 		"event NewOrder(bytes32 indexed key,address indexed user,bytes32 indexed productId,address currency,bool isLong,uint256 margin,uint256 size,bool isClose)",
-		"event PositionUpdated(bytes32 indexed key,address indexed user,bytes32 indexed productId,address currency,bool isLong,uint256 margin,uint256 size,uint256 price)",
+		"event PositionUpdated(bytes32 indexed key,address indexed user,bytes32 indexed productId,address currency,bool isLong,uint256 margin,uint256 size,uint256 price,uint256 fee)",
 		"event ClosePosition(bytes32 indexed key,address indexed user,bytes32 indexed productId,address currency,bool isLong,uint256 price,uint256 margin,uint256 size,uint256 fee,int256 pnl,bool wasLiquidated)"
 	],
 	pool: [
@@ -75,13 +75,13 @@ export const ABIS = {
 export const CHAINDATA = {
 	31337: {
 		label: 'localhost',
-		router: '0x1BA1f90A3eB0e59421B54Dbf876119987587C0C3',
+		router: '0xBcA21A2e4c0b2Dc1279a282E6e6d8FaC8d88adAd',
 		explorer: 'http://localhost:8545',
 		currencies: {
 			weth: ADDRESS_ZERO,
-			usdc: '0xB3a1e45D60f9394bC4327f5Dc46dB56D8a3c3688'
+			usdc: '0x8a5592b0E95767886642269AEb0B7A80dAa22c8f'
 		},
-		cap: '0x57a7b5cD15eA2c64A48104482837519B81a0619a'
+		cap: '0x25e67aedBA8aCe016Dd4573df46c50E4F8a97497'
 	},
 	42161: {
 		label: 'Arbitrum',

@@ -37,7 +37,7 @@ async function handleTxComplete(type, details) {
 		await getUserOrders();
 		await getUserPositions();
 	} else if (type == 'cancel-order') {
-		showToast('Close order cancelled.', 'success');
+		showToast('Order cancelled.', 'success');
 		await getUserOrders();
 		await getUserPositions();
 	} else if (type == 'approve') {

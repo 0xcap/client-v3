@@ -177,7 +177,7 @@
 
 					<div class='column column-product'>{#if position.isLong}<span class='pos'>↑</span>{:else}<span class='neg'>↓</span>{/if} {position.product}</div>
 					<div class='column column-price'>
-						{#if position.isSettling}
+						{#if position.price == 0}
 						-
 						{:else}
 							{formatToDisplay(position.price)}
@@ -189,7 +189,7 @@
 						{formatToDisplay(position.leverage)}×
 					</div>
 					<div class={`column column-pnl ${upls[position.key] * 1 < 0 ? 'neg' : 'pos'}`}>
-						{#if position.isSettling}
+						{#if position.price == 0}
 							-
 						{:else}
 							{formatPnl(upls[position.key]) || '-'}

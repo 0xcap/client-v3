@@ -48,8 +48,8 @@
 		console.log('sizeToSubmit', sizeToSubmit);
 		submitIsPending = true;
 		const error = await submitCloseOrder(
-			data.currencyLabel,
 			data.productId,
+			data.currencyLabel,
 			data.isLong,
 			sizeToSubmit
 		);

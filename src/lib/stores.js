@@ -68,6 +68,7 @@ export const enhancedPositions = derived([orders, positions], ([$orders, $positi
 		if (a.timestamp < b.timestamp) return 1;
 		return 0;
 	});
+	new_orders.reverse();
 	return new_orders.concat(enhanced_positions);
 }, []);
 

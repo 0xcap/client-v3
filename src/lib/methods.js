@@ -75,6 +75,8 @@ export async function getAllowance(currencyLabel, spenderName) {
 	
 	if (!currencyLabel) currencyLabel = get(Stores.currencyLabel);
 
+	console.log('currencyLabel', currencyLabel);
+
 	if (currencyLabel == 'weth') {
 		Stores.allowances.update((x) => {
 			if (!x[currencyLabel]) x[currencyLabel] = {};
@@ -94,6 +96,8 @@ export async function getAllowance(currencyLabel, spenderName) {
 	if (!spenderContract) return;
 
 	const allowance = formatUnits(await contract.allowance(address, spenderContract.address), 18);
+
+	console.log('allowance', allowance);
 
 	Stores.allowances.update((x) => {
 		if (!x[currencyLabel]) x[currencyLabel] = {};
@@ -455,13 +459,14 @@ export async function submitOrder(isLong) {
 
 	try {
 
+		let marginEth = 0;
+
 		if (currencyLabel == 'weth') {
 			// Add fee to margin
 			const product = get(Stores.product);
 			const fee = product.fee * 1;
 			margin += size * fee / 100;
-		} else {
-			margin = 0;
+			marginEth = margin;
 		}
 
 		margin = margin.toFixed(8);
@@ -476,7 +481,7 @@ export async function submitOrder(isLong) {
 			isLong,
 			parseUnits(margin),
 			parseUnits(size),
-			{value: parseUnits(margin, 18)}
+			{value: parseUnits(marginEth, 18)}
 		);
 
 		monitorTx(tx.hash, 'submit-new-position');
@@ -488,7 +493,7 @@ export async function submitOrder(isLong) {
 
 }
 
-export async function submitCloseOrder(currencyLabel, productId, isLong, size) {
+export async function submitCloseOrder(productId, currencyLabel, isLong, size) {
 
 	//console.log('sco', positionId, productId, size, currencyLabel);
 
@@ -512,8 +517,8 @@ export async function submitCloseOrder(currencyLabel, productId, isLong, size) {
 			console.log('fee', product.fee, fee);
 
 			tx = await contract.submitCloseOrder(
-				currency,
 				toBytes32(productId),
+				currency,
 				isLong,
 				parseUnits(size),
 				{value: parseUnits(fee, 18)}
@@ -522,8 +527,8 @@ export async function submitCloseOrder(currencyLabel, productId, isLong, size) {
 		} else {
 
 			tx = await contract.submitCloseOrder(
-				currency,
 				toBytes32(productId),
+				currency,
 				isLong,
 				parseUnits(size)
 			);
