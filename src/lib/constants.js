@@ -20,6 +20,8 @@ export const ABIS = {
 		"function oracle() view returns(address)",
 
 		"function getPool(address currency) view returns(address)",
+		"function getPoolShare(address currency) view returns(uint256)",
+		"function getCapShare(address currency) view returns(uint256)",
 		"function getPoolRewards(address currency) view returns(address)",
 		"function getCapRewards(address currency) view returns(address)"
 	],
@@ -28,7 +30,7 @@ export const ABIS = {
 		"function getOrders(bytes32[] keys) view returns(tuple(bool isClose, uint64 size, uint64 margin)[])",
 		"function getPositions(bytes32[] keys) view returns(tuple(uint64 size, uint64 margin, uint64 timestamp, uint64 price)[])",
 
-		"function submitOrder(address currency,bytes32 productId,bool isLong,uint256 margin,uint256 size) payable",
+		"function submitOrder(bytes32 productId,address currency,bool isLong,uint256 margin,uint256 size) payable",
 		"function submitCloseOrder(bytes32 productId,address currency,bool isLong,uint256 size) payable",
 		"function cancelOrder(bytes32 productId,address currency,bool isLong)",
 
@@ -54,8 +56,7 @@ export const ABIS = {
 		"function collectReward()"
 	],
 	treasury: [
-		"function getPoolShare(address currency) view returns(uint256)",
-		"function getCapShare(address currency) view returns(uint256)"
+		
 	],
 	oracle: [
 		"event SettlementError(uint256 indexed orderId,bool indexed isClose,string reason)"
@@ -75,13 +76,13 @@ export const ABIS = {
 export const CHAINDATA = {
 	31337: {
 		label: 'localhost',
-		router: '0xBcA21A2e4c0b2Dc1279a282E6e6d8FaC8d88adAd',
+		router: '0x8Bf18e85B2FB7B050343AB2560E497b3Df18a59c',
 		explorer: 'http://localhost:8545',
 		currencies: {
 			weth: ADDRESS_ZERO,
-			usdc: '0x8a5592b0E95767886642269AEb0B7A80dAa22c8f'
+			usdc: '0xAa2Dde363aAd835C88D28069769002e182c2611b'
 		},
-		cap: '0x25e67aedBA8aCe016Dd4573df46c50E4F8a97497'
+		cap: '0x2C0Cb6183720432832b4aAC01553eCfc476c1D27'
 	},
 	42161: {
 		label: 'Arbitrum',

@@ -175,7 +175,7 @@ export async function getBalanceOf(currencyLabel, address) {
 
 export async function getPoolShare(currencyLabel) {
 
-	const contract = await getContract('treasury');
+	const contract = await getContract('router');
 	if (!contract) return 0;
 
 	const currencies = getChainData('currencies');
@@ -189,7 +189,7 @@ export async function getPoolShare(currencyLabel) {
 
 export async function getCapPoolShare(currencyLabel) {
 
-	const contract = await getContract('treasury');
+	const contract = await getContract('router');
 	if (!contract) return 0;
 
 	const currencies = getChainData('currencies');
@@ -476,8 +476,8 @@ export async function submitOrder(isLong) {
 		console.log('sm', size, margin, parseUnits(size));
 
 		let tx = await contract.submitOrder(
-			currency,
 			toBytes32(productId),
+			currency,
 			isLong,
 			parseUnits(margin),
 			parseUnits(size),

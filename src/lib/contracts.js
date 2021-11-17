@@ -42,6 +42,8 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 		router = new ethers.Contract(routerAddress, routerAbi, _provider);
 	}
 
+	if (contractName == 'router') return router;
+
 	const currencies = CHAINDATA[_chainId].currencies;
 
 	// Currencies (ERC20)
