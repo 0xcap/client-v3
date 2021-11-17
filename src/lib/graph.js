@@ -1,6 +1,7 @@
 // Subgraph interaction
 import { get } from 'svelte/store'
 
+import { ADDRESS_ZERO } from './constants'
 import { getContract } from './contracts'
 import { getOrders, getPositions } from './methods'
 
@@ -23,7 +24,8 @@ export async function getVolume() {
 		body: JSON.stringify({
 			query: `
 				query {
-					data(id: "0x0000000000000000000000000000000000000000") {
+					datas(first: 2) {
+						id
 						cumulativeVolume
 					}
 				}
@@ -32,8 +34,21 @@ export async function getVolume() {
 	});
 	const json = await response.json();
 	if (!json.data) return {volume: 1099876787};
+
+	let datas = json.data && json.data.datas;
+	let volumeETH = 0;
+	let volumeUSD = 1099876787; // v2 + v1
+	for (const d of datas) {
+		console.log('d', d);
+		if (d.id == ADDRESS_ZERO) { // ETH
+			volumeETH += formatUnits(d.cumulativeVolume) * 1;
+		} else {
+			volumeUSD += formatUnits(d.cumulativeVolume) * 1;
+		}
+	}
 	return {
-		volume: formatUnits(1 * json.data.data.cumulativeVolume)
+		volumeETH: volumeETH,
+		volumeUSD: volumeUSD
 	};
 }
 

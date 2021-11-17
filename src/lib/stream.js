@@ -56,6 +56,8 @@ export function initWebsocket() {
 		try {
 			const message = JSON.parse(e.data);
 
+			console.log('m', message);
+
 			const { type, product_id, open_24h, price } = message;
 
 			if (type == 'heartbeat') return heartbeat();
