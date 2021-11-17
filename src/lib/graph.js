@@ -39,7 +39,7 @@ export async function getVolume() {
 	let volumeETH = 0;
 	let volumeUSD = 1099876787; // v2 + v1
 	for (const d of datas) {
-		console.log('d', d);
+		// console.log('d', d);
 		if (d.id == ADDRESS_ZERO) { // ETH
 			volumeETH += formatUnits(d.cumulativeVolume) * 1;
 		} else {

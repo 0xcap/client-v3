@@ -12,7 +12,7 @@
 
 	onMount(async () => {
 		const res = await getVolume();
-		console.log('res', res);
+		// console.log('res', res);
 		volumeETH = res.volumeETH;
 		volumeUSD = res.volumeUSD;
 		v = setInterval(async () => {
@@ -29,7 +29,7 @@
 	let volume;
 
 	function calculateVolume(_prices, _volumeETH, _volumeUSD) {
-		console.log('calculateVolume', _prices, _volumeETH, _volumeUSD);
+		// console.log('calculateVolume', _prices, _volumeETH, _volumeUSD);
 		volume = _volumeUSD * 1 + _prices['ETH-USD'] * _volumeETH * 1;
 	}
 
