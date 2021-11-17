@@ -28,7 +28,7 @@ async function handleEvent() {
 
 	const ev = arguments[arguments.length - 1];
 
-	console.log('got event', ev);
+	// console.log('got event', ev);
 
 	if (ev.event == 'NewOrder') {
 		await getUserOrders();

@@ -30,6 +30,7 @@
 	let items_to_show = [];
 
 	function displayItems(_orders, _positions) {
+		// console.log('_positions', _positions);
 		items_to_show = _orders.concat(_positions);
 	}
 

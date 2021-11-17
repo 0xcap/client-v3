@@ -75,7 +75,7 @@ export async function getAllowance(currencyLabel, spenderName) {
 	
 	if (!currencyLabel) currencyLabel = get(Stores.currencyLabel);
 
-	console.log('currencyLabel', currencyLabel);
+	// console.log('currencyLabel', currencyLabel);
 
 	if (currencyLabel == 'weth') {
 		Stores.allowances.update((x) => {
@@ -97,7 +97,7 @@ export async function getAllowance(currencyLabel, spenderName) {
 
 	const allowance = formatUnits(await contract.allowance(address, spenderContract.address), 18);
 
-	console.log('allowance', allowance);
+	// console.log('allowance', allowance);
 
 	Stores.allowances.update((x) => {
 		if (!x[currencyLabel]) x[currencyLabel] = {};
@@ -471,9 +471,9 @@ export async function submitOrder(isLong) {
 
 		margin = margin.toFixed(8);
 
-		console.log('parseUnits(margin, 18)', parseUnits(margin, 18));
+		// console.log('parseUnits(margin, 18)', parseUnits(margin, 18));
 
-		console.log('sm', size, margin, parseUnits(size));
+		// console.log('sm', size, margin, parseUnits(size));
 
 		let tx = await contract.submitOrder(
 			toBytes32(productId),
@@ -513,8 +513,8 @@ export async function submitCloseOrder(productId, currencyLabel, isLong, size) {
 			const product = await getProduct(productId);
 			const fee = (size * product.fee / 100).toFixed(10);
 
-			console.log('size', size);
-			console.log('fee', product.fee, fee);
+			// console.log('size', size);
+			// console.log('fee', product.fee, fee);
 
 			tx = await contract.submitCloseOrder(
 				toBytes32(productId),

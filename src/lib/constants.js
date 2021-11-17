@@ -86,11 +86,11 @@ export const CHAINDATA = {
 	},
 	42161: {
 		label: 'Arbitrum',
-		router: '0x6eB0306B47595d3453491A1D90081F166FeE7676',
+		router: '0x5ABFF8F8D5b13253dCAB1e427Fdb3305cA620119',
 		explorer: 'https://arbiscan.io',
 		rpc: 'https://arb1.arbitrum.io/rpc', // for walletconnect
 		currencies: {
-			weth: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+			weth: ADDRESS_ZERO,
 			usdc: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8'
 		},
 		cap: '0x031d35296154279DC1984dCD93E392b1f946737b'

@@ -7,11 +7,13 @@ import { getOrders, getPositions } from './methods'
 import { formatUnits, formatTrades, formatOrders, formatPositions } from './utils'
 import { history, orders, positions, address } from './stores'
 
-const graph_url = 'https://api.thegraph.com/subgraphs/name/0xcap/capv3';
+const graph_url = 'https://api.thegraph.com/subgraphs/name/0xcap/cap3';
 
 export async function getVolume() {
 
 	// v1 and v2 volume should already be added in graph call 
+
+  // TODO: volume, margin metrics depend on currency - currently in subgraph they are mixed (wrong)
 
 	const response = await fetch(graph_url, {
 		method: 'POST',
@@ -21,8 +23,8 @@ export async function getVolume() {
 		body: JSON.stringify({
 			query: `
 				query {
-					data(id: 1) {
-						cumulativeVolumeUSD
+					data(id: "0x0000000000000000000000000000000000000000") {
+						cumulativeVolume
 					}
 				}
 			`
@@ -31,13 +33,13 @@ export async function getVolume() {
 	const json = await response.json();
 	if (!json.data) return {volume: 1099876787};
 	return {
-		volume: formatUnits(1 * json.data.data.cumulativeVolumeUSD)
+		volume: formatUnits(1 * json.data.data.cumulativeVolume)
 	};
 }
 
 export async function getUserOrders() {
 
-	console.log('called getUserOrders');
+	// console.log('called getUserOrders');
 
 	// from events only
 
@@ -51,7 +53,7 @@ export async function getUserOrders() {
 	const filter = contract.filters.NewOrder(null, _address);
 	const _events = await contract.queryFilter(filter, -1000);
 
-	console.log('NewOrder _events', _events);
+	// console.log('NewOrder _events', _events);
 
 	let _details = {};
 	for (const ev of _events) {
@@ -74,7 +76,7 @@ export async function getUserOrders() {
 		_order_info.push(_details[k]);
 	}
 
-	console.log('_raw_orders', _raw_orders, _order_info);
+	// console.log('_raw_orders', _raw_orders, _order_info);
 	
 	orders.set(formatOrders(_raw_orders,_order_info));
 
@@ -85,51 +87,49 @@ export async function getUserPositions() {
 	const _address = get(address);
 	if (!_address) return;
 
-	// From recent events + graph - merge both
-	const contract = await getContract('trading');
-	if (!contract) return;
+	// // From recent events + graph - merge both
+	// const contract = await getContract('trading');
+	// if (!contract) return;
 
-	const filter = contract.filters.PositionUpdated(null, _address);
-	const _events = await contract.queryFilter(filter, -1000);
+	// const filter = contract.filters.PositionUpdated(null, _address);
+	// const _events = await contract.queryFilter(filter, -100);
 
-	console.log('_events', _events);
+	// // console.log('_events', _events);
 
-	let _details = {};
-	for (const ev of _events) {
-		_details[ev.args.key] = ev.args;
-	}
+	// let _details = {};
+	// for (const ev of _events) {
+	// 	_details[ev.args.key] = ev.args;
+	// }
 
-	let keys = _events.map((e) => {return e.args.key;});
+	// let keys = _events.map((e) => {return e.args.key;});
 
-	console.log('keys', keys);
+	// // console.log('keys', keys);
 
-	// uniq keys
-	let unique_keys = [];
-	for (const k of keys) {
-		if (unique_keys.includes(k)) continue;
-		unique_keys.push(k);
-	}
+	// // uniq keys
+	// let unique_keys = [];
+	// for (const k of keys) {
+	// 	if (unique_keys.includes(k)) continue;
+	// 	unique_keys.push(k);
+	// }
 
-	console.log('unique_keys', unique_keys);
+	// // console.log('unique_keys', unique_keys);
 
-	let _raw_positions = await getPositions(unique_keys);
-	console.log('_raw_positions', _raw_positions);
+	// let _raw_positions = await getPositions(unique_keys);
+	// // console.log('_raw_positions', _raw_positions);
 
-	let _position_info = [];
-	for (const k of unique_keys) {
-		_position_info.push(_details[k]);
-	}
+	// let _position_info = [];
+	// for (const k of unique_keys) {
+	// 	_position_info.push(_details[k]);
+	// }
 
-	positions.set(formatPositions(_raw_positions,_position_info));
+	// positions.set(formatPositions(_raw_positions,_position_info));
 
-	// Chart
-	//loadPositionLines();
+	// // Chart
+	// //loadPositionLines();
 
-	return;
+	// return;
 
 	////////
-
-	
 
 	const response = await fetch(graph_url, {
 		method: 'POST',
@@ -139,35 +139,29 @@ export async function getUserPositions() {
 		body: JSON.stringify({
 			query: `
 				query {
-				  trades(
-				    orderBy: timestamp,
+				  positions(
+				    orderBy: createdAtTimestamp,
 				    orderDirection: desc,
 				    first:50,
-				    where: {owner: "${_address}"}
+				    where: {user: "${_address}"}
 				  ) {
-				    id,
-				    txHash,
-				    positionId,
+				  	id,
 				    productId,
 				    currency,
 				    margin,
+				    fee,
+				    size,
 				    leverage,
-				    amount,
-				    entryPrice,
-				    closePrice,
+				    price,
 				    isLong,
-				    pnl,
-				    timestamp,
-				    blockNumber,
-				    wasLiquidated,
-				    isFullClose
+				    createdAtTimestamp
 				  }
 				}
 			`
 		})
 	});
 	const json = await response.json();
-	history.set(formatTrades(json.data && json.data.trades));
+	positions.set(formatPositions(json.data && json.data.positions));
 }
 
 export async function getUserHistory() {
@@ -175,19 +169,19 @@ export async function getUserHistory() {
 	const _address = get(address);
 	if (!_address) return;
 
-	// From recent events + graph - merge both
-	const contract = await getContract('trading');
-	if (!contract) return;
+	// // From recent events + graph - merge both
+	// const contract = await getContract('trading');
+	// if (!contract) return;
 
-	const filter = contract.filters.ClosePosition(null, _address);
-	const _events = await contract.queryFilter(filter, -1000);
+	// const filter = contract.filters.ClosePosition(null, _address);
+	// const _events = await contract.queryFilter(filter, -1000);
 
-	let evs = _events.map((e) => {return e.args;});
-	evs.reverse();
-	history.set(formatTrades(evs));
-	return;
+	// let evs = _events.map((e) => {return e.args;});
+	// evs.reverse();
+	// history.set(formatTrades(evs));
+	// return;
 
-	////////
+	// ////////
 
 	
 
@@ -203,20 +197,21 @@ export async function getUserHistory() {
 				    orderBy: timestamp,
 				    orderDirection: desc,
 				    first:50,
-				    where: {owner: "${_address}"}
+				    where: {user: "${_address}"}
 				  ) {
 				    id,
 				    txHash,
-				    positionId,
+				    positionKey,
 				    productId,
 				    currency,
 				    margin,
 				    leverage,
-				    amount,
+				    size,
 				    entryPrice,
 				    closePrice,
 				    isLong,
 				    pnl,
+				    fee,
 				    timestamp,
 				    blockNumber,
 				    wasLiquidated,
