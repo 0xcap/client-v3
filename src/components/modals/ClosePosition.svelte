@@ -40,7 +40,7 @@
 	async function _submitOrder() {
 		let sizeToSubmit;
 		if (closePercent >= 100) {
-			sizeToSubmit = data.size * 1.001;
+			sizeToSubmit = data.size * 1.0000001;
 		} else {
 			sizeToSubmit = size*1;
 		}

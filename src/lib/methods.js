@@ -511,7 +511,7 @@ export async function submitCloseOrder(productId, currencyLabel, isLong, size) {
 		if (currencyLabel == 'weth') {
 
 			const product = await getProduct(productId);
-			const fee = (size * product.fee * 1.003 / 100).toFixed(10);
+			const fee = (size * product.fee / 100).toFixed(10);
 
 			console.log('size', size);
 			console.log('fee', product.fee, fee);

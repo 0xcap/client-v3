@@ -76,13 +76,13 @@ export const ABIS = {
 export const CHAINDATA = {
 	31337: {
 		label: 'localhost',
-		router: '0x8Bf18e85B2FB7B050343AB2560E497b3Df18a59c',
+		router: '0x883CcB0F1838b12bf720Bef0Af788758A9E6C57F',
 		explorer: 'http://localhost:8545',
 		currencies: {
 			weth: ADDRESS_ZERO,
-			usdc: '0xAa2Dde363aAd835C88D28069769002e182c2611b'
+			usdc: '0x43F48c3DC6df4674219923F2d4f8880d5E3CCC4c'
 		},
-		cap: '0x2C0Cb6183720432832b4aAC01553eCfc476c1D27'
+		cap: '0x292E27B2b439Bb485265aBA27c131247B13593c1'
 	},
 	42161: {
 		label: 'Arbitrum',
