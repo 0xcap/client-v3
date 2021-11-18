@@ -74,7 +74,8 @@
 
 
 <div class='ticker'>
-		
+	
+	{#if $product && $product.logo}
 	<div class='product-info'>
 
 		<div class='item selector selector-product' on:click={() => {if ($address) {showModal('Products')}}} data-intercept="true">
@@ -92,6 +93,7 @@
 		</div>
 
 	</div>
+	{/if}
 
 	<div class='volume'>
 		<div class='value'><Volume/></div>

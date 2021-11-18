@@ -231,13 +231,12 @@ export async function getPoolInfo(currencyLabel) {
 
 	const contract = await getContract('pool', false, currencyLabel);
 
-	if (!contract) {
-		Stores.pools.update((x) => {
-			x[currencyLabel] = info;
-			return x;
-		});
-		return;
-	}
+	Stores.pools.update((x) => {
+		x[currencyLabel] = info;
+		return x;
+	});
+
+	if (!contract) return;
 
 	try {
 		const poolBalance = await getBalanceOf(currencyLabel, contract.address);
