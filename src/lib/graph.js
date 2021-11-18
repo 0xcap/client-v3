@@ -14,8 +14,6 @@ export async function getVolume() {
 
 	// v1 and v2 volume should already be added in graph call 
 
-  // TODO: volume, margin metrics depend on currency - currently in subgraph they are mixed (wrong)
-
 	const response = await fetch(graph_url, {
 		method: 'POST',
 		headers: {
