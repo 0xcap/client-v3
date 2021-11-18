@@ -13,10 +13,6 @@
 
 	$: !data ? '' : rows = [
 			{
-				label: 'Position ID',
-				value: data.positionId
-			},
-			{
 				label: 'Date',
 				value: data.timestamp ? new Date(data.timestamp * 1000).toLocaleString() : null
 			},

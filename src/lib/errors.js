@@ -9,6 +9,8 @@ const ERROR_STRINGS = {
 	'!position': 'Position not found.',
 	'!size': "Trade size is too low.",
 	'!currency': "Currency is not supported.",
+	'!order': "Your order is still settling. Try again later.",
+	'!exists': "This order does not exist.",
 	'!margin': "Margin is too low.",
 	'!min-margin': "Margin is too low (min: 0.001 ETH).",
 	'!margin<fee': "Margin sent is below the required fee.",

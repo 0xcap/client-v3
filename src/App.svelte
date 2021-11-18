@@ -10,6 +10,12 @@
 	import { component } from './lib/stores'
 	import { loadRoute, navigateTo, catchLinks, hidePopoversOnClick } from './lib/utils'
 
+	// localstorage clearance for v2
+	if (localStorage.getItem('productId')*1 > 0) {
+		localStorage.removeItem('productId');
+		localStorage.removeItem('leverage');
+	}
+
 	onMount(async () => {
 		loadRoute(location.hash, true);
 		catchLinks((path) => navigateTo(path));
@@ -18,7 +24,7 @@
 		// For back button functionality
 		window.onpopstate = () => loadRoute(location.hash);
 
-		initWebsocket()
+		initWebsocket();
 	});
 
 </script>

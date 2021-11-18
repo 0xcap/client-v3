@@ -40,16 +40,18 @@
 	async function _submitOrder() {
 		let sizeToSubmit;
 		if (closePercent >= 100) {
-			sizeToSubmit = data.size * 1.001;
+			sizeToSubmit = data.size * 1.0000001;
 		} else {
 			sizeToSubmit = size*1;
 		}
+		sizeToSubmit = sizeToSubmit.toFixed(8);
+		// console.log('sizeToSubmit', sizeToSubmit);
 		submitIsPending = true;
 		const error = await submitCloseOrder(
-			data.positionId,
 			data.productId,
-			sizeToSubmit,
-			data.currencyLabel
+			data.currencyLabel,
+			data.isLong,
+			sizeToSubmit
 		);
 		submitIsPending = false;
 	}

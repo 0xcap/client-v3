@@ -1,7 +1,8 @@
 import { get } from 'svelte/store'
 
-import { selectProduct, selectCurrency, getUserPositions, getPoolInfo, getCapPoolInfo } from './methods'
-
+import { selectProduct, selectCurrency, getPoolInfo, getCapPoolInfo } from './methods'
+import { getUserOrders, getUserPositions } from './graph'
+ 
 import { currentPage } from './stores'
 
 // Fetchs appropriate data from contracts and APIs. Called on route or signer change
@@ -16,6 +17,7 @@ export function hydrateData() {
 	} else if (_currentPage == 'trade') {
 		selectProduct();
 		selectCurrency();
+		getUserOrders();
 		getUserPositions();
 	} else if (_currentPage == 'pool') {
 		getPoolInfo('weth');

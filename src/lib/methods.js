@@ -5,7 +5,7 @@ import { monitorTx } from './monitor'
 
 import { getContract } from './contracts'
 import { loadCandles, loadPositionLines, applyWatermark } from './chart'
-import { formatUnits, formatProduct, formatPositions, parseUnits, getChainData, hideModal, showToast, getCachedLeverage } from './utils'
+import { formatUnits, formatProduct, formatPositions, parseUnits, getChainData, hideModal, showToast, getCachedLeverage, toBytes32 } from './utils'
 
 import * as Stores from './stores'
 
@@ -20,7 +20,7 @@ export async function getProduct(productId) {
 	const contract = await getContract('trading');
 	if (!contract) return {};
 
-	productCache[productId] = formatProduct(productId, await contract.getProduct(productId));
+	productCache[productId] = formatProduct(productId, await contract.getProduct(toBytes32(productId)));
 	
 	return productCache[productId];
 
@@ -75,6 +75,8 @@ export async function getAllowance(currencyLabel, spenderName) {
 	
 	if (!currencyLabel) currencyLabel = get(Stores.currencyLabel);
 
+	// console.log('currencyLabel', currencyLabel);
+
 	if (currencyLabel == 'weth') {
 		Stores.allowances.update((x) => {
 			if (!x[currencyLabel]) x[currencyLabel] = {};
@@ -93,13 +95,33 @@ export async function getAllowance(currencyLabel, spenderName) {
 	const spenderContract = await getContract(spenderName);
 	if (!spenderContract) return;
 
-	const allowance = formatUnits(await contract.allowance(address, spenderContract.address));
+	const allowance = formatUnits(await contract.allowance(address, spenderContract.address), 18);
+
+	// console.log('allowance', allowance);
 
 	Stores.allowances.update((x) => {
 		if (!x[currencyLabel]) x[currencyLabel] = {};
 		x[currencyLabel][spenderName] = allowance;
 		return x;
 	});
+
+}
+
+export async function getOrders(keys) {
+	
+	const contract = await getContract('trading');
+	if (!contract) return {};
+	
+	return await contract.getOrders(keys);
+
+}
+
+export async function getPositions(keys) {
+	
+	const contract = await getContract('trading');
+	if (!contract) return {};
+	
+	return await contract.getPositions(keys);
 
 }
 
@@ -125,7 +147,7 @@ export async function approveCurrency(currencyLabel, spenderName) {
 
 }
 
-export async function getBalanceOf(currencyLabel, address, forceWETH) {
+export async function getBalanceOf(currencyLabel, address) {
 	
 	if (!currencyLabel) currencyLabel = get(Stores.currencyLabel);
 	
@@ -135,7 +157,7 @@ export async function getBalanceOf(currencyLabel, address, forceWETH) {
 	}
 
 	let balance, decimals;
-	if (currencyLabel == 'weth' && !forceWETH) {
+	if (currencyLabel == 'weth') {
 		// get ETH balance
 		balance = await get(Stores.provider).getBalance(address);
 	} else {
@@ -153,7 +175,7 @@ export async function getBalanceOf(currencyLabel, address, forceWETH) {
 
 export async function getPoolShare(currencyLabel) {
 
-	const contract = await getContract('treasury');
+	const contract = await getContract('router');
 	if (!contract) return 0;
 
 	const currencies = getChainData('currencies');
@@ -167,7 +189,7 @@ export async function getPoolShare(currencyLabel) {
 
 export async function getCapPoolShare(currencyLabel) {
 
-	const contract = await getContract('treasury');
+	const contract = await getContract('router');
 	if (!contract) return 0;
 
 	const currencies = getChainData('currencies');
@@ -190,7 +212,7 @@ export async function getUserPoolBalance(currencyLabel) {
 	// TEST TEST
 	//return 0;
 
-	return formatUnits(await contract.getCurrencyBalance(address));
+	return formatUnits(await contract.getCurrencyBalance(address), 18);
 
 }
 
@@ -218,13 +240,13 @@ export async function getPoolInfo(currencyLabel) {
 	}
 
 	try {
-		const poolBalance = await getBalanceOf(currencyLabel, contract.address, true);
+		const poolBalance = await getBalanceOf(currencyLabel, contract.address);
 		const userBalance = await getUserPoolBalance(currencyLabel);
 		const claimableReward = await getClaimableReward(currencyLabel);
 		const poolShare = await getPoolShare(currencyLabel);
 		const withdrawFee = formatUnits(await contract.withdrawFee(), 2);
 		const utilization = formatUnits(await contract.getUtilization(), 2);
-		const openInterest = formatUnits(await contract.openInterest());
+		const openInterest = formatUnits(await contract.openInterest(), 18);
 		const utilizationMultiplier = formatUnits(await contract.utilizationMultiplier(), 2);
 
 		info = {
@@ -256,9 +278,9 @@ export async function deposit(currencyLabel, amount) {
 		let tx;
 
 		if (currencyLabel == 'weth') {
-			tx = await contract.deposit(0, {value: parseUnits(amount)});
+			tx = await contract.deposit(0, {value: parseUnits(amount, 18)});
 		} else {
-			tx = await contract.deposit(parseUnits(amount));
+			tx = await contract.deposit(parseUnits(amount, 18));
 		}
 
 		monitorTx(tx.hash, 'pool-deposit', {currencyLabel});
@@ -276,7 +298,7 @@ export async function withdraw(currencyLabel, amount) {
 	if (!contract) return;
 
 	try {
-		let tx = await contract.withdraw(parseUnits(amount));
+		let tx = await contract.withdraw(parseUnits(amount, 18));
 		monitorTx(tx.hash, 'pool-withdraw', {currencyLabel});
 		hideModal();
 	} catch(e) {
@@ -311,7 +333,7 @@ export async function getUserCapBalance() {
 	const contract = await getContract('capPool');
 	if (!contract) return;
 
-	return formatUnits(await contract.getBalance(address));
+	return formatUnits(await contract.getBalance(address), 18);
 
 }
 
@@ -320,7 +342,7 @@ export async function getCapSupply() {
 	const contract = await getContract('capPool');
 	if (!contract) return;
 	
-	return formatUnits(await contract.totalSupply());
+	return formatUnits(await contract.totalSupply(), 18);
 
 }
 
@@ -363,7 +385,7 @@ export async function depositCAP(amount) {
 	if (!contract) return;
 
 	try {
-		let tx = await contract.deposit(parseUnits(amount));
+		let tx = await contract.deposit(parseUnits(amount, 18));
 		monitorTx(tx.hash, 'cap-deposit');
 		hideModal();
 	} catch(e) {
@@ -379,7 +401,7 @@ export async function withdrawCAP(amount) {
 	if (!contract) return;
 
 	try {
-		let tx = await contract.withdraw(parseUnits(amount));
+		let tx = await contract.withdraw(parseUnits(amount, 18));
 		monitorTx(tx.hash, 'cap-withdraw');
 		hideModal();
 	} catch(e) {
@@ -412,32 +434,15 @@ export async function getClaimableReward(currencyLabel, forCAP) {
 	const contract = await getContract(contractName, true, currencyLabel);
 	if (!contract) return;
 
-	return formatUnits(await contract.getClaimableReward());
+	return formatUnits(await contract.getClaimableReward(), 18);
 
 }
 
 // Positions
 
-export async function getUserPositions() {
-
-	const contract = await getContract('trading');
-	if (!contract) return;
-	
-	const address = get(Stores.address);
-	if (!address) return;
-	
-	const positions = formatPositions(await contract.getUserPositions(address));
-
-	Stores.positions.set(positions);
-
-	// Chart
-	loadPositionLines();
-
-}
-
 // TODO: error handling
 
-export async function submitNewPosition(isLong) {
+export async function submitOrder(isLong) {
 
 	const contract = await getContract('trading', true);
 	if (!contract) return;
@@ -454,36 +459,30 @@ export async function submitNewPosition(isLong) {
 
 	try {
 
-		let tx;
+		let marginEth = 0;
 
 		if (currencyLabel == 'weth') {
-
 			// Add fee to margin
 			const product = get(Stores.product);
 			const fee = product.fee * 1;
 			margin += size * fee / 100;
-
-			tx = await contract.submitNewPosition(
-				currency,
-				productId,
-				0,
-				parseUnits(size),
-				isLong,
-				{value: parseUnits(margin)}
-			);
-
-		} else {
-
-			// ERC20, should be pre-approved
-			tx = await contract.submitNewPosition(
-				currency,
-				productId,
-				parseUnits(margin),
-				parseUnits(size),
-				isLong
-			);
-
+			marginEth = margin;
 		}
+
+		margin = margin.toFixed(8);
+
+		// console.log('parseUnits(margin, 18)', parseUnits(margin, 18));
+
+		// console.log('sm', size, margin, parseUnits(size));
+
+		let tx = await contract.submitOrder(
+			toBytes32(productId),
+			currency,
+			isLong,
+			parseUnits(margin),
+			parseUnits(size),
+			{value: parseUnits(marginEth, 18)}
+		);
 
 		monitorTx(tx.hash, 'submit-new-position');
 
@@ -494,12 +493,17 @@ export async function submitNewPosition(isLong) {
 
 }
 
-export async function submitCloseOrder(positionId, productId, size, currencyLabel) {
+export async function submitCloseOrder(productId, currencyLabel, isLong, size) {
 
 	//console.log('sco', positionId, productId, size, currencyLabel);
 
 	const contract = await getContract('trading', true);
 	if (!contract) return;
+
+	const currencies = getChainData('currencies');
+	if (!currencies) return;
+
+	const currency = currencies[currencyLabel];
 
 	try {
 		let tx;
@@ -507,21 +511,25 @@ export async function submitCloseOrder(positionId, productId, size, currencyLabe
 		if (currencyLabel == 'weth') {
 
 			const product = await getProduct(productId);
-			const fee = size * product.fee * 1.003 / 100;
+			const fee = (size * product.fee / 100).toFixed(10);
 
 			// console.log('size', size);
 			// console.log('fee', product.fee, fee);
 
 			tx = await contract.submitCloseOrder(
-				positionId,
+				toBytes32(productId),
+				currency,
+				isLong,
 				parseUnits(size),
-				{value: parseUnits(fee)}
+				{value: parseUnits(fee, 18)}
 			);
 
 		} else {
 
 			tx = await contract.submitCloseOrder(
-				positionId,
+				toBytes32(productId),
+				currency,
+				isLong,
 				parseUnits(size)
 			);
 
@@ -537,63 +545,19 @@ export async function submitCloseOrder(positionId, productId, size, currencyLabe
 
 }
 
-export async function cancelPosition(positionId) {
+export async function cancelOrder(productId, currencyLabel, isLong) {
 
 	const contract = await getContract('trading', true);
 	if (!contract) return;
 
-	try {
+	const currencies = getChainData('currencies');
+	if (!currencies) return;
 
-		const tx = await contract.cancelPosition(positionId);
-		
-		monitorTx(tx.hash, 'cancel-position');
-		hideModal();
-
-	} catch(e) {
-		
-		showToast(e);
-		return e;
-
-	}
-
-}
-
-export async function addMargin(positionId, margin, productId, currencyLabel) {
-	
-	const product = await getProduct(productId);
-
-	const contract = await getContract('trading', true);
-	if (!contract) return;
+	const currency = currencies[currencyLabel];
 
 	try {
 
-		let tx;
-
-		if (currencyLabel == 'weth') {
-			tx = await contract.addMargin(positionId, 0, {value: parseUnits(margin)});
-		} else {
-			tx = await contract.addMargin(positionId, parseUnits(margin));
-		}
-	
-		monitorTx(tx.hash, 'add-margin');
-		hideModal();
-	
-	} catch(e) {
-	
-		showToast(e);
-		return e;
-	
-	}
-}
-
-export async function cancelOrder(orderId) {
-
-	const contract = await getContract('trading', true);
-	if (!contract) return;
-
-	try {
-
-		const tx = await contract.cancelOrder(orderId);
+		const tx = await contract.cancelOrder(toBytes32(productId), currency, isLong);
 		monitorTx(tx.hash, 'cancel-order');
 		hideModal();
 

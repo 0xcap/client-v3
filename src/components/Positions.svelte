@@ -1,6 +1,6 @@
 <script>
 
-	import { positions, prices } from '../lib/stores'
+	import { positions, prices, orders, enhancedPositions } from '../lib/stores'
 
 	import { CANCEL_ICON } from '../lib/icons'
 
@@ -16,9 +16,9 @@
 		totalUPL = 0;
 		for (const position of $positions) {
 			const upl = await getUPL(position, _prices[position.productId]);
-			upls[position.positionId] = upl;
+			upls[position.key] = upl;
 			if (!upl) continue;
-			upls_percent[position.positionId] = (100 * upl * 1 / position.margin);
+			upls_percent[position.key] = (100 * upl * 1 / position.margin);
 			totalUPL += upl * 1;
 		}
 		if (isNaN(totalUPL)) totalUPL = 0;
@@ -26,6 +26,17 @@
 	}
 
 	$: calculateUPLs($prices);
+
+	let items_to_show = [];
+
+	function displayItems(_orders, _positions) {
+		// console.log('_positions', _positions);
+		items_to_show = _orders.concat(_positions);
+	}
+
+	$: displayItems($orders, $positions);
+
+	$: $enhancedPositions;
 
 </script>
 
@@ -159,10 +170,10 @@
 
 	<div class='positions-list no-scrollbar'>
 
-		{#if $positions.length == 0}
+		{#if $enhancedPositions.length == 0}
 			<div class='empty'>No positions to show.</div>
 		{:else}
-			{#each $positions as position}
+			{#each $enhancedPositions as position}
 				<div class='position' on:click={() => {showModal('PositionDetails', position)}} data-intercept="true">
 
 					<div class='column column-product'>{#if position.isLong}<span class='pos'>↑</span>{:else}<span class='neg'>↓</span>{/if} {position.product}</div>
@@ -175,16 +186,22 @@
 					</div>
 					<div class='column column-size'>{formatToDisplay(position.size)} {formatCurrency(position.currencyLabel)}</div>
 					<div class='column column-margin'>{formatToDisplay(position.margin)} {formatCurrency(position.currencyLabel)}</div>
-					<div class='column column-leverage'>{formatToDisplay(position.leverage)}×</div>
-					<div class={`column column-pnl ${upls[position.positionId] * 1 < 0 ? 'neg' : 'pos'}`}>
-						{formatPnl(upls[position.positionId]) || '-'}
+					<div class='column column-leverage'>
+						{formatToDisplay(position.leverage)}×
+					</div>
+					<div class={`column column-pnl ${upls[position.key] * 1 < 0 ? 'neg' : 'pos'}`}>
+						{#if position.price == 0}
+							-
+						{:else}
+							{formatPnl(upls[position.key]) || '-'}
+						{/if}
 					</div>
 
 					<div class='column column-close'>
 
-						{#if position.closeOrderId > 0}
+						{#if position.isClosing}
 							<span class='status'>Closing</span>
-						{:else if position.price == 0}
+						{:else if position.isSettling}
 							<span class='status'>Settling</span>
 						{:else}
 							<a class='close' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">

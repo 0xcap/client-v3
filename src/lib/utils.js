@@ -2,7 +2,7 @@
 import { ethers } from 'ethers'
 import { get } from 'svelte/store'
 
-import { PRODUCTS, CHAINDATA } from './constants'
+import { PRODUCT_LOGOS, CHAINDATA } from './constants'
 
 // Pages
 import Home from '../components/pages/Home.svelte'
@@ -156,65 +156,103 @@ export function navigateTo(path) {
     loadRoute(path, false);
 }
 
+export function toBytes32(string) {
+  return ethers.utils.formatBytes32String(string);
+}
+export function fromBytes32(string) {
+  return ethers.utils.parseBytes32String(string);
+}
+
 // Data formatters
 export function formatUnits(number, units) {
-  return ethers.utils.formatUnits(number || 0, units || 18);
+  return ethers.utils.formatUnits(number || 0, units || 8);
 }
 export function parseUnits(number, units) {
   if (typeof(number) == 'number') {
   	number = "" + number;
   }
-  return ethers.utils.parseUnits(number, units || 18);
+  return ethers.utils.parseUnits(number, units || 8);
 }
 export function formatProduct(id, product) {
 	return {
 		productId: id,
-		symbol: PRODUCTS[id].symbol,
+		symbol: id,
+		logo: PRODUCT_LOGOS[id],
 		maxLeverage: formatUnits(product.maxLeverage),
 		liquidationThreshold: formatUnits(product.liquidationThreshold, 2),
 		fee: formatUnits(product.fee, 4),
 		interest: formatUnits(product.interest, 2)
 	};
 }
-export function formatPositions(positions) {
-	let formattedPositions = [];
+export function formatOrders(orders, info) {
+	let formattedOrders = [];
+	//console.log('order_info', info);
 	let i = 0;
-	for (const p of positions) {
-		if (!p.productId) {
+	for (const o of orders) {
+		if (!o.size.toNumber()) {
 			i++;
 			continue;
 		}
+		//console.log('o', o);
+		formattedOrders.push({
+			key: info[i].key,
+			price: 0,
+			isClose: o.isClose,
+			margin: formatUnits(o.margin),
+			size: formatUnits(o.size),
+			currency: info[i].currency,
+			isLong: info[i].isLong,
+			currencyLabel: getCurrencyLabelFromAddress(info[i].currency),
+			productId: fromBytes32(info[i].productId),
+			product: fromBytes32(info[i].productId),
+			leverage: o.margin.toNumber() ? formatUnits(o.size) * 1 / (formatUnits(o.margin) * 1) : 0,
+		});
+		i++;
+	}
+	// console.log('formattedOrders', formattedOrders);
+	return formattedOrders;
+}
+export function formatPositions(positions) {
+	let formattedPositions = [];
+	//console.log('position info', info);
+	// console.log('positions', positions);
+	let i = 0;
+	for (const p of positions) {
+		if (!p.size*1) {
+			i++;
+			continue;
+		}
+		//console.log('p', p);
 		formattedPositions.push({
-			positionId: p.positionId,
-			product: PRODUCTS[p.productId].symbol,
-			timestamp: p.timestamp,
-			isLong: p.isLong,
+			key: p.id,
 			margin: formatUnits(p.margin),
 			size: formatUnits(p.size),
-			leverage: formatUnits(p.size) * 1 / (formatUnits(p.margin) * 1),
 			price: formatUnits(p.price),
-			productId: p.productId,
-			closeOrderId: p.closeOrderId,
+			timestamp: p.createdAtTimestamp,
 			currency: p.currency,
+			isLong: p.isLong,
 			currencyLabel: getCurrencyLabelFromAddress(p.currency),
+			productId: fromBytes32(p.productId),
+			product: fromBytes32(p.productId),
+			leverage: formatUnits(p.leverage),
 			fee: formatUnits(p.fee)
 		});
 		i++;
 	}
-	formattedPositions.reverse();
+	// console.log('formattedPositions', formattedPositions);
 	return formattedPositions;
 }
 export function formatTrades(trades) {
 	if (!trades) return [];
 	let formattedTrades = [];
 	for (const t of trades) {
+		//console.log('t', t);
 		formattedTrades.push({
-			positionId: t.positionId,
-			orderId: t.orderId,
+			positionKey: t.positionKey,
 			currency: t.currency,
 			currencyLabel: getCurrencyLabelFromAddress(t.currency),
-			productId: t.productId,
-			product: PRODUCTS[t.productId].symbol,
+			productId: fromBytes32(t.productId),
+			product: fromBytes32(t.productId),
 			price: formatUnits(t.closePrice || t.price),
 			entryPrice: formatUnits(t.entryPrice),
 			margin: formatUnits(t.margin),
@@ -285,7 +323,7 @@ export async function getInterest(position) {
 		let interest;
 		let now = parseInt(Date.now() / 1000);
 		const productInfo = await getProduct(position.productId);
-		if (!position.price || now < position.timestamp * 1 + 900) {
+		if (!position.price || !position.timestamp || now < position.timestamp * 1 + 900) {
 			interest = 0;
 		} else {
 			interest = position.margin * position.leverage * ((productInfo.interest * 1 || 0) / 100) * (now - position.timestamp * 1) / (360 * 24 * 3600);

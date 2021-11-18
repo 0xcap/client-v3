@@ -107,8 +107,6 @@
 							{@html row.value}
 						{:else if row.isEmpty}
 							-
-						{:else if row.addMargin}
-							{row.value} (<a on:click={() => {showModal('AddMargin', row.data)}} data-intercept="true">add</a>)
 						{:else}
 							{row.value}
 						{/if}

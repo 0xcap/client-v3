@@ -6,7 +6,7 @@
 	import DataList from '../layout/DataList.svelte'
 
 	import { getUPL, getInterest, calculateLiquidationPrice, formatToDisplay, formatPnl, formatCurrency } from '../../lib/utils'
-	import { cancelPosition, cancelOrder } from '../../lib/methods'
+	import { cancelOrder } from '../../lib/methods'
 
 	import { prices } from '../../lib/stores'
 
@@ -19,12 +19,8 @@
 		liquidationPrice = lp && lp.toFixed(6);
 	});
 
-	async function _cancelPosition() {
-		const error = await cancelPosition(data.positionId);
-	}
-
 	async function _cancelOrder() {
-		const error = await cancelOrder(data.closeOrderId);
+		const error = await cancelOrder(data.productId, data.currencyLabel, data.isLong);
 	}
 
 	let rows = [];
@@ -37,10 +33,6 @@
 		const liquidatingSoon = data.isLong ? _prices[data.productId] <= liquidationPrice : _prices[data.productId] >= liquidationPrice;
 
 		rows = [
-			{
-				label: 'ID',
-				value: data.positionId
-			},
 			{
 				label: 'Date',
 				value: new Date(data.timestamp * 1000).toLocaleString()
@@ -67,9 +59,7 @@
 			},
 			{
 				label: 'Margin',
-				value: `${formatToDisplay(data.margin, 0, true)} ${formatCurrency(data.currencyLabel)}`,
-				addMargin: data.price * 1 > 0 ? true : false,
-				data: data
+				value: `${formatToDisplay(data.margin, 0, true)} ${formatCurrency(data.currencyLabel)}`
 			},
 			{
 				label: 'Leverage',
@@ -110,19 +100,16 @@
 </style>
 
 <Modal>
-	{#if data.price * 1 == 0 || data.closeOrderId > 0}
-		{#if data.price * 1 == 0}
-			<div class='status'>
-				Status: Settling. <a on:click={_cancelPosition}>Cancel Order</a>
-			</div>
-		{/if}
+	{#if data.isSettling}
+		<div class='status'>
+			Status: Settling. <a on:click={_cancelOrder}>Cancel Order</a>
+		</div>
+	{/if}
 
-		{#if data.closeOrderId > 0}
-			<div class='status'>
-				Status: Closing. <a on:click={_cancelOrder}>Cancel Close Order</a>
-			</div>
-		{/if}
-
+	{#if data.isClosing}
+		<div class='status'>
+			Status: Closing. <a on:click={_cancelOrder}>Cancel Close Order</a>
+		</div>
 	{/if}
 	<DataList data={rows} />
 </Modal>

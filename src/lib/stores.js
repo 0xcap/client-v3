@@ -4,7 +4,7 @@ import { writable, derived } from 'svelte/store'
 export const history = writable([]);
 
 // New order
-export const productId = writable(localStorage.getItem('productId') || 1);
+export const productId = writable(localStorage.getItem('productId') || 'ETH-USD');
 export const product = writable({});
 
 export const currencyLabel = writable(localStorage.getItem('currencyLabel') || 'weth');
@@ -32,8 +32,45 @@ export const marginPlusFee = derived([size, leverage, product], ([$size, $levera
 export const pools = writable({});
 export const capPool = writable({});
 
+// Orders
+export const orders = writable([]);
+
 // Positions
 export const positions = writable([]);
+
+export const enhancedPositions = derived([orders, positions], ([$orders, $positions]) => {
+	// console.log('orders', $orders);
+	// console.log('positions', $positions);
+	let enhanced_positions = [];
+	let new_orders = [];
+	let used_orders = {};
+	for (let p of $positions) {
+		for (let o of $orders) {
+			if (o.key == p.key) {
+				if (o.isClose) {
+					p.isClosing = true;
+				} else {
+					p.isSettling = true;
+				}
+				used_orders[o.key] = true;
+			}
+		}
+		enhanced_positions.push(p);
+	}
+	for (let o of $orders) {
+		if (!used_orders[o.key]) {
+			o.isSettling = true;
+			new_orders.push(o);
+		}
+	}
+	enhanced_positions.sort((a,b) => {
+		if (a.timestamp > b.timestamp) return -1;
+		if (a.timestamp < b.timestamp) return 1;
+		return 0;
+	});
+	new_orders.reverse();
+	return new_orders.concat(enhanced_positions);
+}, []);
 
 // Prices
 export const prices = writable({});

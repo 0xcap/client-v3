@@ -6,7 +6,6 @@ import { prices, prices24h, productId } from './stores'
 
 import { onNewPrice } from './chart'
 
-import { PRODUCTS_REVERSE } from './constants'
 import { setTitle, shortSymbol } from './utils'
 
 let ws;
@@ -69,22 +68,20 @@ export function initWebsocket() {
 
 			lastTimestamp[product_id] = Date.now();
 
-			const pid = PRODUCTS_REVERSE[product_id];
-
 			prices.update((x) => {
-				x[pid] = price * 1;
+				x[product_id] = price * 1;
 				return x;
 			});
 
 			prices24h.update((x) => {
-				x[pid] = open_24h * 1;
+				x[product_id] = open_24h * 1;
 				return x;
 			});
 
 			// update chart
 			onNewPrice(price, Date.now(), product_id);
 
-			if (pid == get(productId)) {
+			if (product_id == get(productId)) {
 				setTitle(product_id, price);
 			}
 
