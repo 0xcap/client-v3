@@ -22,13 +22,9 @@
 		align-items: center;
 	}
 
-	.left a, .left span {
+	.left a, .headerBtn {
 		color: var(--sonic-silver);
 		margin-right: var(--base-padding);
-	}
-
-	.clickable {
-		cursor: pointer;
 	}
 
 	.left a.active {
@@ -47,6 +43,12 @@
 		opacity: 1;
 	}
 
+	.headerBtn {
+		background: none;
+		padding: 0;
+
+	}
+
 </style>
 
 
@@ -60,9 +62,9 @@
 		<a class:active={$currentPage == 'pool'} href='#/pool'>Pool</a>
 		<a href='https://docs.cap.finance' target='_blank'>Docs</a>
 		{#if $legacyPositions && $legacyPositions.length}
-			<span class='clickable' on:click={() => showModal('LegacyPositions', $legacyPositions)} data-intercept="true">
+			<button class='headerBtn' on:click={() => showModal('LegacyPositions', $legacyPositions)} data-intercept="true">
 				Legacy Positions
-			</span>
+			</button>
 		{/if}
 	</div>
 
