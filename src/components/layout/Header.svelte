@@ -2,6 +2,8 @@
 	import Wallet from '../Wallet.svelte'
 
 	import { currentPage } from '../../lib/stores'
+	import { showModal } from '../../lib/utils'
+	import { legacyPositions } from '../../lib/legacy'
 </script>
 
 <style>
@@ -20,9 +22,13 @@
 		align-items: center;
 	}
 
-	.left a {
+	.left a, .left span {
 		color: var(--sonic-silver);
 		margin-right: var(--base-padding);
+	}
+
+	.clickable {
+		cursor: pointer;
 	}
 
 	.left a.active {
@@ -53,6 +59,11 @@
 		<a class:active={$currentPage == 'trade'} href='#/trade'>Trade</a>
 		<a class:active={$currentPage == 'pool'} href='#/pool'>Pool</a>
 		<a href='https://docs.cap.finance' target='_blank'>Docs</a>
+		{#if $legacyPositions && $legacyPositions.length}
+			<span class='clickable' on:click={() => showModal('LegacyPositions', $legacyPositions)} data-intercept="true">
+				Legacy Positions
+			</span>
+		{/if}
 	</div>
 
 	<div class='right'>

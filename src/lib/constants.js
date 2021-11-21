@@ -96,3 +96,8 @@ export const CHAINDATA = {
 		cap: '0x031d35296154279DC1984dCD93E392b1f946737b'
 	}
 }
+
+// Whether we should check for outstanding
+// positions/stakes in previous versions
+export const CHECK_V1_POSITIONS = true;
+export const CHECK_V2_POSITIONS = true;

@@ -12,6 +12,7 @@
 	import PoolDeposit from '../modals/PoolDeposit.svelte'
 	import PoolWithdraw from '../modals/PoolWithdraw.svelte'
 	
+	import LegacyPositions from '../modals/LegacyPositions.svelte'
 </script>
 
 {#if $activeModal && $activeModal.name == 'Connect'}
@@ -20,6 +21,10 @@
 
 {#if $activeModal && $activeModal.name == 'Products'}
 <Products />
+{/if}
+
+{#if $activeModal && $activeModal.name == 'LegacyPositions'}
+<LegacyPositions data={$activeModal.data} />
 {/if}
 
 <TradeDetails isActive={$activeModal && $activeModal.name == 'TradeDetails'}  data={$activeModal.data} />
