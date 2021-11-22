@@ -161,7 +161,7 @@
 			<div class='info'>
 				<div class='column column-asset flex'>{formatCurrency(_currencyLabel)} <div title='Reload' class='reload' on:click={() => {reloadPoolInfo(_currencyLabel)}}>&#8635;</div></div>
 				<div class='column column-apr'></div>
-				<div class='column column-tvl'>{formatToDisplay(poolInfo.tvl) || 0}</div>
+				<div class='column column-tvl'>{poolInfo.tvl ? formatToDisplay(poolInfo.tvl) : 'loading...'}</div>
 			</div>
 
 			<div class='description'>
@@ -201,7 +201,7 @@
     	<div class='info'>
     		<div class='column column-asset flex'>CAP <div title='Reload' class='reload' on:click={() => {reloadPoolInfo('cap')}}>&#8635;</div></div>
     		<div class='column column-apr'></div>
-    		<div class='column column-tvl'>{formatToDisplay($capPool.supply) || 0}</div>
+    		<div class='column column-tvl'>{$capPool.supply ? formatToDisplay($capPool.supply) : 'loading...'}</div>
     	</div>
 
     	<div class='description'>This pool receives trading fees as rewards.</div>

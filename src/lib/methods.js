@@ -33,7 +33,7 @@ export async function selectProduct(productId) {
 	let product = await getProduct(productId);
 
 	if (!product.symbol) {
-		product = {symbol: 'ETH-USD', productId: 1, maxLeverage: 50};
+		product = formatProduct('ETH-USD', {symbol: 'ETH-USD', productId: 1, maxLeverage: 50});
 	}
 
 	Stores.product.set(product);
@@ -231,13 +231,12 @@ export async function getPoolInfo(currencyLabel) {
 
 	const contract = await getContract('pool', false, currencyLabel);
 
-	if (!contract) {
-		Stores.pools.update((x) => {
-			x[currencyLabel] = info;
-			return x;
-		});
-		return;
-	}
+	Stores.pools.update((x) => {
+		x[currencyLabel] = info;
+		return x;
+	});
+
+	if (!contract) return;
 
 	try {
 		const poolBalance = await getBalanceOf(currencyLabel, contract.address);

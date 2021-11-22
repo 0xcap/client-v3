@@ -28,6 +28,12 @@
 		white-space: nowrap;
 	}
 
+	@media (max-width: 600px) {
+		.wrong-network {
+			display: none;
+		}
+	}
+
 </style>
 
 <div class='wallet'>

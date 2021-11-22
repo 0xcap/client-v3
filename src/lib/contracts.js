@@ -2,10 +2,12 @@
 import { get } from 'svelte/store'
 import { ethers } from 'ethers'
 import { CHAINDATA, ABIS } from './constants'
+import { showModal, hideModal } from './utils'
 import * as Stores from './stores'
 
 let router;
 let contracts = {};
+let ack_network = false;
 
 export async function getContract(contractName, withSigner, _currencyLabel) {
 
@@ -31,9 +33,14 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 
 	if (!CHAINDATA[_chainId]) {
 		Stores.wrongNetwork.set(true);
+		if (!ack_network) {
+			showModal('Network');
+			ack_network = true;
+		}
 		return;
 	}
 	
+	hideModal();
 	Stores.wrongNetwork.set(false);
 
 	if (!router) {

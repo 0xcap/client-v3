@@ -52,6 +52,7 @@
 		</a>
 		<a class:active={$currentPage == 'trade'} href='#/trade'>Trade</a>
 		<a class:active={$currentPage == 'pool'} href='#/pool'>Pool</a>
+		<a href='https://docs.cap.finance' target='_blank'>Docs</a>
 	</div>
 
 	<div class='right'>

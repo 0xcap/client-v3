@@ -90,7 +90,7 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 0 var(--base-padding);
-		border-bottom: 1px solid var(--onyx-dim);
+		border-bottom: 1px solid var(--rich-black-fogra);
 		height: var(--ticker-height);
 	}
 
@@ -176,6 +176,13 @@
 		color: var(--sonic-silver);
 	}
 
+	.note {
+		padding: var(--base-padding);
+		border-top: 1px solid var(--jet);
+		color: var(--sonic-silver);
+		font-size: 80%;
+	}
+
 </style>
 
 <div class='order' class:loading={$isSubmittingLong || $isSubmittingShort}>
@@ -236,6 +243,10 @@
 		</div>
 		{/if}
 	</div>
+
+	{#if available * 1 == 0}
+	<div class='note'><a href='https://docs.cap.finance/setting-up-your-wallet' target='_blank'>Bridge funds</a> to Arbitrum to start trading.</div>
+	{/if}
 	
 
 </div>

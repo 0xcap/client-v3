@@ -14,6 +14,7 @@
 	if (localStorage.getItem('productId')*1 > 0) {
 		localStorage.removeItem('productId');
 		localStorage.removeItem('leverage');
+		localStorage.removeItem('cachedLeverages');
 	}
 
 	onMount(async () => {
