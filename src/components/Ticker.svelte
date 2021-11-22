@@ -75,7 +75,7 @@
 
 <div class='ticker'>
 	
-	{#if $product && $product.logo}
+	{#if $product && $product.symbol}
 	<div class='product-info'>
 
 		<div class='item selector selector-product' on:click={() => {if ($address) {showModal('Products')}}} data-intercept="true">
@@ -88,9 +88,11 @@
 			{$prices[$productId] ? $prices[$productId].toFixed(2) : ''}
 		</div>
 
+		{#if change}
 		<div class={`item price-change ${change * 1 < 0 ? 'neg' : 'pos'}`}>
 			{change}%
 		</div>
+		{/if}
 
 	</div>
 	{/if}

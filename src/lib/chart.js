@@ -23,7 +23,7 @@ const lookbacks = {
 	86400: 24 * 12 * 24 * 60 * 60 * 1000,
 };
 
-let sidebarWidth = 280;
+let sidebarWidth = 300;
 
 export function initChart() {
 
@@ -152,7 +152,7 @@ export async function loadCandles(_resolution, _start, _end, prepend, productOve
 
 	if (!candlestickSeries || !_product) {
 		// try again
-		console.log('attempting chart again...');
+		// console.log('attempting chart again...');
 		setTimeout(() => {
 			loadCandles(_resolution, _start, _end, false, !_product ? 'ETH-USD' : false);
 		}, 2000);

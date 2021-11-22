@@ -21,7 +21,7 @@
 		display: grid;
 		grid-gap: var(--grid-gap);
 		grid-auto-flow: column;
-		grid-template-columns: auto 280px;
+		grid-template-columns: 300px auto;
 		background-color: var(--rich-black-fogra);
 		position: absolute;
 		top: calc(var(--header-height) + var(--grid-gap));
@@ -30,17 +30,17 @@
 		right: 0;
 	}
 
-	.core {
+	.sidebar {
 		order: 1;
+		background-color: var(--eerie-black);
+	}
+
+	.core {
+		order: 2;
 		display: grid;
 		grid-gap: var(--grid-gap);
 		grid-auto-flow: row;
 		grid-template-rows: var(--ticker-height) var(--chart-resolution-height) var(--chart-height) auto;
-	}
-
-	.sidebar {
-		order: 2;
-		background-color: var(--jet-dim);
 	}
 
 	.account {

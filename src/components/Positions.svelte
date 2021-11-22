@@ -204,7 +204,7 @@
 						{:else if position.isSettling}
 							<span class='status'>Settling</span>
 						{:else}
-							<a class='close' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">
+							<a class='close' title='Close Position' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">
 								{@html CANCEL_ICON}
 							</a>
 						{/if}

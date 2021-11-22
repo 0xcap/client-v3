@@ -33,7 +33,7 @@ export async function selectProduct(productId) {
 	let product = await getProduct(productId);
 
 	if (!product.symbol) {
-		product = {symbol: 'ETH-USD', productId: 1, maxLeverage: 50};
+		product = formatProduct('ETH-USD', {symbol: 'ETH-USD', productId: 1, maxLeverage: 50});
 	}
 
 	Stores.product.set(product);

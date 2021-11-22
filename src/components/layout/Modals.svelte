@@ -1,6 +1,7 @@
 <script>
 	import { activeModal } from '../../lib/stores'
 
+	import Network from '../modals/Network.svelte'
 	import Connect from '../modals/Connect.svelte'
 	import Products from '../modals/Products.svelte'
 	import Leverage from '../modals/Leverage.svelte'
@@ -13,6 +14,10 @@
 	import PoolWithdraw from '../modals/PoolWithdraw.svelte'
 	
 </script>
+
+{#if $activeModal && $activeModal.name == 'Network'}
+<Network />
+{/if}
 
 {#if $activeModal && $activeModal.name == 'Connect'}
 <Connect />
