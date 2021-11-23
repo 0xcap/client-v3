@@ -1,5 +1,9 @@
 <script>
 
+	import { onMount } from 'svelte'
+
+	import { getUserOrders, getUserPositions } from '../lib/graph'
+
 	import { positions, prices, orders, enhancedPositions } from '../lib/stores'
 
 	import { CANCEL_ICON, SPINNER_ICON } from '../lib/icons'
@@ -37,6 +41,11 @@
 	$: displayItems($orders, $positions);
 
 	$: $enhancedPositions;
+
+	onMount(async () => {
+		await getUserOrders();
+		await getUserPositions();
+	});
 
 </script>
 

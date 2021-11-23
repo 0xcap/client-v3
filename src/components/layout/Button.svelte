@@ -28,10 +28,10 @@
 		background-color: var(--red);
 	}
 
-	button:hover {
+	button:not(.loading):hover {
 		background-color: var(--green-dim);
 	}
-	button.red:hover {
+	button.red:not(.loading):hover {
 		background-color: var(--red-dim);
 	}
 

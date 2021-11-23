@@ -133,15 +133,15 @@ export async function getUserPositions() {
 
 	// console.log('unique_keys', unique_keys);
 
-	let _raw_positions = await getPositions(unique_keys);
-	// console.log('_raw_positions', _raw_positions);
+	let raw_positions = await getPositions(unique_keys);
+	// console.log('raw_positions', raw_positions);
 
 	let _position_info = [];
 	for (const k of unique_keys) {
 		_position_info.push(_details[k]);
 	}
 
-	let event_positions = formatPositions(_raw_positions,_position_info);
+	let event_positions = formatPositions(raw_positions,_position_info);
 
 	// console.log('event_positions', event_positions);
 
@@ -176,8 +176,26 @@ export async function getUserPositions() {
 			`
 		})
 	});
+
 	const json = await response.json();
-	let graph_positions = formatPositions(json.data && json.data.positions);
+
+	let _positions = json.data && json.data.positions;
+
+	let _keys = _positions.map((e) => {return e.id;});
+
+	let _raw_positions = await getPositions(_keys);
+
+	// make sure graph positions actually exist in the contract for times the graph hasn't yet updated
+	let actual_positions = [];
+	let i = 0;
+	for (const p of _positions) {
+		if (_raw_positions[i] && _raw_positions[i].size && _raw_positions[i].size.toString() * 1 > 0) {
+			actual_positions.push(p);
+		}
+		i++;
+	}
+
+	let graph_positions = formatPositions(actual_positions);
 
 	// console.log('graph_positions', graph_positions);
 
