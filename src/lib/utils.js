@@ -222,25 +222,27 @@ export function formatPositions(positions, info) {
 	// console.log('position info', info);
 	// console.log('positions', positions);
 	let i = 0;
+	if (!info) info = {};
 	for (const p of positions) {
-		if (!p.size*1) {
+		if (!p.size || !p.size*1 || p.size.toString()*1 == 0) {
 			i++;
 			continue;
 		}
-		//console.log('p', p);
+		// console.log('psize', p.size.toString(), p.size.toString()*1);
+		// console.log('p', p);
 		formattedPositions.push({
-			key: p.id || info[i].key,
+			key: p.id || info[i] && info[i].key,
 			margin: formatUnits(p.margin),
 			size: formatUnits(p.size),
 			price: formatUnits(p.price),
 			timestamp: p.createdAtTimestamp || p.timestamp.toString(),
-			currency: p.currency || info[i].currency,
-			isLong: p.isLong || info[i].isLong,
-			currencyLabel: getCurrencyLabelFromAddress(p.currency || info[i].currency),
-			productId: fromBytes32(p.productId || info[i].productId),
-			product: fromBytes32(p.productId || info[i].productId),
+			currency: p.currency || info[i] && info[i].currency,
+			isLong: p.isLong === undefined ? info[i] && info[i].isLong : p.isLong,
+			currencyLabel: getCurrencyLabelFromAddress(p.currency || info[i] && info[i].currency),
+			productId: fromBytes32(p.productId || info[i] && info[i].productId),
+			product: fromBytes32(p.productId || info[i] && info[i].productId),
 			leverage: formatUnits(p.size) / formatUnits(p.margin),
-			fee: formatUnits(p.fee || info[i].fee)
+			fee: formatUnits(p.fee || info[i] && info[i].fee)
 		});
 		i++;
 	}

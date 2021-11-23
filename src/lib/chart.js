@@ -76,12 +76,28 @@ export function initChart() {
 		    },
 			timeScale: {
 				timeVisible: true
+			},
+			crosshair: {
+				mode: 2,
+				vertLine: {
+					width: 0.5,
+					labelBackgroundColor: '#3D3D3D'
+				},
+				horzLine: {
+					width: 0.5,
+					labelBackgroundColor: '#3D3D3D'
+				}
 			}
 		});
 
 		const resolution = get(chartResolution);
 
-		candlestickSeries = chart.addCandlestickSeries();
+		candlestickSeries = chart.addCandlestickSeries({
+			upColor: '#00C805',
+		    downColor: '#FF5000',
+		    wickUpColor: '#00C805',
+		    wickDownColor: '#FF5000',
+		});
 
 		async function onVisibleLogicalRangeChanged(newVisibleLogicalRange) {
 			//console.log('lvc', newVisibleLogicalRange);

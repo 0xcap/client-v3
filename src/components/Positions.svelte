@@ -2,7 +2,7 @@
 
 	import { positions, prices, orders, enhancedPositions } from '../lib/stores'
 
-	import { CANCEL_ICON } from '../lib/icons'
+	import { CANCEL_ICON, SPINNER_ICON } from '../lib/icons'
 
 	import { formatPnl, showModal, getUPL, formatCurrency, formatToDisplay } from '../lib/utils'
 
@@ -107,9 +107,12 @@
 	.column-close {
 		flex: 1;
 		text-align: right;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
 	}
 
-	.column-close :global(svg) {
+	.column-close a :global(svg) {
 		width: 16px;
 		fill: currentColor;
 		margin-bottom: -2px;
@@ -118,7 +121,7 @@
 		color: var(--sonic-silver);
 	}
 	.column-close a:hover {
-		color: #fff;
+		color: var(--green);
 	}
 
 	.status {
@@ -150,6 +153,13 @@
 			width: 25%;
 		}
 
+	}
+
+	.loading-icon :global(svg) {
+		height: 23px;
+		fill: none;
+		margin-right: 6px;
+		margin-bottom: -2px;
 	}
 
 </style>
@@ -200,8 +210,10 @@
 					<div class='column column-close'>
 
 						{#if position.isClosing}
+							<div class='loading-icon'>{@html SPINNER_ICON}</div>
 							<span class='status'>Closing</span>
 						{:else if position.isSettling}
+							<div class='loading-icon'>{@html SPINNER_ICON}</div>
 							<span class='status'>Settling</span>
 						{:else}
 							<a class='close' title='Close Position' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">
