@@ -64,7 +64,7 @@ export async function getUserOrders() {
 	if (!contract) return;
 
 	const filter = contract.filters.NewOrder(null, _address);
-	const _events = await contract.queryFilter(filter, -1000);
+	const _events = await contract.queryFilter(filter, -250);
 
 	// console.log('NewOrder _events', _events);
 
@@ -100,49 +100,49 @@ export async function getUserPositions() {
 	const _address = get(address);
 	if (!_address) return;
 
-	// // From recent events + graph - merge both
-	// const contract = await getContract('trading');
-	// if (!contract) return;
+	// From recent events + graph - merge both
 
-	// const filter = contract.filters.PositionUpdated(null, _address);
-	// const _events = await contract.queryFilter(filter, -100);
+	// events
 
-	// // console.log('_events', _events);
+	const contract = await getContract('trading');
+	if (!contract) return;
 
-	// let _details = {};
-	// for (const ev of _events) {
-	// 	_details[ev.args.key] = ev.args;
-	// }
+	const filter = contract.filters.PositionUpdated(null, _address);
+	const _events = await contract.queryFilter(filter, -250);
 
-	// let keys = _events.map((e) => {return e.args.key;});
+	// console.log('_events', _events);
 
-	// // console.log('keys', keys);
+	let _details = {};
+	for (const ev of _events) {
+		_details[ev.args.key] = ev.args;
+	}
 
-	// // uniq keys
-	// let unique_keys = [];
-	// for (const k of keys) {
-	// 	if (unique_keys.includes(k)) continue;
-	// 	unique_keys.push(k);
-	// }
+	let keys = _events.map((e) => {return e.args.key;});
 
-	// // console.log('unique_keys', unique_keys);
+	// console.log('keys', keys);
 
-	// let _raw_positions = await getPositions(unique_keys);
-	// // console.log('_raw_positions', _raw_positions);
+	// uniq keys
+	let unique_keys = [];
+	for (const k of keys) {
+		if (unique_keys.includes(k)) continue;
+		unique_keys.push(k);
+	}
 
-	// let _position_info = [];
-	// for (const k of unique_keys) {
-	// 	_position_info.push(_details[k]);
-	// }
+	// console.log('unique_keys', unique_keys);
 
-	// positions.set(formatPositions(_raw_positions,_position_info));
+	let _raw_positions = await getPositions(unique_keys);
+	// console.log('_raw_positions', _raw_positions);
 
-	// // Chart
-	// //loadPositionLines();
+	let _position_info = [];
+	for (const k of unique_keys) {
+		_position_info.push(_details[k]);
+	}
 
-	// return;
+	let event_positions = formatPositions(_raw_positions,_position_info);
 
-	////////
+	// console.log('event_positions', event_positions);
+
+	// graph
 
 	const response = await fetch(graph_url, {
 		method: 'POST',
@@ -174,29 +174,33 @@ export async function getUserPositions() {
 		})
 	});
 	const json = await response.json();
-	positions.set(formatPositions(json.data && json.data.positions));
+	let graph_positions = formatPositions(json.data && json.data.positions);
+
+	// console.log('graph_positions', graph_positions);
+
+	let unique_positions = [];
+	let added_key = {};
+	for (const item of event_positions) {
+		if (!added_key[item.key]) {
+			unique_positions.push(item);
+			added_key[item.key] = true;
+		}
+	}
+	for (const item of graph_positions) {
+		if (!added_key[item.key]) {
+			unique_positions.push(item);
+			added_key[item.key] = true;
+		}
+	}
+
+	positions.set(unique_positions);
+
 }
 
 export async function getUserHistory() {
 
 	const _address = get(address);
 	if (!_address) return;
-
-	// // From recent events + graph - merge both
-	// const contract = await getContract('trading');
-	// if (!contract) return;
-
-	// const filter = contract.filters.ClosePosition(null, _address);
-	// const _events = await contract.queryFilter(filter, -1000);
-
-	// let evs = _events.map((e) => {return e.args;});
-	// evs.reverse();
-	// history.set(formatTrades(evs));
-	// return;
-
-	// ////////
-
-	
 
 	const response = await fetch(graph_url, {
 		method: 'POST',

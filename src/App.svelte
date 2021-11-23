@@ -6,6 +6,7 @@
 	import Toasts from './components/layout/Toasts.svelte'
 	import Header from './components/layout/Header.svelte'
 
+	import { monitorOracleResponse } from './lib/monitor'
 	import { initWebsocket } from './lib/stream'
 	import { component } from './lib/stores'
 	import { loadRoute, navigateTo, catchLinks, hidePopoversOnClick } from './lib/utils'
@@ -26,6 +27,7 @@
 		window.onpopstate = () => loadRoute(location.hash);
 
 		initWebsocket();
+		monitorOracleResponse();
 	});
 
 </script>
@@ -67,6 +69,18 @@
 		--ticker-height: 60px;
 		--grid-gap: 1px;
 
+	}
+
+	@media (max-height: 700px) {
+	  :global(:root) {
+	    --chart-height: 330px;
+	  }
+	}
+
+	@media (max-height: 600px) {
+	  :global(:root) {
+	    --chart-height: 280px;
+	  }
 	}
 
 	:global(.pos) {
