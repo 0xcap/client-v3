@@ -75,6 +75,9 @@
 		color: var(--sonic-silver);
 		margin-right: var(--base-padding);
 	}
+	.account-nav a:hover {
+		color: var(--green);
+	}
 	.account-nav a.active {
 		color: var(--green);
 		font-weight: 600;

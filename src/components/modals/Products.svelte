@@ -46,7 +46,7 @@
 
 </style>
 
-<Modal>
+<Modal title='Select Product' showHeader={true}>
 
 	{#each Object.entries(PRODUCT_LOGOS) as [_productId, _logo]}
 

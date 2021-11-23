@@ -87,7 +87,8 @@ export const toast = writable(null);
 export const activeModal = writable({});
 
 // Chart
-export const chartResolution = writable(900);
+export const chartResolution = writable(localStorage.getItem('chartResolution') || 900);
+export const chartLoading = writable();
 
 // Wallet
 export const provider = writable(null);

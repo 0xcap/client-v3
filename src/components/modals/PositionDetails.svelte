@@ -99,7 +99,7 @@
 	}
 </style>
 
-<Modal>
+<Modal title='Position Details' showHeader={true}>
 	{#if data.isSettling}
 		<div class='status'>
 			Status: Settling. <a on:click={_cancelOrder}>Cancel Order</a>

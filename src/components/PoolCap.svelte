@@ -4,7 +4,7 @@
 
 	import { SPINNER_ICON } from '../lib/icons'
 
-	import { capPool, allowances } from '../lib/stores'
+	import { capPool, allowances, prices } from '../lib/stores'
 
 	import { getAllowance, collectCAPReward, approveCurrency, getCapPoolInfo } from '../lib/methods'
 
@@ -145,6 +145,10 @@
 		height: 24px;
 	}
 
+	.dollar-amount {
+		color: var(--sonic-silver);
+	}
+
 </style>
 
 <div class='pool-cap'>
@@ -195,7 +199,12 @@
     				<div class='column column-asset label'>My {formatCurrency(_currencyLabel)} Rewards
     					<div class='sub-label'>Receives <strong>{formatToDisplay($capPool.poolShares[_currencyLabel])}%</strong> of fees</div>
     				</div>
-    				<div class='column column-apr'>{formatToDisplay(reward)} {formatCurrency(_currencyLabel)}</div>
+    				<div class='column column-apr'>
+    					{formatToDisplay(reward)} {formatCurrency(_currencyLabel)} 
+    					{#if _currencyLabel == 'weth'}
+    					<span class='dollar-amount'>(${formatToDisplay($prices['ETH-USD'] * reward || 0)})</span>
+    					{/if}
+    				</div>
     				<div class='column column-tvl'>
     					<a class:disabled={reward == 0} on:click={() => {collectCAPReward(_currencyLabel)}}>Collect</a>
     				</div>
