@@ -14,3 +14,7 @@ export const EXTERNAL_ICON = `<svg viewBox="0 0 283.178 283.178">
 		c1.989,0,3.897-0.79,5.303-2.197L248.177,59.748v27.303c0,4.142,3.358,7.5,7.5,7.5h20c4.142,0,7.5-3.358,7.5-7.5V7.5
 		C283.177,3.358,279.819,0,275.677,0z"/>
 </svg>`;
+
+export const SPINNER_ICON = `<svg viewBox="0 0 24 24" fill="none"><style>@keyframes rotate-center{0%{-webkit-transform:rotate(0);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}</style><g style="animation:rotate-center 1s cubic-bezier(.18,.89,.32,1.28) infinite both;transform-origin:center center"><circle cx="12" cy="12" r="8" stroke="rgb(55,55,55)" stroke-width="2"/><path d="M18.447 14.73a.53.53 0 00.233.68l.89.457a.48.48 0 00.66-.223A9 9 0 0016.551 4.22a.48.48 0 00-.667.205l-.456.89a.53.53 0 00.209.688 7.001 7.001 0 012.81 8.726z" fill="rgb(0,200,5)"/></g></svg>`;
+
+export const CIRCLE_ICON = `<svg viewBox="0 0 120 120"><circle cx="60" cy="60.834" r="54.167"/></svg>`;

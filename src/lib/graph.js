@@ -34,7 +34,9 @@ export async function getVolume() {
 	if (!json.data) return {volume: 1099876787};
 
 	let datas = json.data && json.data.datas;
-  
+  	
+  	// console.log('datas', datas);
+  	
 	let volumeETH = 110000;
 	let volumeUSD = 0; // v2 + v1
 	for (const d of datas) {

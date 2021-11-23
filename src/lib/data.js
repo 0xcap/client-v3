@@ -22,6 +22,7 @@ export function hydrateData() {
 	} else if (_currentPage == 'pool') {
 		getPoolInfo('weth');
 		getPoolInfo('usdc');
+	} else if (_currentPage == 'stake') {
 		getCapPoolInfo();
 	}
 

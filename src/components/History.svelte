@@ -2,12 +2,17 @@
 
 	import { onMount } from 'svelte'
 
+	import { SPINNER_ICON } from '../lib/icons'
+
 	import { history } from '../lib/stores'
 	import { formatPnl, showModal, formatCurrency, formatToDisplay } from '../lib/utils'
 	import { getUserHistory } from '../lib/graph'
 
-	onMount(() => {
-		getUserHistory();
+	let loading;
+	onMount(async () => {
+		loading = true;
+		await getUserHistory();
+		loading = false;
 	});
 
 </script>
@@ -79,6 +84,10 @@
 		text-align: center;
 	}
 
+	.loading-icon :global(svg) {
+		height: 24px;
+	}
+
 	@media (max-width: 600px) {
 
 		.column-leverage {
@@ -116,24 +125,30 @@
 
 	<div class='trades-list no-scrollbar'>
 
-		{#if $history.length == 0}
-			<div class='empty'>No trades to show.</div>
+		{#if loading}
+			<div class='empty'>
+				<div class='loading-icon'>{@html SPINNER_ICON}</div>
+			</div>
 		{:else}
+			{#if $history.length == 0}
+				<div class='empty'>No trades to show.</div>
+			{:else}
 
-			{#each $history as trade}
+				{#each $history as trade}
 
-				<div class='trade' on:click={() => {showModal('TradeDetails', trade)}} data-intercept="true">
+					<div class='trade' on:click={() => {showModal('TradeDetails', trade)}} data-intercept="true">
 
-					<div class='column column-product'>{#if trade.isLong}<span class='pos'>↑</span>{:else}<span class='neg'>↓</span>{/if} {trade.product}</div>
-					<div class='column column-price'>{formatToDisplay(trade.price)}</div>
-					<div class='column column-size'>{formatToDisplay(trade.size)} {formatCurrency(trade.currencyLabel)}</div>
-					<div class='column column-leverage'>{formatToDisplay(trade.leverage)}×</div>
-					<div class={`column column-pnl ${trade.pnl * 1 < 0 ? 'neg' : 'pos'}`}>{formatPnl(trade.pnl)}</div>
+						<div class='column column-product'>{#if trade.isLong}<span class='pos'>↑</span>{:else}<span class='neg'>↓</span>{/if} {trade.product}</div>
+						<div class='column column-price'>{formatToDisplay(trade.price)}</div>
+						<div class='column column-size'>{formatToDisplay(trade.size)} {formatCurrency(trade.currencyLabel)}</div>
+						<div class='column column-leverage'>{formatToDisplay(trade.leverage)}×</div>
+						<div class={`column column-pnl ${trade.pnl * 1 < 0 ? 'neg' : 'pos'}`}>{formatPnl(trade.pnl)}</div>
 
-				</div>
+					</div>
 
-			{/each}
+				{/each}
 
+			{/if}
 		{/if}
 
 	</div>

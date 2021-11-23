@@ -1,13 +1,17 @@
 <script>
 
-	import { pools, capPool, allowances } from '../lib/stores'
+	import { CURRENCY_LOGOS } from '../lib/constants'
 
-	import { getAllowance, collectPoolReward, collectCAPReward, approveCurrency, getPoolShare, getPoolInfo, getCapPoolInfo } from '../lib/methods'
+	import { SPINNER_ICON } from '../lib/icons'
+
+	import { pools, allowances } from '../lib/stores'
+
+	import { getAllowance, collectPoolReward, approveCurrency, getPoolInfo } from '../lib/methods'
 
 	import { showModal, formatCurrency, formatToDisplay } from '../lib/utils'
 
 	async function _approveCurrency(_currencyLabel) {
-		const result = await approveCurrency(_currencyLabel, _currencyLabel == 'cap' ? 'capPool' : 'pool' + _currencyLabel);
+		const result = await approveCurrency(_currencyLabel, 'pool' + _currencyLabel);
 	}
 
 	async function getAllowances(_pools) {
@@ -15,7 +19,6 @@
 		for (const _currencyLabel in _pools) {
 			await getAllowance(_currencyLabel, 'pool' + _currencyLabel);
 		}
-		await getAllowance('cap', 'capPool');
 	}
 
 	$: getAllowances($pools);
@@ -24,11 +27,7 @@
 
 	async function reloadPoolInfo(_currencyLabel) {
 		poolIsLoading[_currencyLabel] = true;
-		if (_currencyLabel == 'cap') {
-			await getCapPoolInfo();
-		} else {
-			await getPoolInfo(_currencyLabel);
-		}
+		await getPoolInfo(_currencyLabel);
 		poolIsLoading[_currencyLabel] = false;
 	}
 
@@ -83,6 +82,11 @@
 		flex: 1;
 	}
 
+	.column-asset img {
+		width: 24px;
+		margin-right: 10px;
+	}
+
 	.column-apr {
 		flex: 1.5;
 		text-align: right;
@@ -124,7 +128,7 @@
 	}
 
 	.loading {
-		opacity: 0.5;
+		opacity: 1;
 		pointer-events: none;
 	}
 
@@ -143,6 +147,10 @@
 		color: #fff;
 	}
 
+	.loading-icon :global(svg) {
+		height: 24px;
+	}
+
 </style>
 
 <div class='pools'>
@@ -156,12 +164,22 @@
 	</div>
 
 	{#each poolEntries as [_currencyLabel, poolInfo]}
-		<div class='pool' class:loading={poolIsLoading[_currencyLabel]}>
+		<div class='pool' class:loading={poolIsLoading[_currencyLabel] || !poolInfo.tvl}>
 
 			<div class='info'>
-				<div class='column column-asset flex'>{formatCurrency(_currencyLabel)} <div title='Reload' class='reload' on:click={() => {reloadPoolInfo(_currencyLabel)}}>&#8635;</div></div>
+				<div class='column column-asset flex'>
+					<img src={CURRENCY_LOGOS[_currencyLabel]}>
+					{formatCurrency(_currencyLabel)} 
+					<div title='Reload' class='reload' on:click={() => {reloadPoolInfo(_currencyLabel)}}>&#8635;</div>
+				</div>
 				<div class='column column-apr'></div>
-				<div class='column column-tvl'>{poolInfo.tvl ? formatToDisplay(poolInfo.tvl) : 'loading...'}</div>
+				<div class='column column-tvl'>
+					{#if poolInfo.tvl}
+						{formatToDisplay(poolInfo.tvl)}
+					{:else}
+						<div class='loading-icon'>{@html SPINNER_ICON}</div>
+					{/if}
+				</div>
 			</div>
 
 			<div class='description'>
@@ -195,47 +213,5 @@
 
 		</div>
     {/each}
-
-    <div class='pool' class:loading={poolIsLoading['cap']}>
-
-    	<div class='info'>
-    		<div class='column column-asset flex'>CAP <div title='Reload' class='reload' on:click={() => {reloadPoolInfo('cap')}}>&#8635;</div></div>
-    		<div class='column column-apr'></div>
-    		<div class='column column-tvl'>{$capPool.supply ? formatToDisplay($capPool.supply) : 'loading...'}</div>
-    	</div>
-
-    	<div class='description'>This pool receives trading fees as rewards.</div>
-
-    	<div class='my-share'>
-
-    		<div class='row'>
-    			<div class='column column-asset label'>My Share</div>
-    			<div class='column column-apr'>{formatToDisplay($capPool.userBalance)} CAP ({formatToDisplay($capPool.supply*1 == 0 ? 0 : 100*$capPool.userBalance/$capPool.supply)}%)</div>
-    			<div class='column column-tvl'>
-    				{#if $allowances['cap'] && $allowances['cap']['capPool'] * 1 == 0}
-    					<a on:click={() => {_approveCurrency('cap')}}>Approve CAP</a>
-    				{:else}
-    					<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: 'cap'})}}>Deposit</a><span class='sep'>|</span><a class:disabled={$capPool.userBalance == 0} data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: 'cap'})}}>Withdraw</a>
-    				{/if}
-    			</div>
-    		</div>
-
-    		{#each Object.entries($capPool.claimableRewards || {}) as [_currencyLabel, reward]}
-
-    			<div class='row'>
-    				<div class='column column-asset label'>My {formatCurrency(_currencyLabel)} Rewards
-    					<div class='sub-label'>Receives <strong>{formatToDisplay($capPool.poolShares[_currencyLabel])}%</strong> of fees</div>
-    				</div>
-    				<div class='column column-apr'>{formatToDisplay(reward)} {formatCurrency(_currencyLabel)}</div>
-    				<div class='column column-tvl'>
-    					<a class:disabled={reward == 0} on:click={() => {collectCAPReward(_currencyLabel)}}>Collect</a>
-    				</div>
-    			</div>
-
-    		{/each}
-
-    	</div>
-
-    </div>
 
 </div>

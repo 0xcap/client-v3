@@ -4,7 +4,7 @@
 
 	import { formatToDisplay, formatCurrency } from '../../lib/utils'
 	
-	import { deposit, depositCAP } from '../../lib/methods'
+	import { deposit, depositCAP, getBalanceOf } from '../../lib/methods'
 	
 	import Modal from './Modal.svelte'
 	import DataList from '../layout/DataList.svelte'
@@ -35,9 +35,23 @@
 		submitIsPending = false;
 	}
 
+	let loading = false;
+	let balance = 0;
 	onMount(async () => {
-
+		// get available balance
+		loading = true;
+		balance = await getBalanceOf(data.currencyLabel);
+		loading = false;
 	});
+
+	function setMaxAmount() {
+		let _balance = balance * 1;
+		if (data.currencyLabel == 'weth') {
+			_balance -= 0.003; // gas 
+			if (_balance < 0) _balance = 0;
+		}
+		amount = _balance;
+	}
 
 	let rows;
 	$: rows = [
@@ -45,6 +59,12 @@
 			type: 'input',
 			label: 'Amount (' + formatCurrency(data.currencyLabel) + ')',
 			onKeyUp: calculateShare
+		},
+		{
+			label: 'Balance',
+			value: `${formatToDisplay(balance)}`,
+			onclick: setMaxAmount,
+			isEmpty: loading
 		}
 	];
 

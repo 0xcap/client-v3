@@ -7,7 +7,8 @@ export const PRODUCT_LOGOS = {
 
 export const CURRENCY_LOGOS = {
 	weth: '/logos/ETH.svg',
-	usdc: '/logos/USDC.svg'
+	usdc: '/logos/USDC.svg',
+	cap: '/logos/CAP.svg'
 }
 
 export const ABIS = {

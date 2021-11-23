@@ -216,6 +216,8 @@ export async function getUserPoolBalance(currencyLabel) {
 
 }
 
+let dataCache = {};
+
 export async function getPoolInfo(currencyLabel) {
 
 	let info = {
@@ -228,6 +230,8 @@ export async function getPoolInfo(currencyLabel) {
 		openInterest: 0,
 		utilizationMultiplier: 0.1
 	};
+
+	if (!dataCache[currencyLabel]) dataCache[currencyLabel] = {};
 
 	const contract = await getContract('pool', false, currencyLabel);
 
@@ -243,10 +247,16 @@ export async function getPoolInfo(currencyLabel) {
 		const userBalance = await getUserPoolBalance(currencyLabel);
 		const claimableReward = await getClaimableReward(currencyLabel);
 		const poolShare = await getPoolShare(currencyLabel);
-		const withdrawFee = formatUnits(await contract.withdrawFee(), 2);
-		const utilization = formatUnits(await contract.getUtilization(), 2);
+		
 		const openInterest = formatUnits(await contract.openInterest(), 18);
-		const utilizationMultiplier = formatUnits(await contract.utilizationMultiplier(), 2);
+		
+		const withdrawFee = dataCache[currencyLabel].withdrawFee || formatUnits(await contract.withdrawFee(), 2);
+		dataCache[currencyLabel].withdrawFee = withdrawFee;
+
+		const utilizationMultiplier = dataCache[currencyLabel].utilizationMultiplier || formatUnits(await contract.utilizationMultiplier(), 2);
+		dataCache[currencyLabel].utilizationMultiplier = utilizationMultiplier;
+
+		const utilization = poolBalance * 1 ? openInterest * utilizationMultiplier / poolBalance : 0;
 
 		info = {
 			tvl: poolBalance,

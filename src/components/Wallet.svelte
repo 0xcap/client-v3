@@ -3,6 +3,8 @@
 
 	import Button from './layout/Button.svelte'
 
+	import { CIRCLE_ICON } from '../lib/icons'
+
 	import { checkMetamaskSession } from '../lib/wallet'
 
 	import { address, wrongNetwork, currentPage } from '../lib/stores'
@@ -20,6 +22,17 @@
 	.wallet {
 		display: flex;
 		align-items: center;
+	}
+
+	.address {
+		display: flex;
+		align-items: center;
+	}
+
+	.address :global(svg) {
+		fill:  var(--green);
+		height: 10px;
+		margin-right: 8px;
 	}
 
 	.wrong-network {
@@ -43,7 +56,10 @@
 	{/if}
 
 	{#if $address}
-		<div class='address'>{shortAddress($address)}</div>
+		<div class='address'>
+			{@html CIRCLE_ICON}
+			{shortAddress($address)}
+		</div>
 	{:else}
 		{#if $currentPage != 'home'}
 		<Button small={true} onClick={() => {showModal('Connect')}} label={`Connect Wallet`} />
