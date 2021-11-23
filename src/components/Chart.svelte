@@ -10,9 +10,8 @@
 </script>
 
 <style>
-
 	#chart {
-		min-height: var(--chart-height);
+		height: var(--chart-height);
 	}
 </style>
 

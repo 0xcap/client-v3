@@ -6,7 +6,7 @@ import { provider } from './stores'
 
 import { getAllowance, getPoolInfo, getCapPoolInfo } from './methods'
 import { getUserOrders, getUserPositions } from './graph'
-
+import { orders } from './stores'
 import { showToast, formatCurrency } from './utils'
 
 export async function monitorTx(hash, type, details) {
@@ -24,22 +24,39 @@ export async function monitorTx(hash, type, details) {
 
 }
 
-// Todo: show success toasts
+export async function monitorOracleResponse() {
+	let requests = 0;
+	let c = setInterval(async () => {
+		const _orders = get(orders);
+		// console.log('got orders', _orders);
+		// console.log('requests', requests);
+		if (_orders.length) {
+			await getUserOrders();
+			await getUserPositions();
+			requests++;
+			if (requests > 100) {
+				clearInterval(c);
+			}
+		} else {
+			requests = 0;
+		}
+	}, 5000);
+}
 
 async function handleTxComplete(type, details) {
 
 	if (type == 'submit-new-position') {
 		showToast('Order submitted.', 'success');
 		await getUserOrders();
-		await getUserPositions();
+		// await getUserPositions();
 	} else if (type == 'submit-close-order') {
 		showToast('Close order submitted.', 'success');
 		await getUserOrders();
-		await getUserPositions();
+		// await getUserPositions();
 	} else if (type == 'cancel-order') {
 		showToast('Order cancelled.', 'success');
 		await getUserOrders();
-		await getUserPositions();
+		// await getUserPositions();
 	} else if (type == 'approve') {
 		await getAllowance(details.currencyLabel, details.spenderName);
 	} else if (type == 'pool-deposit') {

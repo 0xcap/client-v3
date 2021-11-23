@@ -45,11 +45,12 @@ export function initChart() {
 		let chartDivHeight = chartElem.offsetHeight;
 
 		chart = LightweightCharts.createChart(chartElem, { width: chartDivWidth, height: chartDivHeight });
-		
+
 		window.onresize = () => {
 			chartDivWidth = tradingRowElem.offsetWidth - sidebarWidth;
 			chartDivHeight = chartElem.offsetHeight;
-			//console.log('chartDivWidth', chartDivWidth, chartDivHeight);
+			// console.log('px', window.devicePixelRatio, window.screen.availWidth, document.documentElement.clientWidth);
+			// console.log('chartDivWidth', chartDivWidth, chartDivHeight);
 			chart.resize(chartDivWidth, chartDivHeight);
 		};
 

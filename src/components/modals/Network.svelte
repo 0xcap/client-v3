@@ -1,5 +1,8 @@
 <script>
 	import Modal from '../modals/Modal.svelte'
+	import Button from '../layout/Button.svelte'
+
+	import { switchChains } from '../../lib/wallet'
 </script>
 
 <style>
@@ -14,7 +17,9 @@
 <Modal title='Invalid Network' showHeader={true}>
 
 	<div class='note'>
-		Select Arbitrum as your wallet network to trade or pool on Cap. Details on how to do this are available <a href='https://docs.cap.finance/setting-up-your-wallet' target='_blank'>here</a>.
+		Select Arbitrum as your wallet's network to trade or pool on Cap.
 	</div>
+
+	<Button wrap={true} onClick={() => {switchChains()}} label={`Switch to Arbitrum`} />
 
 </Modal>
