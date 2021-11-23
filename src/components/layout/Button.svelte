@@ -28,6 +28,13 @@
 		background-color: var(--red);
 	}
 
+	button:hover {
+		background-color: var(--green-dim);
+	}
+	button.red:hover {
+		background-color: var(--red-dim);
+	}
+
 	button.loading {
 		pointer-events: none;
 		cursor: default;
