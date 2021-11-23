@@ -6,7 +6,7 @@ import { prices, prices24h, productId } from './stores'
 
 import { onNewPrice } from './chart'
 
-import { setTitle, shortSymbol } from './utils'
+import { setTitle, shortSymbol, showToast, hideToast } from './utils'
 
 let ws;
 let lastTimestamp = {};
@@ -24,6 +24,22 @@ function heartbeat() {
 
 export function initWebsocket() {
 
+	// console.log('initWebsocket');
+
+	let time_initialized = Date.now();
+
+	let error_last_shown = Date.now();
+
+	let unopened = true;
+
+	// Check open
+	setInterval(() => {
+		if (unopened && Date.now() - time_initialized > 10 * 1000 && error_last_shown < Date.now() - 10 * 1000) {
+			showToast('Price stream: still connecting...');
+			error_last_shown = Date.now();
+		}
+	}, 1000);
+
 	if (ws) {
 		try {
 			ws.close(3335,"");
@@ -35,6 +51,12 @@ export function initWebsocket() {
 	ws = new WebSocket('wss://ws-feed.exchange.coinbase.com');
 
 	ws.onopen = (e) => {
+
+		//console.log('onopen', ws.readyState, e);
+
+		unopened = false;
+
+		hideToast();
 
 		if (ws.readyState != 1) return;
 

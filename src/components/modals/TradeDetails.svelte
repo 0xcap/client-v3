@@ -68,6 +68,6 @@
 <style>
 </style>
 
-<Modal isActive={isActive}>
+<Modal isActive={isActive} title='Trade Details' showHeader={true}>
 	<DataList data={rows} />
 </Modal>

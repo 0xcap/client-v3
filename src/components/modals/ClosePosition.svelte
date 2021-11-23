@@ -102,5 +102,5 @@
 
 <Modal title='Close'>
 	<DataList data={rows} bind:value={size} onSubmit={_submitOrder} />
-	<Button wrap={true} isLoading={!canSubmit || submitIsPending} onClick={_submitOrder} label='Close' />
+	<Button wrap={true} isLoading={!canSubmit || submitIsPending} onClick={_submitOrder} label='Close Position' />
 </Modal>

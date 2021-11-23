@@ -10,7 +10,9 @@
 
 	let loading;
 	onMount(async () => {
-		loading = true;
+		if (!$history.length) {
+			loading = true;
+		}
 		await getUserHistory();
 		loading = false;
 	});

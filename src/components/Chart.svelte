@@ -2,6 +2,7 @@
 
 	import { onMount } from 'svelte'
 	import { initChart } from '../lib/chart'
+	import { chartLoading } from '../lib/stores'
 
 	onMount(() => {
 		initChart();
@@ -11,8 +12,13 @@
 
 <style>
 	#chart {
+		background-color: var(--eerie-black);
 		height: var(--chart-height);
+	}
+	.loading {
+		opacity: 0.8;
+		pointer-events: none;
 	}
 </style>
 
-<div id='chart'></div>
+<div id='chart' class:loading={$chartLoading}></div>

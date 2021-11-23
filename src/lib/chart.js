@@ -1,6 +1,6 @@
 import { get } from 'svelte/store'
 
-import { product, positions, chartResolution } from './stores'
+import { product, positions, chartResolution, chartLoading } from './stores'
 
 let candles = []; // current candle set
 
@@ -155,7 +155,10 @@ export function applyWatermark() {
 
 export async function setResolution(_resolution) {
 	chartResolution.set(_resolution);
+	localStorage.setItem('chartResolution', _resolution);
+	chartLoading.set(true);
 	await loadCandles(_resolution);
+	chartLoading.set(false);
 }
 
 export async function loadCandles(_resolution, _start, _end, prepend, productOverride) {
@@ -197,7 +200,9 @@ export async function loadCandles(_resolution, _start, _end, prepend, productOve
 	const response = await fetch(`https://api.exchange.coinbase.com/products/${_product}/candles?granularity=${_resolution}&start=${url_start}&end=${url_end}`);
 	const json = await response.json();
 
-	//console.log('json', json);
+	if (!json || !Array.isArray(json)) {
+		return console.log('json invalid', json);
+	}
 
 	if (prepend) {
 		// prepend candles to existing set

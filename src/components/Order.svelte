@@ -124,7 +124,7 @@
 		background-color: var(--onyx-dim);
 		border-radius: var(--base-radius);
 		border: 1px solid var(--onyx-dim);
-		padding: 11px 62px;
+		padding: 11px var(--base-padding);
 		width: 100%;
 		box-sizing: border-box;
 		text-align: right;
@@ -199,9 +199,8 @@
 
 	<div class='input-wrap'>
 
-		<span class='label'>Size</span>
+		<span class='label'>Size ({formatCurrency($currencyLabel)})</span>
 		<input id='size' type='number' step="0.0001" bind:value={$size} min="0" max="1000000" maxlength="10" spellcheck="false" placeholder={`0.0`} autocomplete="off" autocorrect="off" inputmode="decimal" lang="en">
-		<span class='currency'>{formatCurrency($currencyLabel)}</span>
 
 	</div>
 

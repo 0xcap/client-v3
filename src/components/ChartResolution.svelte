@@ -20,6 +20,10 @@
 		margin-right: var(--base-padding);
 	}
 
+	a:hover {
+		color: var(--green);
+	}
+
 	.active {
 		color: var(--green);
 		font-weight: 700;

@@ -4,7 +4,7 @@
 
 	import { SPINNER_ICON } from '../lib/icons'
 
-	import { pools, allowances } from '../lib/stores'
+	import { pools, allowances, prices } from '../lib/stores'
 
 	import { getAllowance, collectPoolReward, approveCurrency, getPoolInfo } from '../lib/methods'
 
@@ -151,6 +151,10 @@
 		height: 24px;
 	}
 
+	.dollar-amount {
+		color: var(--sonic-silver);
+	}
+
 </style>
 
 <div class='pools'>
@@ -203,7 +207,11 @@
 
 				<div class='row'>
 					<div class='column column-asset label'>My Rewards</div>
-					<div class='column column-apr'>{formatToDisplay(poolInfo.claimableReward) || 0} {formatCurrency(_currencyLabel)}</div>
+					<div class='column column-apr'>{formatToDisplay(poolInfo.claimableReward) || 0} {formatCurrency(_currencyLabel)} 
+						{#if _currencyLabel == 'weth'}
+						<span class='dollar-amount'>(${formatToDisplay($prices['ETH-USD'] * poolInfo.claimableReward || 0)})</span>
+						{/if}
+					</div>
 					<div class='column column-tvl'>
 						<a class:disabled={poolInfo.claimableReward == 0} on:click={() => {collectPoolReward(_currencyLabel)}}>Collect</a>
 					</div>

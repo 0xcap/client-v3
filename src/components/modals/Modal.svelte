@@ -49,6 +49,7 @@
 		padding: 0 var(--base-padding);
 		height: 60px;
 		background-color: var(--jet);
+		border-bottom: 1px solid var(--eerie-black);
 	}
 
 	.modal-title {
