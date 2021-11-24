@@ -2,9 +2,9 @@
 
 	import { CURRENCY_LOGOS } from '../lib/constants'
 
-	import { SPINNER_ICON } from '../lib/icons'
+	import { SPINNER_ICON, EXTERNAL_ICON } from '../lib/icons'
 
-	import { capPool, allowances, prices } from '../lib/stores'
+	import { capPool, allowances, prices, address } from '../lib/stores'
 
 	import { getAllowance, collectCAPReward, approveCurrency, getCapPoolInfo } from '../lib/methods'
 
@@ -149,6 +149,16 @@
 		color: var(--sonic-silver);
 	}
 
+	.note {
+		color: var(--sonic-silver);
+		line-height: 1.618;
+	}
+
+	.note a :global(svg) {
+		height: 10px;
+		fill: currentColor;
+	}
+
 </style>
 
 <div class='pool-cap'>
@@ -171,6 +181,8 @@
     		<div class='column column-tvl'>
     			{#if $capPool.supply}
     				{formatToDisplay($capPool.supply)}
+    			{:else if !$address}
+					--
     			{:else}
     				<div class='loading-icon'>{@html SPINNER_ICON}</div>
     			{/if}
@@ -214,6 +226,10 @@
 
     	</div>
 
+    </div>
+
+    <div class='note'>
+    	<a target='_blank' href='https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x43044f861ec040db59a7e324c40507addb673142'>Buy CAP (Ethereum L1) {@html EXTERNAL_ICON}</a><br/><a target='_blank' class='button' href='https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x031d35296154279dc1984dcd93e392b1f946737b'>Buy CAP (Arbitrum L2) {@html EXTERNAL_ICON}</a>
     </div>
 
 </div>

@@ -6,7 +6,7 @@
 
 	import { submitOrder, approveCurrency, getBalanceOf } from '../lib/methods'
 
-	import { showModal, shortSymbol, getCachedLeverage, formatToDisplay, formatCurrency } from '../lib/utils'
+	import { showModal, showToast, shortSymbol, getCachedLeverage, formatToDisplay, formatCurrency } from '../lib/utils'
 	import { CARET_DOWN } from '../lib/icons'
 
 	import { address, productId, product, currencyLabel, leverage, size, margin, marginPlusFee, isSubmittingShort, isSubmittingLong, prices, allowances } from '../lib/stores'
@@ -20,6 +20,7 @@
 
 	async function _submitNewPosition(isLong) {
 		if (!$size) return focusAmount();
+		if (!$address) return showToast('Connect your wallet to trade.');
 
 		if (isLong) {
 			isSubmittingLong.set(true);
@@ -46,6 +47,7 @@
 	function setInitialLeverage(_product, _productId) {
 		if (!_product || !_productId) return;
 		const cached = getCachedLeverage(_productId);
+		// console.log('cached', cached);
 		if (cached) {
 			leverage.set(cached);
 		} else {
@@ -212,7 +214,6 @@
 		{/if}
 	</div>
 
-	
 	<div class='details'>
 		{#if $margin * 1 > 0}
 		<div class='row'>

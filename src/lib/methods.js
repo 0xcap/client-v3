@@ -27,13 +27,15 @@ export async function getProduct(productId) {
 }
 
 export async function selectProduct(productId) {
-	
+		
+	// console.log('selectProduct', productId);
+
 	if (!productId) productId = get(Stores.productId);
 
 	let product = await getProduct(productId);
 
 	if (!product.symbol) {
-		product = formatProduct('ETH-USD', {symbol: 'ETH-USD', productId: 1, maxLeverage: 50});
+		product = formatProduct('ETH-USD', {symbol: 'ETH-USD', productId: 'ETH-USD', maxLeverage: 50 * 10**8, fee: 1000});
 	}
 
 	Stores.product.set(product);
@@ -42,6 +44,8 @@ export async function selectProduct(productId) {
 
 	// Leverage
 	const cached = getCachedLeverage(productId);
+	// console.log('cached2', cached);
+	// console.log('p', product);
 	if (cached) {
 		Stores.leverage.set(cached);
 	} else {

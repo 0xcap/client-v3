@@ -154,7 +154,7 @@ export function loadRoute(path, isInitial) {
 		currentPage.set('stake');
 		document.title = `Stake | Cap`;
 	}
-	if (!isInitial) hydrateData();
+	hydrateData();
 }
 export function navigateTo(path) {
     window.history.pushState(null, null, path);

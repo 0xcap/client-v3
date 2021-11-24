@@ -2,7 +2,7 @@
 
 	import Volume from './Volume.svelte'
 
-	import { showModal, shortSymbol, displayPricePercentChange, formatToDisplay } from '../lib/utils'
+	import { showModal, showToast, shortSymbol, displayPricePercentChange, formatToDisplay } from '../lib/utils'
 	import { address, productId, product, prices, prices24h } from '../lib/stores'
 	import { CARET_DOWN } from '../lib/icons'
 
@@ -78,7 +78,7 @@
 	{#if $product && $product.symbol}
 	<div class='product-info'>
 
-		<div class='item selector selector-product' on:click={() => {if ($address) {showModal('Products')}}} data-intercept="true">
+		<div class='item selector selector-product' on:click={() => {if ($address) {showModal('Products')} else {showToast('Connect your wallet to trade.')}}} data-intercept="true">
 			<img src={$product.logo} alt={`${$product.symbol} logo`}>
 			<span>{$product.symbol || ''}</span>
 			{@html CARET_DOWN}
