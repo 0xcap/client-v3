@@ -59,9 +59,8 @@
 		--orange: rgb(253,167,20);
 		
 		--base-padding: 16px;
-		--semi-padding: 16px;
+		--semi-padding: 8px;
 		--base-radius: 4px;
-		--container-width: 2100px;
 
 		--chart-resolution-height: 40px;
 		--chart-height: 440px;

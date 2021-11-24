@@ -4,7 +4,7 @@
 
 	import { SPINNER_ICON } from '../lib/icons'
 
-	import { pools, allowances, prices } from '../lib/stores'
+	import { pools, allowances, prices, address } from '../lib/stores'
 
 	import { getAllowance, collectPoolReward, approveCurrency, getPoolInfo } from '../lib/methods'
 
@@ -180,6 +180,8 @@
 				<div class='column column-tvl'>
 					{#if poolInfo.tvl}
 						{formatToDisplay(poolInfo.tvl)}
+					{:else if !$address}
+						--
 					{:else}
 						<div class='loading-icon'>{@html SPINNER_ICON}</div>
 					{/if}
