@@ -64,22 +64,34 @@
 		--container-width: 2100px;
 
 		--chart-resolution-height: 40px;
-		--chart-height: 400px;
+		--chart-height: 440px;
 		--header-height: 60px;
 		--ticker-height: 60px;
 		--grid-gap: 1px;
 
 	}
 
+	@media (max-height: 800px) {
+	  :global(:root) {
+	    --chart-height: 400px;
+	  }
+	}
+
 	@media (max-height: 700px) {
 	  :global(:root) {
-	    --chart-height: 330px;
+	    --chart-height: 320px;
 	  }
 	}
 
 	@media (max-height: 600px) {
 	  :global(:root) {
-	    --chart-height: 280px;
+	    --chart-height: 240px;
+	  }
+	}
+
+	@media (max-height: 500px) {
+	  :global(:root) {
+	    --chart-height: 180px;
 	  }
 	}
 
