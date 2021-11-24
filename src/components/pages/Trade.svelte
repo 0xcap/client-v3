@@ -41,7 +41,6 @@
 		grid-gap: var(--grid-gap);
 		grid-auto-flow: row;
 		grid-template-rows: var(--ticker-height) var(--chart-resolution-height) var(--chart-height) auto;
-		overflow-y: scroll;
 	}
 
 	.account {
