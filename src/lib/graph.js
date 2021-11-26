@@ -5,7 +5,7 @@ import { ADDRESS_ZERO } from './constants'
 import { getContract } from './contracts'
 import { getOrders, getPositions } from './methods'
 
-import { formatUnits, formatTrades, formatOrders, formatPositions } from './utils'
+import { formatUnits, formatTrades, formatOrders, formatPositions, setActiveProducts } from './utils'
 import { history, orders, positions, address } from './stores'
 
 const graph_url = 'https://api.thegraph.com/subgraphs/name/0xcap/cap3';
@@ -215,6 +215,7 @@ export async function getUserPositions() {
 	}
 
 	positions.set(unique_positions);
+	setActiveProducts();
 
 }
 

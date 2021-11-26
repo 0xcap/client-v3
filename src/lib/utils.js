@@ -14,7 +14,7 @@ import { hydrateData } from './data'
 import { getProduct } from './methods'
 import { parseErrorToString } from './errors'
 
-import { component, currentPage, activeModal, toast, chainId } from './stores'
+import { component, currentPage, activeModal, toast, chainId, activeProducts, productId, positions } from './stores'
 
 // Price title
 export function setTitle(product, price) {
@@ -74,6 +74,27 @@ export function displayPricePercentChange(last, initial) {
 	}
 	string += formatToDisplay(diff*100, 2, true) || '';
 	return string;
+}
+
+// Active products
+export function setActiveProducts() {
+	// Products that aren't in positions or selected
+	const _productId = get(productId);
+	const _positions = get(positions);
+	let positionProducts = {};
+	for (const p of _positions) {
+		positionProducts[p.productId] = true;
+	}
+	activeProducts.update((x) => {
+		for (const p in PRODUCT_LOGOS) {
+			if (!positionProducts[p] && p != _productId && p != 'ETH-USD') {
+				delete x[p];
+			} else {
+				x[p] = true;
+			}
+		}
+		return x;
+	});
 }
 
 // Leverage cache

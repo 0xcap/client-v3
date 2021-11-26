@@ -5,7 +5,7 @@ import { monitorTx } from './monitor'
 
 import { getContract } from './contracts'
 import { loadCandles, loadPositionLines, applyWatermark } from './chart'
-import { formatUnits, formatProduct, formatPositions, parseUnits, getChainData, hideModal, showToast, getCachedLeverage, toBytes32 } from './utils'
+import { formatUnits, formatProduct, formatPositions, parseUnits, getChainData, hideModal, showToast, getCachedLeverage, toBytes32, setActiveProducts } from './utils'
 
 import * as Stores from './stores'
 
@@ -51,6 +51,8 @@ export async function selectProduct(productId) {
 	} else {
 		Stores.leverage.set(product.maxLeverage);
 	}
+
+	setActiveProducts();
 
 	// Chart
 	await loadCandles();

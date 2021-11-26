@@ -24,8 +24,7 @@
 		border-bottom: 1px solid var(--jet);
 	}
 
-	.hero-inner {
-		
+	.hero-inner {		
 		display: grid;
 		grid-auto-flow: row;
 		grid-gap: 24px;
