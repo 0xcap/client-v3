@@ -2,7 +2,7 @@
 
 import { get } from 'svelte/store'
 
-import { prices, prices24h, productId } from './stores'
+import { prices, prices24h, productId, activeProducts } from './stores'
 
 import { onNewPrice } from './chart'
 
@@ -11,7 +11,9 @@ import { setTitle, shortSymbol, showToast, hideToast } from './utils'
 let ws;
 let lastTimestamp = {};
 let h;
-
+let subscribedProducts = {
+	'ETH-USD': true
+};
 
 function heartbeat() {
 	clearTimeout(h);
@@ -20,6 +22,54 @@ function heartbeat() {
 		if (ws) ws.close(1000,"");
 		initWebsocket();
 	}, 15 * 1000);
+}
+
+setInterval(() => {
+	// resubscribe if there is a diff between activeProducts and subscribedProducts
+	let _activeProducts = get(activeProducts);
+	// console.log('ap', _activeProducts, subscribedProducts);
+	let diff = false;
+	for (const p in _activeProducts) {
+		if (!subscribedProducts[p]) {
+			diff = true;
+			break;
+		}
+	}
+	for (const p in subscribedProducts) {
+		if (!_activeProducts[p]) {
+			diff = true;
+			break;
+		}
+	}
+	if (diff) {
+		subscribedProducts = JSON.parse(JSON.stringify(_activeProducts));
+		subscribeToProducts();
+	}
+}, 1000);
+
+function subscribeToProducts() {
+
+	let _activeProducts = get(activeProducts);
+
+	// console.log('subscribeToProducts', _activeProducts);
+
+	ws.send(JSON.stringify({
+	    "type": "unsubscribe",
+	    "channels": [
+	    	"heartbeat",
+	    	"ticker"
+	    ]
+	}));
+
+	ws.send(JSON.stringify({
+	    "type": "subscribe",
+	    "product_ids": Object.keys(_activeProducts),
+	    "channels": [
+	    	"heartbeat",
+	    	"ticker"
+	    ]
+	}));
+
 }
 
 export function initWebsocket() {
@@ -62,14 +112,7 @@ export function initWebsocket() {
 
 		heartbeat();
 
-		ws.send(JSON.stringify({
-		    "type": "subscribe",
-		    "product_ids": ['BTC-USD', 'ETH-USD'],
-		    "channels": [
-		    	"heartbeat",
-		    	"ticker"
-		    ]
-		}));
+		subscribeToProducts();
 
 	}
 

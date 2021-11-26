@@ -14,11 +14,12 @@
 		const result = await approveCurrency('cap', 'capPool');
 	}
 
-	async function getAllowances() {
+	async function getAllowances(cp) {
+		if (!cp || !cp.supply) return;
 		await getAllowance('cap', 'capPool');
 	}
 
-	$: getAllowances();
+	$: getAllowances($capPool);
 
 	let poolIsLoading = false;
 

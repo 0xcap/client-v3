@@ -179,7 +179,10 @@
 				<div class='column column-apr'></div>
 				<div class='column column-tvl'>
 					{#if poolInfo.tvl}
-						{formatToDisplay(poolInfo.tvl)}
+						{formatToDisplay(poolInfo.tvl)} 
+						{#if _currencyLabel == 'weth'}
+						<span class='dollar-amount'>(${formatToDisplay($prices['ETH-USD'] * poolInfo.tvl || 0)})</span>
+						{/if}
 					{:else if !$address}
 						--
 					{:else}

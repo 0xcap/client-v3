@@ -73,6 +73,7 @@ export const enhancedPositions = derived([orders, positions], ([$orders, $positi
 }, []);
 
 // Prices
+export const activeProducts = writable({'ETH-USD': true});
 export const prices = writable({});
 export const prices24h = writable({});
 
