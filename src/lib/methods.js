@@ -207,12 +207,12 @@ export async function getCapPoolShare(currencyLabel) {
 
 }
 
-export async function getUserPoolBalance(currencyLabel) {
+export async function getUserPoolBalance(currencyLabel, isOld) {
 	
 	const address = get(Stores.address);
 	if (!address) return 0;
 
-	const contract = await getContract('pool', false, currencyLabel);
+	const contract = await getContract(isOld ? 'oldpool' : 'pool', false, currencyLabel);
 	if (!contract) return 0;
 
 	// TEST TEST
@@ -310,8 +310,8 @@ export async function getOldPoolInfo(currencyLabel) {
 
 	try {
 		const poolBalance = await getBalanceOf(currencyLabel, contract.address);
-		const userBalance = await getUserPoolBalance(currencyLabel);
-		const claimableReward = await getClaimableReward(currencyLabel);
+		const userBalance = await getUserPoolBalance(currencyLabel, true);
+		const claimableReward = await getClaimableReward(currencyLabel, false, true);
 		const poolShare = await getPoolShare(currencyLabel);
 		
 		const openInterest = formatUnits(await contract.openInterest(), 18);
@@ -374,7 +374,7 @@ export async function withdraw(currencyLabel, amount, isOld) {
 
 	try {
 		let tx = await contract.withdraw(parseUnits(amount, 18));
-		monitorTx(tx.hash, 'pool-withdraw', {currencyLabel});
+		monitorTx(tx.hash, isOld ? 'pool-withdraw-old' : 'pool-withdraw', {currencyLabel});
 		hideModal();
 	} catch(e) {
 		showToast(e);
@@ -390,7 +390,7 @@ export async function collectPoolReward(currencyLabel, isOld) {
 
 	try {
 		let tx = await contract.collectReward();
-		monitorTx(tx.hash, 'pool-collect', {currencyLabel});
+		monitorTx(tx.hash, isOld ? 'pool-collect-old' : 'pool-collect', {currencyLabel});
 	} catch(e) {
 		showToast(e);
 		return e;
