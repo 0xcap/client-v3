@@ -7,7 +7,6 @@ const ERROR_STRINGS = {
 	'User rejected': null,
 	'exceeds balance': "You have insufficient funds to complete this transaction.",
 	'allowance': "You have to approve spending this ERC20 before depositing.",
-	'reverted': "A contract error occurred and execution was reverted.",
 	'!position': 'Position not found.',
 	'!size': "Trade size is too low.",
 	'!currency': "Currency is not supported.",
