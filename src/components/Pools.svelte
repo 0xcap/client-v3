@@ -266,7 +266,7 @@
 			</div>
 
 			<div class='description'>
-				This pool is deprecated. Please transfer your assets to the current pools.<br/>
+				This pool is deprecated. Please collect your rewards and transfer your assets to the current pools.<br/>
 				Open interest: {formatToDisplay(poolInfo.openInterest)} {formatCurrency(_currencyLabel)} / {formatToDisplay(poolInfo.tvl / (poolInfo.utilizationMultiplier/100))} {formatCurrency(_currencyLabel)} ({formatToDisplay(poolInfo.utilization)}% utilization)
 			</div>
 
