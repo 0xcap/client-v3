@@ -72,7 +72,21 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 
 	let abiName = contractName;
 
-	if (contractName.toLowerCase().includes('poolrewards')) {
+	if (contractName.toLowerCase().includes('oldpoolrewards')) {
+		if (_currencyLabel == 'weth') {
+			address = '0x9190338f23bE9024A9F9628E44cd169926fE7795';
+		} else if (_currencyLabel == 'usdc') {
+			address = '0x996DA299Fb8247dbc2ef45299b62B897d89C01D4';
+		}
+		abiName = 'rewards';
+	} else if (contractName.toLowerCase().includes('oldpool')) {
+		if (_currencyLabel == 'weth') {
+			address = '0xB224F2689BC0aFc5b6721a0807d07017D8CDddf8';
+		} else if (_currencyLabel == 'usdc') {
+			address = '0x07B0B00B9008798055071dde6f2d343782b35dC6';
+		}
+		abiName = 'pool';
+	} else if (contractName.toLowerCase().includes('poolrewards')) {
 		address = await router.getPoolRewards(currency);
 		abiName = 'rewards';
 	} else if (contractName.toLowerCase().includes('caprewards')) {
@@ -80,13 +94,6 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 		abiName = 'rewards';
 	} else if (contractName == 'capPool') {
 		address = await router[contractName]();
-		abiName = 'pool';
-	} else if (contractName.toLowerCase().includes('oldpool')) {
-		if (_currencyLabel == 'weth') {
-			address = '0xB224F2689BC0aFc5b6721a0807d07017D8CDddf8';
-		} else if (_currencyLabel == 'usdc') {
-			address = '0x07B0B00B9008798055071dde6f2d343782b35dC6';
-		}
 		abiName = 'pool';
 	} else if (contractName.toLowerCase().includes('pool')) {
 		address = await router.getPool(currency);

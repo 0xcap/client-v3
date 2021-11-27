@@ -32,7 +32,8 @@
 		} else {
 			error = await withdraw(
 				data.currencyLabel,
-				amount
+				amount,
+				data.isOld
 			);
 		}
 		submitIsPending = false;

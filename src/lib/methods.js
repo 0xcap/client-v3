@@ -367,9 +367,9 @@ export async function deposit(currencyLabel, amount) {
 
 }
 
-export async function withdraw(currencyLabel, amount) {
+export async function withdraw(currencyLabel, amount, isOld) {
 	
-	const contract = await getContract('pool', true, currencyLabel);
+	const contract = await getContract(isOld ? 'oldpool' : 'pool', true, currencyLabel);
 	if (!contract) return;
 
 	try {
@@ -383,9 +383,9 @@ export async function withdraw(currencyLabel, amount) {
 
 }
 
-export async function collectPoolReward(currencyLabel) {
+export async function collectPoolReward(currencyLabel, isOld) {
 	
-	const contract = await getContract('poolrewards', true, currencyLabel);
+	const contract = await getContract(isOld ? 'oldpoolrewards' : 'poolrewards', true, currencyLabel);
 	if (!contract) return;
 
 	try {
@@ -503,9 +503,16 @@ export async function collectCAPReward(currencyLabel) {
 
 // Rewards
 
-export async function getClaimableReward(currencyLabel, forCAP) {
+export async function getClaimableReward(currencyLabel, forCAP, isOld) {
 	
-	const contractName = forCAP ? 'caprewards' : 'poolrewards';
+	let contractName = forCAP ? 'caprewards' : 'poolrewards';
+	if (forCAP) {
+		contractName = 'caprewards';
+	} else if (isOld) {
+		contractName = 'oldpoolrewards';
+	} else {
+		contractName = 'poolrewards';
+	}
 	const contract = await getContract(contractName, true, currencyLabel);
 	if (!contract) return;
 
