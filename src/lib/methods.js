@@ -311,7 +311,7 @@ export async function getOldPoolInfo(currencyLabel) {
 	try {
 		const poolBalance = await getBalanceOf(currencyLabel, contract.address);
 		const userBalance = await getUserPoolBalance(currencyLabel, true);
-		const claimableReward = await getClaimableReward(currencyLabel, true);
+		const claimableReward = await getClaimableReward(currencyLabel, false, true);
 		const poolShare = await getPoolShare(currencyLabel);
 		
 		const openInterest = formatUnits(await contract.openInterest(), 18);
