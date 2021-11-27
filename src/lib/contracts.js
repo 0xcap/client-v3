@@ -81,6 +81,13 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 	} else if (contractName == 'capPool') {
 		address = await router[contractName]();
 		abiName = 'pool';
+	} else if (contractName.toLowerCase().includes('oldpool')) {
+		if (_currencyLabel == 'weth') {
+			address = '0xB224F2689BC0aFc5b6721a0807d07017D8CDddf8';
+		} else if (_currencyLabel == 'usdc') {
+			address = '0x07B0B00B9008798055071dde6f2d343782b35dC6';
+		}
+		abiName = 'pool';
 	} else if (contractName.toLowerCase().includes('pool')) {
 		address = await router.getPool(currency);
 		abiName = 'pool';

@@ -30,6 +30,7 @@ export const marginPlusFee = derived([size, leverage, product], ([$size, $levera
 
 // Pools
 export const pools = writable({});
+export const oldPools = writable({});
 export const capPool = writable({});
 
 // Orders
