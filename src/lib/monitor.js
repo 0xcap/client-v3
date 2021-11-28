@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 
 import { provider } from './stores'
 
-import { getAllowance, getPoolInfo, getCapPoolInfo } from './methods'
+import { getAllowance, getPoolInfo, getOldPoolInfo, getCapPoolInfo } from './methods'
 import { getUserOrders, getUserPositions } from './graph'
 import { orders } from './stores'
 import { showToast, formatCurrency } from './utils'
@@ -65,9 +65,15 @@ async function handleTxComplete(type, details) {
 	} else if (type == 'pool-withdraw') {
 		showToast(`Withdrew from ${formatCurrency(details.currencyLabel)} pool.`, 'success');
 		await getPoolInfo(details.currencyLabel);
+	} else if (type == 'pool-withdraw-old') {
+		showToast(`Withdrew from ${formatCurrency(details.currencyLabel)} pool.`, 'success');
+		await getOldPoolInfo(details.currencyLabel);
 	} else if (type == 'pool-collect') {
 		showToast(`Collected rewards from ${formatCurrency(details.currencyLabel)} pool.`, 'success');
 		await getPoolInfo(details.currencyLabel);
+	} else if (type == 'pool-collect-old') {
+		showToast(`Collected rewards from ${formatCurrency(details.currencyLabel)} pool.`, 'success');
+		await getOldPoolInfo(details.currencyLabel);
 	} else if (type == 'cap-deposit') {
 		showToast('Deposited CAP into pool.', 'success');
 		await getCapPoolInfo();
