@@ -1,4 +1,5 @@
 <script>
+	import {_} from "../services/i18n"
 
 	import { CURRENCY_LOGOS } from '../lib/constants'
 
@@ -166,9 +167,9 @@
 
 	<div class='columns'>
 
-		<div class='column column-asset'>Asset</div>
+		<div class='column column-asset'>{$_('page.pool.asset')}</div>
 		<div class='column column-apr'></div>
-		<div class='column column-tvl'>TVL</div>
+		<div class='column column-tvl'>{$_('page.pool.tvl')}</div>
 
 	</div>
 
@@ -190,18 +191,20 @@
     		</div>
     	</div>
 
-    	<div class='description'>Stake your CAP to receive a share of trading fees. There are no restrictions on deposits or withdrawals.</div>
+    	<div class='description'>{$_('page.pool.stakeDesc')}</div>
 
     	<div class='my-share'>
 
     		<div class='row'>
-    			<div class='column column-asset label'>My Share</div>
+    			<div class='column column-asset label'>{$_('page.pool.myShare')}</div>
     			<div class='column column-apr'>{formatToDisplay($capPool.userBalance)} CAP ({formatToDisplay($capPool.supply*1 == 0 ? 0 : 100*$capPool.userBalance/$capPool.supply)}%)</div>
     			<div class='column column-tvl'>
     				{#if $allowances['cap'] && $allowances['cap']['capPool'] * 1 == 0}
-    					<a on:click={() => {_approveCurrency()}}>Approve CAP</a>
+    					<a on:click={() => {_approveCurrency()}}>{$_('page.pool.approve',{values:{currency:"CAP"}})}</a>
     				{:else}
-    					<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: 'cap'})}}>Deposit</a><span class='sep'>|</span><a class:disabled={$capPool.userBalance == 0} data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: 'cap'})}}>Withdraw</a>
+    					<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: 'cap'})}}>{$_('page.pool.deposit')}</a>
+						<span class='sep'>|</span>
+						<a class:disabled={$capPool.userBalance == 0} data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: 'cap'})}}>{$_('page.pool.withdraw')}</a>
     				{/if}
     			</div>
     		</div>
@@ -209,8 +212,8 @@
     		{#each Object.entries($capPool.claimableRewards || {}) as [_currencyLabel, reward]}
 
     			<div class='row'>
-    				<div class='column column-asset label'>My {formatCurrency(_currencyLabel)} Rewards
-    					<div class='sub-label'>Receives <strong>{formatToDisplay($capPool.poolShares[_currencyLabel])}%</strong> of fees</div>
+    				<div class='column column-asset label'> {$_("page.pool.stakeRewards", {values:{"currency":formatCurrency(_currencyLabel)}})}
+    					<div class='sub-label'>{@html $_('page.pool.receives',{values:{"fee": formatToDisplay($capPool.poolShares[_currencyLabel])}})}</div>
     				</div>
     				<div class='column column-apr'>
     					{formatToDisplay(reward)} {formatCurrency(_currencyLabel)} 
@@ -219,7 +222,7 @@
     					{/if}
     				</div>
     				<div class='column column-tvl'>
-    					<a class:disabled={reward == 0} on:click={() => {collectCAPReward(_currencyLabel)}}>Collect</a>
+    					<a class:disabled={reward == 0} on:click={() => {collectCAPReward(_currencyLabel)}}>{$_("page.pool.collect")}</a>
     				</div>
     			</div>
 
@@ -230,7 +233,7 @@
     </div>
 
     <div class='note'>
-    	<a target='_blank' href='https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x43044f861ec040db59a7e324c40507addb673142'>Buy CAP (Ethereum L1) {@html EXTERNAL_ICON}</a><br/><a target='_blank' class='button' href='https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x031d35296154279dc1984dcd93e392b1f946737b'>Buy CAP (Arbitrum L2) {@html EXTERNAL_ICON}</a>
+    	<a target='_blank' href='https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x43044f861ec040db59a7e324c40507addb673142'>{$_('page.pool.buyCapL1')} {@html EXTERNAL_ICON}</a><br/><a target='_blank' class='button' href='https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x031d35296154279dc1984dcd93e392b1f946737b'>{$_('page.pool.buyCapL2')} {@html EXTERNAL_ICON}</a>
     </div>
 
 </div>

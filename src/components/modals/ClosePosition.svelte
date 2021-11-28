@@ -1,4 +1,5 @@
 <script>
+	import { _ } from '../../services/i18n';
 
 	import { submitCloseOrder, getProduct } from '../../lib/methods'
 	
@@ -102,5 +103,5 @@
 
 <Modal title='Close'>
 	<DataList data={rows} bind:value={size} onSubmit={_submitOrder} />
-	<Button wrap={true} isLoading={!canSubmit || submitIsPending} onClick={_submitOrder} label='Close Position' />
+	<Button wrap={true} isLoading={!canSubmit || submitIsPending} onClick={_submitOrder} label='{$_('p.close')}' />
 </Modal>

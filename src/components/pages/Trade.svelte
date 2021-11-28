@@ -1,4 +1,5 @@
 <script>
+	import { _ } from '../../services/i18n';
 
 	import Ticker from '../Ticker.svelte'
 	import ChartResolution from '../ChartResolution.svelte'
@@ -121,8 +122,8 @@
 		<div class='account'>
 
 			<div class='account-nav'>
-				<a class:active={panel == 'positions'} on:click={() => {selectPanel('positions')}}>Positions</a>
-				<a class:active={panel == 'history'} on:click={() => {selectPanel('history')}}>History</a>
+				<a class:active={panel == 'positions'} on:click={() => {selectPanel('positions')}}>{$_('comm.positions')}</a>
+				<a class:active={panel == 'history'} on:click={() => {selectPanel('history')}}>{$_('comm.history')}</a>
 			</div>
 
 			<div class='account-list'>

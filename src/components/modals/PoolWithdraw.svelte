@@ -1,4 +1,5 @@
 <script>
+	import { _ } from '../../services/i18n';
 
 	import { onMount } from 'svelte'
 
@@ -46,7 +47,7 @@
 	$: rows = [
 		{
 			type: 'input',
-			label: 'Amount (' + formatCurrency(data.currencyLabel) + ')',
+			label: $_('page.pool.amount')+' (' + formatCurrency(data.currencyLabel) + ')',
 			onKeyUp: calculateShare
 		}
 	];
@@ -65,7 +66,7 @@
 <Modal>
 	<DataList data={rows} bind:value={amount} onSubmit={_submit} />
 	{#if data.withdrawFee}
-		<div class='info'>{data.withdrawFee}% is retained and awarded to the rest of the pool.</div>
+		<div class='info'> {$_('page.pool.withdrawNote',{values:{"fee":data.withdrawFee}})}</div>
 	{/if}
-	<Button wrap={true} isLoading={!amount || submitIsPending} onClick={_submit} label={`Withdraw from ${formatCurrency(data.currencyLabel)} pool`} />
+	<Button wrap={true} isLoading={!amount || submitIsPending} onClick={_submit} label={$_('page.pool.btnWithdraw',{values:{"currency":formatCurrency(data.currencyLabel)}})}/>
 </Modal>

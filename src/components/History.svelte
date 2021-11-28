@@ -1,4 +1,5 @@
 <script>
+	import {_} from "../services/i18n"
 
 	import { onMount } from 'svelte'
 
@@ -116,12 +117,11 @@
 <div class='history'>
 
 	<div class='columns'>
-
-		<div class='column column-product'>Product</div>
-		<div class='column column-price'>Close Price</div>
-		<div class='column column-size'>Size</div>
-		<div class='column column-leverage'>Leverage</div>
-		<div class='column column-pnl'>P/L</div>
+		<div class='column column-product'>{$_('p.prod')}</div>
+		<div class='column column-price'>{$_('p.price')}</div>
+		<div class='column column-size'>{$_('p.size')}</div> 
+		<div class='column column-leverage'>{$_('p.leverage')}</div>
+		<div class='column column-pnl'>{$_('p.PL2')}</div>
 
 	</div>
 
@@ -133,7 +133,7 @@
 			</div>
 		{:else}
 			{#if $history.length == 0}
-				<div class='empty'>No trades to show.</div>
+				<div class='empty'>{$_('p.noTrades')}</div>
 			{:else}
 
 				{#each $history as trade}

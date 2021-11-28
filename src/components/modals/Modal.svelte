@@ -1,4 +1,5 @@
 <script>
+	import { _ } from '../../services/i18n';
 
 	import { hideModal } from '../../lib/utils'
 
@@ -79,7 +80,7 @@
 		{#if showHeader}
 		<div class='modal-header'>
 			<div class='modal-title'>{title}</div>
-			<span class='done-button' on:click={hideModal}>Done</span>
+			<span class='done-button' on:click={hideModal}>{$_('comm.done')}</span>
 		</div>
 		{/if}
 

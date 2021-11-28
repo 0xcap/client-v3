@@ -1,4 +1,5 @@
 <script>
+	import { _ } from '../../services/i18n';
 
 	import { onMount } from 'svelte'
 
@@ -31,54 +32,53 @@
 		const interest = await getInterest(data);
 
 		const liquidatingSoon = data.isLong ? _prices[data.productId] <= liquidationPrice : _prices[data.productId] >= liquidationPrice;
-
 		rows = [
 			{
-				label: 'Date',
+				label: $_('p.date'),
 				value: new Date(data.timestamp * 1000).toLocaleString()
 			},
 			{
-				label: 'Product',
+				label: $_('p.prod'),
 				value: data.product
 			},
 			{
-				label: 'Direction',
-				value: data.isLong ? 'Long' : 'Short'
+				label: $_('p.dir'),
+				value: data.isLong ? $_('p.long'): $_('p.short')
 			},
 			{
-				label: 'Execution Price',
-				value: data.price * 1 > 0 ? formatToDisplay(data.price) : 'Settling'
+				label: $_('p.pexec'),
+				value: data.price * 1 > 0 ? formatToDisplay(data.price) : $_('p.settling')
 			},
 			{
-				label: 'Current Price',
+				label: $_('p.pcurr'),
 				value: formatToDisplay(_prices[data.productId])
 			},
 			{
-				label: 'Size',
+				label: $_('p.size'),
 				value: `${formatToDisplay(data.size, 0, true)} ${formatCurrency(data.currencyLabel)}`,
 			},
 			{
-				label: 'Margin',
+				label: $_('p.margin'),
 				value: `${formatToDisplay(data.margin, 0, true)} ${formatCurrency(data.currencyLabel)}`
 			},
 			{
-				label: 'Leverage',
+				label: $_('p.leverage'),
 				value: `${formatToDisplay(data.leverage)}×`
 			}
 		];
 
 		if (data.price * 1 > 0) {
 			rows.push({
-				label: 'Unrealized P/L',
+				label: $_('p.PL'),
 				value: `${formatPnl(upl)} ${formatCurrency(data.currencyLabel)} (${formatPnl(100*upl/data.margin, true)}%)`,
 				hasError: liquidatingSoon
 			},
 			{
-				label: 'Interest',
+				label: $_('p.INT'),
 				value: interest ? `${formatToDisplay(interest)}  ${formatCurrency(data.currencyLabel)}` : '0'
 			},
 			{
-				label: 'Liquidation Price',
+				label: $_('p.LIQP'),
 				value: formatToDisplay(liquidationPrice),
 				hasError: liquidatingSoon
 			});
@@ -99,16 +99,16 @@
 	}
 </style>
 
-<Modal title='Position Details' showHeader={true}>
+<Modal title={$_('p.detailTitle')} showHeader={true}>
 	{#if data.isSettling}
 		<div class='status'>
-			Status: Settling. <a on:click={_cancelOrder}>Cancel Order</a>
+			Status: {$_('p.status1')} <a on:click={_cancelOrder}>{$_("p.cancel1")}</a>
 		</div>
 	{/if}
 
 	{#if data.isClosing}
 		<div class='status'>
-			Status: Closing. <a on:click={_cancelOrder}>Cancel Close Order</a>
+			Status: {$_('p.status2')} <a on:click={_cancelOrder}>{$_("p.cancel2")}</a>
 		</div>
 	{/if}
 	<DataList data={rows} />

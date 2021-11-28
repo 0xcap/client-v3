@@ -1,4 +1,5 @@
 <script>
+	import {_} from "../services/i18n"
 
 	import { onMount } from 'svelte'
 
@@ -191,7 +192,7 @@
 
 	<div class='header'>
 
-		<div class='title'>Place Order</div>
+		<div class='title'>{$_('page.order.title')}</div>
 		<div class='pills'>
 			<div class='pill' on:click={() => {if ($address) {showModal('Currencies')}}} data-intercept="true">{formatCurrency($currencyLabel)}</div>
 			<div class='pill' on:click={() => {showModal('Leverage')}} data-intercept="true">{formatToDisplay($leverage)}×</div>
@@ -210,42 +211,42 @@
 		{#if $currencyLabel != 'weth' && $allowances[$currencyLabel] && $allowances[$currencyLabel]['trading'] * 1 == 0}
 		<Button label={`Approve ${formatCurrency($currencyLabel)}`} onClick={() => {_approveCurrency()}} />
 		{:else}
-		<Button isRed={true} isLoading={$isSubmittingShort} label='Short' onClick={() => {_submitNewPosition(false)}} /> <Button isLoading={$isSubmittingLong} label='Long' onClick={() => {_submitNewPosition(true)}} />
+		<Button isRed={true} isLoading={$isSubmittingShort} label={$_('p.short')} onClick={() => {_submitNewPosition(false)}} /> <Button isLoading={$isSubmittingLong} label={$_('p.long')} onClick={() => {_submitNewPosition(true)}} />
 		{/if}
 	</div>
 
 	<div class='details'>
 		{#if $margin * 1 > 0}
 		<div class='row'>
-			<div class='detail-label'>Product</div>
+			<div class='detail-label'>{$_('p.prod')}</div>
 			<div class='detail-value'>{$product.symbol}</div>
 		</div>
 		{#if sizeInUSD}
 		<div class='row'>
-			<div class='detail-label'>Size in USD</div>
+			<div class='detail-label'>{$_('p.sizeUSD')}</div>
 			<div class='detail-value'>${formatToDisplay(sizeInUSD, 2)}</div>
 		</div>
 		{/if}
 		<div class='row'>
-			<div class='detail-label'>Margin</div>
+			<div class='detail-label'>{$_('p.margin')}</div>
 			<div class='detail-value'>{formatToDisplay($marginPlusFee || 0)} {formatCurrency($currencyLabel)}</div>
 		</div>
 		{#if $product.fee}
 		<div class='row'>
-			<div class='detail-label'>Fee</div>
+			<div class='detail-label'>{$_('p.fee')}</div>
 			<div class='detail-value'>{$product.fee}%</div>
 		</div>
 		{/if}
 		{:else}
 		<div class='row'>
-			<div class='detail-label'>Buying Power</div>
+			<div class='detail-label'>{$_('page.order.power')}</div>
 			<div class='detail-value'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
 		</div>
 		{/if}
 	</div>
 
 	{#if available * 1 == 0}
-	<div class='note'><a href='https://docs.cap.finance/setting-up-your-wallet' target='_blank'>Bridge funds</a> to Arbitrum to start trading.</div>
+	<div class='note'>{@html $_('page.order.note')}</div>
 	{/if}
 	
 
