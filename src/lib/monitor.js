@@ -40,7 +40,7 @@ export async function monitorOracleResponse() {
 		} else {
 			requests = 0;
 		}
-	}, 5000);
+	}, 2000);
 }
 
 async function handleTxComplete(type, details) {
