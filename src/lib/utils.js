@@ -58,7 +58,7 @@ export function formatToDisplay(amount, maxPrecision, fixPrecision) {
 	} else if (amount * 1 >= 100 || amount * 1 <= -100) {
 		return (amount * 1).toFixed(2);
 	} else if (amount * 1 >= 1 || amount * 1 <= -1) {
-		return (amount * 1).toFixed(Math.min(maxPrecision,3));
+		return (amount * 1).toFixed(Math.min(maxPrecision,2));
 	} else if (amount * 1 >= 0.1 || amount * 1 <= -0.1) {
 		return (amount * 1).toFixed(Math.min(maxPrecision,5));
 	} else {

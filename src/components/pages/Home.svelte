@@ -34,7 +34,7 @@
 	.main-title {
 		color: var(--green);
 		font-weight: 700;
-		font-size: 160%;
+		font-size: 200%;
 	}
 
 	.tagline {
@@ -122,7 +122,7 @@
 
 				<div class='main-title'>Cap</div>
 					
-				<div class='tagline'>Decentralized trading protocol.</div>
+				<div class='tagline'>Decentralized Trading Protocol</div>
 				
 				<div class='button-wrap'>
 					<a class='button' href='#/trade'>Trade</a>
@@ -144,18 +144,18 @@
 				<div class='benefits-title'><a href='/#/trade'>Trade</a></div>
 
 				<div class='item'>
-					<div class='title'>Fast</div>
-					<div class='description'>Trades are executed and confirmed in seconds.</div>
-				</div>
-
-				<div class='item'>
 					<div class='title'>Permissionless</div>
 					<div class='description'>Trade directly from your wallet, no account needed.</div>
 				</div>
 
 				<div class='item'>
+					<div class='title'>Fast</div>
+					<div class='description'>Trades are executed and settled in seconds.</div>
+				</div>
+
+				<div class='item'>
 					<div class='title'>Leverage</div>
-					<div class='description'>Adjust leverage from 1x to 50x on each trade.</div>
+					<div class='description'>Adjust leverage from none to 50x on each trade.</div>
 				</div>
 
 			</div>
@@ -166,12 +166,12 @@
 
 				<div class='item'>
 					<div class='title'>Liquidity</div>
-					<div class='description'>Pool funds to back trader profits and receive their losses.</div>
+					<div class='description'>Pools pay out trader profits and in exchange receive their losses.</div>
 				</div>
 
 				<div class='item'>
 					<div class='title'>Rewards</div>
-					<div class='description'>Get fee rewards directly in ETH and USDC, not inflation tokens.</div>
+					<div class='description'>Get fee rewards directly in ETH and USDC.</div>
 				</div>
 
 				<div class='item'>
