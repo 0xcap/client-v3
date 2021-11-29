@@ -1,5 +1,7 @@
 import { get } from 'svelte/store'
 
+import Datafeed from './datafeed.js'
+
 import { product, positions, chartResolution, chartLoading } from './stores'
 
 let candles = []; // current candle set
@@ -23,109 +25,151 @@ const lookbacks = {
 	86400: 24 * 12 * 24 * 60 * 60 * 1000,
 };
 
-let sidebarWidth = 300;
+let chartWidget;
+
+const green_color = "#1FF273";
+const red_color = "#FF342D";
+const light_gray = "#858589";
+
+const watermarkColor = 'rgba(118, 123, 133, 0.15)';
+
+const originalGridColor = '#2b2b2d';
+const gridColor = originalGridColor;
 
 export function initChart() {
 
 	let script = document.createElement("script");
-	script.setAttribute("src", "https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js");
+	script.setAttribute("src", "/charting_library/charting_library.standalone.js");
 	document.body.appendChild(script);
 
 	script.addEventListener("load", scriptLoaded, false);
 
 	async function scriptLoaded() {
 
-		let chartElem = document.getElementById('chart');
-		let tradingRowElem = document.getElementById('trade');
+		const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
-		// mobile
-		if (tradingRowElem.offsetWidth <= 600) sidebarWidth = 0;
-		
-		let chartDivWidth = tradingRowElem.offsetWidth - sidebarWidth;
-		let chartDivHeight = chartElem.offsetHeight;
+		const selected_theme = localStorage.getItem('theme');
 
-		chart = LightweightCharts.createChart(chartElem, { width: chartDivWidth, height: chartDivHeight });
+		const widgetOptions = {
+			symbol: 'BTC-USD',
+			datafeed: Datafeed,
+			interval: get(chartResolution),
+			container_id: 'chart',
+			library_path: '/charting_library/',
+			locale: 'en',
+			disabled_features: [
+				"use_localstorage_for_settings", 
+				"header_symbol_search", 
+				"symbol_search_hot_key", 
+				"compare_symbol", 
+				"border_around_the_chart", 
+				"symbol_info", 
+				"header_compare",
+				"header_interval_dialog_button",
+				"show_interval_dialog_on_key_press", 
+				"study_templates", 
+				"timeframes_toolbar", 
+				"legend_context_menu", 
+				"display_market_status", 
+				"create_volume_indicator_by_default",
+				"header_fullscreen_button",
+				"header_settings",
+				"countdown"
+			],
+			enabled_features: [
+				"left_toolbar", 
+				"side_toolbar_in_fullscreen_mode", 
+				"keep_left_toolbar_visible_on_small_screens"
+			],
+			client_id: 'cap',
+			fullscreen: false,
+			autosize: true,
+			allow_symbol_change: false,
+			custom_css_url: 'chart.css',
+			theme: 'dark',
+			overrides: {
+				'symbolWatermarkProperties.color': watermarkColor,
 
-		window.onresize = () => {
-			chartDivWidth = tradingRowElem.offsetWidth - sidebarWidth;
-			chartDivHeight = chartElem.offsetHeight;
-			// console.log('px', window.devicePixelRatio, window.screen.availWidth, document.documentElement.clientWidth);
-			// console.log('chartDivWidth', chartDivWidth, chartDivHeight);
-			chart.resize(chartDivWidth, chartDivHeight);
+				'originalGridColor': originalGridColor,
+
+				'scalesProperties.showRightScale': true,
+				'scalesProperties.showLeftScale': false,
+				'scalesProperties.textColor': '#fff',
+				'scalesProperties.lineColor': 'transparent',
+				'scalesProperties.backgroundColor': '#1b1b1d',
+				
+				'paneProperties.background': '#1b1b1d',
+				'paneProperties.vertGridProperties.color': gridColor,
+				'paneProperties.horzGridProperties.color': gridColor,
+				'paneProperties.crossHairProperties.color': '#ccc',
+				'paneProperties.crossHairProperties.style': 1,
+				'paneProperties.leftAxisProperties.autoScale': true,
+				'paneProperties.rightAxisProperties.autoScale': true,
+
+				'mainSeriesProperties.style': 1,
+				'mainSeriesProperties.showCountdown': true,
+				'mainSeriesProperties.showPriceLine': true,
+				'mainSeriesProperties.priceLineColor': light_gray,
+				'mainSeriesProperties.priceAxisProperties.autoScale': true,
+				'mainSeriesProperties.rightAxisProperties.autoScale': true,
+
+				'mainSeriesProperties.candleStyle.upColor': green_color,
+				'mainSeriesProperties.candleStyle.downColor': red_color,
+				'mainSeriesProperties.candleStyle.borderUpColor': green_color,
+				'mainSeriesProperties.candleStyle.borderDownColor': red_color,
+				'mainSeriesProperties.candleStyle.wickUpColor': light_gray,
+				'mainSeriesProperties.candleStyle.wickDownColor': light_gray,
+
+				'mainSeriesProperties.hollowCandleStyle.upColor': green_color,
+				'mainSeriesProperties.hollowCandleStyle.downColor': red_color,
+				'mainSeriesProperties.hollowCandleStyle.borderUpColor': green_color,
+				'mainSeriesProperties.hollowCandleStyle.borderDownColor': red_color,
+				'mainSeriesProperties.hollowCandleStyle.wickColor': light_gray,
+
+				'mainSeriesProperties.haStyle.upColor': green_color,
+				'mainSeriesProperties.haStyle.downColor': red_color,
+				'mainSeriesProperties.haStyle.borderUpColor': green_color,
+				'mainSeriesProperties.haStyle.borderDownColor': red_color,
+				'mainSeriesProperties.haStyle.wickColor': light_gray,
+
+				'mainSeriesProperties.barStyle.upColor': green_color,
+				'mainSeriesProperties.barStyle.downColor': red_color,
+
+				'mainSeriesProperties.lineStyle.color': "#ff5722",
+				'mainSeriesProperties.lineStyle.linewidth': 2,
+
+				'mainSeriesProperties.areaStyle.color1': "#2b344b",
+				'mainSeriesProperties.areaStyle.color2': "#2b344b",
+				'mainSeriesProperties.areaStyle.lineColor': "#ff5722",
+				'mainSeriesProperties.areaStyle.linewidth': 2
+			},
+			timezone
 		};
 
-		chart.applyOptions({
-			layout: {
-			    background: {
-			        type: LightweightCharts.ColorType.Solid,
-			        color: '#1A1A1A',
-			    },
-			    textColor: '#707070'
-			},
-			grid: {
-		        vertLines: {
-		            color: '#292929',
-		            style: 1,
-		            visible: true,
-		        },
-		        horzLines: {
-		            color: '#292929',
-		            style: 1,
-		            visible: true,
-		        },
-		    },
-			timeScale: {
-				timeVisible: true
-			},
-			crosshair: {
-				mode: 2,
-				vertLine: {
-					width: 0.5,
-					labelBackgroundColor: '#3D3D3D'
-				},
-				horzLine: {
-					width: 0.5,
-					labelBackgroundColor: '#3D3D3D'
-				}
+		let mouse_chart_price = 0, mouseClickTimeout = null, lastCrossHair;
+
+		if (!window.TradingView) return;
+
+		const widget = window.tvWidget = new window.TradingView.widget(widgetOptions);
+
+		console.log('window.TradingView', window.TradingView, window.tvWidget);
+
+		widget.onChartReady(() => {
+
+			// Chart iframe theme
+			let iframe = document.querySelector('#chart iframe');
+			let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+			if (innerDoc) {
+				innerDoc.body.className = '';
 			}
+
+			chartWidget = widget.chart();
+			
+			chartWidget.onIntervalChanged().subscribe(null, function(interval, obj) {
+				localStorage.setItem('chartResolution', interval);
+			});
+			
 		});
-
-		const resolution = get(chartResolution);
-
-		candlestickSeries = chart.addCandlestickSeries({
-			upColor: '#00C805',
-		    downColor: '#FF5000',
-		    wickUpColor: '#00C805',
-		    wickDownColor: '#FF5000',
-		});
-
-		async function onVisibleLogicalRangeChanged(newVisibleLogicalRange) {
-			//console.log('lvc', newVisibleLogicalRange);
-		    // returns bars info in current visible range
-		    const barsInfo = candlestickSeries.barsInLogicalRange(newVisibleLogicalRange);
-		    //console.log(barsInfo);
-		    if (barsInfo !== null && barsInfo.barsBefore < 5) {
-	            // try to load additional historical data and prepend it to the series data
-	            // use setData with additional data prepended
-	            if (isLoadingCandles) return;
-	            // console.log('load additional data to the left');
-	            isLoadingCandles = true;
-	            await loadCandles(resolution, start - lookbacks[resolution], end - lookbacks[resolution], true);
-	            isLoadingCandles = false;
-	        }
-		}
-
-		function onVisibleTimeRangeChanged(newVisibleTimeRange) {
-			//console.log('vc', newVisibleTimeRange);
-		}
-
-		chart.timeScale().subscribeVisibleTimeRangeChange(onVisibleTimeRangeChanged);
-
-		chart.timeScale().subscribeVisibleLogicalRangeChange(onVisibleLogicalRangeChanged);
-
-		loadPositionLines();
-
-		applyWatermark();
 
 	}
 
