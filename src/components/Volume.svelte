@@ -3,7 +3,7 @@
 	import { onMount, onDestroy } from 'svelte'
 	import { getVolume } from '../lib/graph'
 	import { formatToDisplay } from '../lib/utils'
-
+	import { SPINNER_ICON } from '../lib/icons'
 	import { prices } from '../lib/stores'
 
 	let v;
@@ -26,11 +26,14 @@
 		clearInterval(v);
 	});
 
-	let volume;
+	let volume_eth;
+	let volume_usd;
 
 	function calculateVolume(_prices, _volumeETH, _volumeUSD) {
 		// console.log('calculateVolume', _prices, _volumeETH, _volumeUSD);
-		volume = _volumeUSD * 1 + _prices['ETH-USD'] * _volumeETH * 1;
+		if (!_prices['ETH-USD']) return;
+		volume_eth = _volumeUSD * 1 / _prices['ETH-USD'] + _volumeETH * 1;
+		volume_usd = _volumeUSD * 1 + _prices['ETH-USD'] * _volumeETH * 1;
 	}
 
 	$: calculateVolume($prices, volumeETH, volumeUSD);
@@ -38,8 +41,14 @@
 </script>
 
 <style>
+	.loading-icon :global(svg) {
+		height: 16px;
+		fill: none;
+	}
 </style>
 
-{#if volume}
-	${formatToDisplay(volume)}
+{#if volume_eth && volume_usd}
+	{formatToDisplay(volume_eth)} ETH (${formatToDisplay(volume_usd)})
+{:else}
+	<div class='loading-icon'>{@html SPINNER_ICON}</div>
 {/if}

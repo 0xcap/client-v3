@@ -22,7 +22,7 @@
 		overflow-y: auto;
 		right: 0;
 		bottom: 0;
-		background-color: rgb(0,0,0,0.624);
+		background-color: rgb(0,0,0,0.45);
 		z-index: 100;
 		padding: 0 var(--base-padding);
 		outline: 0;
@@ -36,7 +36,7 @@
 
 	.modal {
 		width: 420px;
-		border: 1px solid var(--jet-dim);
+		border: 1px solid var(--rich-black);
 		border-radius: var(--base-radius);
 		background-color: var(--eerie-black);
 		overflow: hidden;
@@ -47,9 +47,8 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 0 var(--base-padding);
-		height: 60px;
-		background-color: var(--jet);
-		border-bottom: 1px solid var(--eerie-black);
+		height: 65px;
+		border-bottom: 1px solid var(--rich-black);
 	}
 
 	.modal-title {
