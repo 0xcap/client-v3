@@ -251,12 +251,12 @@
 			<div class='sep'></div>
 		{/if}
 		<div class='row'>
-			<div class='detail-label'>Balance</div>
-			<div class='detail-value'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
-		</div>
-		<div class='row'>
 			<div class='detail-label'>Buying Power</div>
 			<div class='detail-value'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
+		</div>
+		<div class='row'>
+			<div class='detail-label'>Wallet Balance</div>
+			<div class='detail-value'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
 		</div>
 	</div>
 

@@ -26,13 +26,14 @@
 	let poolIsLoading = {};
 
 	async function reloadPoolInfo(_currencyLabel, isOld) {
-		poolIsLoading[_currencyLabel] = true;
+		const label = isOld ? _currencyLabel + '-old' : _currencyLabel;
+		poolIsLoading[label] = true;
 		if (isOld) {
 			await getOldPoolInfo(_currencyLabel);
 		} else {
-			await getPoolInfo(_currencyLabel);
+			await getPoolInfo(_currencyLabel, true);
 		}
-		poolIsLoading[_currencyLabel] = false;
+		poolIsLoading[label] = false;
 	}
 
 	let poolEntries = [];
@@ -147,7 +148,7 @@
 		pointer-events: none;
 	}
 
-	a.disabled {
+	.loading a, a.disabled {
 		pointer-events: none;
 		color: var(--dim-gray);
 	}
@@ -162,8 +163,13 @@
 		color: #fff;
 	}
 
+	.loading-icon {
+		margin-left: 10px;
+	}
+
 	.loading-icon :global(svg) {
 		height: 24px;
+		margin-bottom: -3px;
 	}
 
 	.dollar-amount {
@@ -198,7 +204,11 @@
 				<div class='column column-asset flex'>
 					<img src={CURRENCY_LOGOS[_currencyLabel]}>
 					{formatCurrency(_currencyLabel)} 
-					<div title='Reload' class='reload' on:click={() => {reloadPoolInfo(_currencyLabel)}}>&#8635;</div>
+					{#if poolIsLoading[_currencyLabel]}
+						<div class='loading-icon'>{@html SPINNER_ICON}</div>
+					{:else}
+						<div title='Reload' class='reload' on:click={() => {reloadPoolInfo(_currencyLabel)}}>&#8635;</div>
+					{/if}
 				</div>
 				<div class='column column-apr'></div>
 				<div class='column column-tvl'>
@@ -229,7 +239,7 @@
 						{#if $allowances[_currencyLabel] && $allowances[_currencyLabel]['pool' + _currencyLabel] * 1 == 0}
 							<a on:click={() => {_approveCurrency(_currencyLabel)}}>Approve {formatCurrency(_currencyLabel)}</a>
 						{:else}
-						<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: _currencyLabel})}}>Deposit</a><span class='sep'>|</span><a class:disabled={poolInfo.userBalance == 0} data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: _currencyLabel, withdrawFee: poolInfo.withdrawFee})}}>Withdraw</a>
+						<a data-intercept="true" class:disabled={!poolInfo.tvl} on:click={() => {showModal('PoolDeposit', {currencyLabel: _currencyLabel})}}>Deposit</a><span class='sep'>|</span><a class:disabled={poolInfo.userBalance == 0} data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: _currencyLabel, withdrawFee: poolInfo.withdrawFee})}}>Withdraw</a>
 						{/if}
 					</div>
 				</div>
@@ -262,7 +272,7 @@
 	    <h5>Please transfer your assets out of these pools as they are no longer receiving revenue.</h5>
 
 		{#each oldPoolEntries as [_currencyLabel, poolInfo]}
-			<div class='pool' class:loading={poolIsLoading[_currencyLabel] || !poolInfo.tvl}>
+			<div class='pool' class:loading={poolIsLoading[_currencyLabel + '-old'] || !poolInfo.tvl}>
 
 				<div class='info'>
 					<div class='column column-asset flex'>

@@ -224,7 +224,7 @@ export async function getUserPoolBalance(currencyLabel, isOld) {
 
 let dataCache = {};
 
-export async function getPoolInfo(currencyLabel) {
+export async function getPoolInfo(currencyLabel, reloading) {
 
 	let info = {
 		tvl: 0,
@@ -241,10 +241,12 @@ export async function getPoolInfo(currencyLabel) {
 
 	const contract = await getContract('pool', false, currencyLabel);
 
-	Stores.pools.update((x) => {
-		x[currencyLabel] = info;
-		return x;
-	});
+	if (!reloading) {
+		Stores.pools.update((x) => {
+			x[currencyLabel] = info;
+			return x;
+		});
+	}
 
 	if (!contract) return;
 
