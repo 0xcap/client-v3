@@ -2,7 +2,7 @@
 import { ethers } from 'ethers'
 import { get } from 'svelte/store'
 
-import { PRODUCT_LOGOS, CHAINDATA } from './constants'
+import { PRODUCTS, CHAINDATA } from './constants'
 
 // Pages
 import Home from '../components/pages/Home.svelte'
@@ -86,7 +86,7 @@ export function setActiveProducts() {
 		positionProducts[p.productId] = true;
 	}
 	activeProducts.update((x) => {
-		for (const p in PRODUCT_LOGOS) {
+		for (const p in PRODUCTS) {
 			if (!positionProducts[p] && p != _productId && p != 'ETH-USD') {
 				delete x[p];
 			} else {
@@ -203,7 +203,8 @@ export function formatProduct(id, product) {
 	return {
 		productId: id,
 		symbol: id,
-		logo: PRODUCT_LOGOS[id],
+		logo: PRODUCTS[id].logo,
+		hours: PRODUCTS[id].hours,
 		maxLeverage: formatUnits(product.maxLeverage),
 		liquidationThreshold: formatUnits(product.liquidationThreshold, 2),
 		fee: formatUnits(product.fee, 4),

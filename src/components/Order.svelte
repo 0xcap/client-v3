@@ -76,7 +76,7 @@
 	async function getSizeInUSD(_currencyLabel, _prices, _size) {
 		if (!_prices || !_currencyLabel || !_size) return 0;
 		if (_currencyLabel == 'weth') {
-			sizeInUSD = _prices[1] * _size;
+			sizeInUSD = _prices['ETH-USD'] * _size;
 		} else if (_currencyLabel == 'usdc') {
 			sizeInUSD = 0;
 		}
@@ -228,10 +228,6 @@
 
 	<div class='details'>
 		{#if $margin * 1 > 0}
-			<div class='row'>
-				<div class='detail-label'>Product</div>
-				<div class='detail-value'>{$product.symbol}</div>
-			</div>
 			{#if sizeInUSD}
 			<div class='row'>
 				<div class='detail-label'>Size in USD</div>
@@ -242,12 +238,6 @@
 				<div class='detail-label'>Margin</div>
 				<div class='detail-value'>{formatToDisplay($marginPlusFee || 0)} {formatCurrency($currencyLabel)}</div>
 			</div>
-			{#if $product.fee}
-			<div class='row'>
-				<div class='detail-label'>Fee</div>
-				<div class='detail-value'>{$product.fee}%</div>
-			</div>
-			{/if}
 			<div class='sep'></div>
 		{/if}
 		<div class='row'>
@@ -257,6 +247,23 @@
 		<div class='row'>
 			<div class='detail-label'>Wallet Balance</div>
 			<div class='detail-value'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
+		</div>
+		<div class='sep'></div>
+		<div class='row'>
+			<div class='detail-label'>Product</div>
+			<div class='detail-value'>{$product.symbol}</div>
+		</div>
+		<div class='row'>
+			<div class='detail-label'>Fee</div>
+			<div class='detail-value'>{$product.fee || 0}%</div>
+		</div>
+		<div class='row'>
+			<div class='detail-label'>Funding</div>
+			<div class='detail-value'>-{formatToDisplay($product.interest/(360*24)) || 0}% / hr</div>
+		</div>
+		<div class='row'>
+			<div class='detail-label'>Trading Hours</div>
+			<div class='detail-value'>{$product.hours}</div>
 		</div>
 	</div>
 
