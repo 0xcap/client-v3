@@ -18,10 +18,10 @@ export async function initEventListeners() {
 	tradingContract.on(tradingContract.filters.PositionUpdated(null, _address), handleEvent);
 	tradingContract.on(tradingContract.filters.ClosePosition(null, _address), handleEvent);
 
-	const oracleContract = await getContract('oracle');
-	if (!oracleContract) return;
+	// const oracleContract = await getContract('oracle');
+	// if (!oracleContract) return;
 	
-	oracleContract.on(oracleContract.filters.SettlementError(), console.log);
+	// oracleContract.on(oracleContract.filters.SettlementError(), console.log);
 }
 
 async function handleEvent() {
