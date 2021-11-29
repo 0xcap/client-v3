@@ -30,19 +30,19 @@ async function handleEvent() {
 
 	// console.log('got event', ev);
 
-	// if (ev.event == 'NewOrder') {
-	// 	await getUserOrders();
-	// }
+	if (ev.event == 'NewOrder') {
+		await getUserOrders();
+	}
 
-	// if (ev.event == 'PositionUpdated') {
-	// 	// From listener only - oracle triggered
-	// 	await getUserOrders();
-	// 	await getUserPositions();
-	// }
+	if (ev.event == 'PositionUpdated') {
+		// From listener only - oracle triggered
+		await getUserOrders();
+		await getUserPositions();
+	}
 
-	// if (ev.event == 'ClosePosition') {
-	// 	// From listener only - oracle triggered
-	// 	await getUserHistory();
-	// }
+	if (ev.event == 'ClosePosition') {
+		// From listener only - oracle triggered
+		await getUserHistory();
+	}
 
 }
