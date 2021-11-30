@@ -47,11 +47,15 @@ export function formatCurrency(_currencyLabel) {
 	if (_currencyLabel.toLowerCase() == 'cap') return 'CAP';
 	return _currencyLabel;
 }
-export function formatToDisplay(amount, maxPrecision, fixPrecision) {
+export function formatToDisplay(amount, maxPrecision, isFixedPrecision) {
 	if (amount == undefined || isNaN(amount)) return '';
 	if (!maxPrecision) maxPrecision = 100;
 
-	if (!fixPrecision && (amount*1 == 0 || amount * 1 >= 1) && (amount * 1).toFixed(3)*1 == Math.round(amount * 1)) return Math.round(amount).toLocaleString();
+	if (isFixedPrecision) {
+		return (amount * 1).toFixed(maxPrecision);
+	}
+
+	if ((amount*1 == 0 || amount * 1 >= 1) && (amount * 1).toFixed(3)*1 == Math.round(amount * 1)) return Math.round(amount).toLocaleString();
 	
 	if (amount * 1 >= 1000 || amount * 1 <= -1000) {
 		return Math.round(amount*1).toLocaleString();
