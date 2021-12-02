@@ -135,17 +135,20 @@ export function calculateLiquidationPrice(params) {
 
 // Toasts
 let timer;
-export function showToast(data, type) {
+export function showToast(data, type, id) {
 	let message = parseErrorToString(data);
 	if (!type) type = 'error';
 	if (!message) return;
-	toast.set({message: message, type});
+	toast.set({message: message, type, id});
 	clearTimeout(timer);
 	timer = setTimeout(() => {hideToast()}, 7*1000);
 }
-export function hideToast() {
-	clearTimeout(timer);
-	toast.set(null);
+export function hideToast(id) {
+	const _toast = get(toast);
+	if (!id || id && _toast && _toast.id == id) {
+		clearTimeout(timer);
+		toast.set(null);
+	}
 }
 
 // Modals

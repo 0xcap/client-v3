@@ -276,7 +276,7 @@
 		</div>
 	</div>
 
-	{#if balance * 1 == 0}
+	{#if $address && balance * 1 == 0}
 	<div class='note'><a href='https://docs.cap.finance/setting-up-your-wallet' target='_blank'>Bridge funds</a> to Arbitrum to start trading.</div>
 	{/if}
 	
