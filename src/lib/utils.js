@@ -2,7 +2,8 @@
 import { ethers } from 'ethers'
 import { get } from 'svelte/store'
 
-import { PRODUCTS, CHAINDATA } from './constants'
+import { CHAINDATA } from './constants'
+import { PRODUCTS } from './products'
 
 // Pages
 import Home from '../components/pages/Home.svelte'

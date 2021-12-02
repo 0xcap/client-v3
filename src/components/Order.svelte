@@ -4,7 +4,7 @@
 
 	import Button from './layout/Button.svelte'
 
-	import { PRODUCTS } from '../lib/constants'
+	import { PRODUCTS } from '../lib/products'
 
 	import { submitOrder, approveCurrency, getBalanceOf } from '../lib/methods'
 

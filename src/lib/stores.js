@@ -1,5 +1,5 @@
 import { writable, derived } from 'svelte/store'
-import { PRODUCTS } from './constants'
+import { PRODUCTS } from './products'
 
 // History
 export const history = writable([]);
