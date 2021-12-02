@@ -4,6 +4,8 @@
 
 	import Button from './layout/Button.svelte'
 
+	import { PRODUCTS } from '../lib/constants'
+
 	import { submitOrder, approveCurrency, getBalanceOf } from '../lib/methods'
 
 	import { showModal, showToast, shortSymbol, getCachedLeverage, formatToDisplay, formatCurrency } from '../lib/utils'
@@ -23,7 +25,7 @@
 		if (!$size) return focusAmount();
 		if (!$address) return showToast('Connect your wallet to trade.');
 
-		if ($size * 1 > PRODUCTS[$currencyLabel].maxLiquidity[$currencyLabel]) return showToast('Order size exceeds maximum allowed on this market.');
+		if ($size * 1 > PRODUCTS[$productId].maxLiquidity[$currencyLabel]) return showToast('Order size exceeds maximum allowed on this market.');
 
 		if (isLong) {
 			isSubmittingLong.set(true);
