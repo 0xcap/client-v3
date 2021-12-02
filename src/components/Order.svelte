@@ -168,6 +168,11 @@
 		padding-top: 0;
 	}
 
+	.product-info {
+		padding-top: var(--base-padding) !important;
+		border-top: 1px solid var(--rich-black);
+	}
+
 	.row {
 		display: flex;
 		align-items: center;
@@ -238,17 +243,19 @@
 				<div class='detail-label'>Margin</div>
 				<div class='detail-value'>{formatToDisplay($marginPlusFee || 0)} {formatCurrency($currencyLabel)}</div>
 			</div>
-			<div class='sep'></div>
+		{:else}
+			<div class='row'>
+				<div class='detail-label'>Buying Power</div>
+				<div class='detail-value'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
+			</div>
+			<div class='row'>
+				<div class='detail-label'>Wallet Balance</div>
+				<div class='detail-value'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
+			</div>
 		{/if}
-		<div class='row'>
-			<div class='detail-label'>Buying Power</div>
-			<div class='detail-value'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
-		</div>
-		<div class='row'>
-			<div class='detail-label'>Wallet Balance</div>
-			<div class='detail-value'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
-		</div>
-		<div class='sep'></div>
+	</div>
+
+	<div class='details product-info'>
 		<div class='row'>
 			<div class='detail-label'>Product</div>
 			<div class='detail-value'>{$product.symbol}</div>
