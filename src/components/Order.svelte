@@ -243,10 +243,12 @@
 				<div class='detail-label'>Margin</div>
 				<div class='detail-value'>{formatToDisplay($marginPlusFee || 0)} {formatCurrency($currencyLabel)}</div>
 			</div>
-			<div class='row'>
-				<div class='detail-label'>Slippage</div>
-				<div class='detail-value'>{formatToDisplay($slippage)}%</div>
-			</div>
+			{#if Math.abs($slippage * 1) > $product.fee * 1}
+				<div class='row'>
+					<div class='detail-label'>Price Impact</div>
+					<div class='detail-value'>{formatToDisplay($slippage)}%</div>
+				</div>
+			{/if}
 			<div class='sep'></div>
 		{/if}
 		<div class='row'>
