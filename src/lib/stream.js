@@ -81,7 +81,6 @@ export function initWebsocket() {
 	setInterval(() => {
 		if (lastMessageReceived < Date.now() - 60 * 1000) {
 			showToast('Price stream is stale. Try refreshing the page.', 'error', 'stream-error');
-			error_last_shown = Date.now();
 		} else {
 			hideToast('stream-error');
 		}
