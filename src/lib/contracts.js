@@ -11,6 +11,8 @@ let ack_network = false;
 
 export async function getContract(contractName, withSigner, _currencyLabel) {
 
+	// console.log('gc', contractName, withSigner, _currencyLabel);
+
 	const _signer = get(Stores.signer);
 
 	if (_currencyLabel) {
@@ -27,7 +29,7 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 	const _chainId = get(Stores.chainId);
 	const _provider = get(Stores.provider);
 
-	//console.log('_chainId', _chainId, _provider);
+	// console.log('_chainId', _chainId, _provider);
 
 	if (!_chainId || !_provider) return;
 
@@ -54,7 +56,7 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 	const currencies = CHAINDATA[_chainId].currencies;
 
 	// Currencies (ERC20)
-	if (!contracts['weth']) {	
+	if (!contracts['weth'] || !contracts['usdc']) {	
 		for (const currencyLabel in currencies) {
 			contracts[currencyLabel] = new ethers.Contract(currencies[currencyLabel], ABIS.erc20, _provider);
 		}
@@ -112,7 +114,7 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 		address = await router[contractName]();
 	}
 		
-	//console.log('contract address', address);
+	// console.log('contract address', abiName, address);
 	
 	const abi = ABIS[abiName];
 

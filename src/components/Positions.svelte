@@ -164,13 +164,6 @@
 
 	}
 
-	.loading-icon :global(svg) {
-		height: 23px;
-		fill: none;
-		margin-right: 6px;
-		margin-bottom: -2px;
-	}
-
 </style>
 
 <div class='positions'>

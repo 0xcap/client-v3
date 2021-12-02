@@ -61,7 +61,7 @@
 			onKeyUp: calculateShare
 		},
 		{
-			label: 'Balance',
+			label: 'Wallet Balance',
 			value: `${formatToDisplay(balance)}`,
 			onclick: setMaxAmount,
 			isEmpty: loading
