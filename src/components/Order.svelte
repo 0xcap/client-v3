@@ -9,7 +9,7 @@
 	import { showModal, showToast, shortSymbol, getCachedLeverage, formatToDisplay, formatCurrency } from '../lib/utils'
 	import { CARET_DOWN } from '../lib/icons'
 
-	import { address, productId, product, currencyLabel, leverage, size, margin, marginPlusFee, isSubmittingShort, isSubmittingLong, prices, allowances } from '../lib/stores'
+	import { address, productId, product, currencyLabel, leverage, size, margin, marginPlusFee, isSubmittingShort, isSubmittingLong, prices, allowances, slippage } from '../lib/stores'
 
 	// functions
 
@@ -19,8 +19,11 @@
 	}
 
 	async function _submitNewPosition(isLong) {
+		
 		if (!$size) return focusAmount();
 		if (!$address) return showToast('Connect your wallet to trade.');
+
+		if ($size * 1 > PRODUCTS[$currencyLabel].maxLiquidity[$currencyLabel]) return showToast('Order size exceeds maximum allowed on this market.');
 
 		if (isLong) {
 			isSubmittingLong.set(true);
@@ -237,6 +240,10 @@
 			<div class='row'>
 				<div class='detail-label'>Margin</div>
 				<div class='detail-value'>{formatToDisplay($marginPlusFee || 0)} {formatCurrency($currencyLabel)}</div>
+			</div>
+			<div class='row'>
+				<div class='detail-label'>Slippage</div>
+				<div class='detail-value'>{formatToDisplay($slippage)}%</div>
 			</div>
 			<div class='sep'></div>
 		{/if}
