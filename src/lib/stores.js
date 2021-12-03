@@ -33,7 +33,7 @@ export const marginPlusFee = derived([size, leverage, product], ([$size, $levera
 	return $size * fee * 1 / 100 + ($size || 0) / $leverage;
 }, 0);
 
-export const slippage = derived([size, productId, prices, currencyLabel], ([$size, $productId, $prices, $currencyLabel]) => {
+export const slippage = derived([size, productId, currencyLabel], ([$size, $productId, $currencyLabel]) => {
 	
 	// console.log('p', $size, $productId, $prices, $currencyLabel);
 

@@ -71,7 +71,8 @@
 			rows.push({
 				label: 'Unrealized P/L',
 				value: `${formatPnl(upl)} ${formatCurrency(data.currencyLabel)} (${formatPnl(100*upl/data.margin, true)}%)`,
-				hasError: liquidatingSoon
+				isPnl: true,
+				rawValue: upl * 1
 			},
 			{
 				label: 'Interest',
