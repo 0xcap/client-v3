@@ -2,23 +2,23 @@ export const PRODUCTS = {
 	'ETH-USD': {
 		hours: '24/7',
 		logo: '/logos/ETH.svg',
-		baseSpread: 0.0005,
+		baseSpread: 0.00025,
 		maxSlippage: 5,
 		slippageExponent: 2.5,
 		maxLiquidity: {
-			weth: 1000,
-			usdc: 2000000
+			weth: 2000,
+			usdc: 3800000
 		}
 	},
 	'BTC-USD': {
 		hours: '24/7',
 		logo: '/logos/BTC.svg',
-		baseSpread: 0.0005,
+		baseSpread: 0.00025,
 		maxSlippage: 5,
 		slippageExponent: 2.5,
 		maxLiquidity: {
-			weth: 1000,
-			usdc: 2000000
+			weth: 2000,
+			usdc: 3800000
 		}
 	}
 };

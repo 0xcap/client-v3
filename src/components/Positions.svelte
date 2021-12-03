@@ -198,7 +198,7 @@
 				<div class='position' on:click={() => {showModal('PositionDetails', position)}} data-intercept="true">
 
 					<div class='column column-product'>{#if position.isLong}<span class='pos'>↑</span>{:else}<span class='neg'>↓</span>{/if} {position.product}</div>
-					<div class='column column-price' class:dim={position.isSettling}>
+					<div class='column column-price' class:dim={!position.price}>
 						{#if !position.price}
 							{$prices[position.productId]}
 						{:else}
