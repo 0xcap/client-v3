@@ -336,9 +336,9 @@ export async function getUPL(position, latestPrice) {
 	if (latestPrice) {
 		const productInfo = await getProduct(position.productId);
 		if (position.isLong) {
-			upl = position.margin * position.leverage * (latestPrice * 1 - position.price * 1) / position.price;
+			upl = position.size * (latestPrice * 1 - position.price * 1) / position.price;
 		} else {
-			upl = position.margin * position.leverage * (position.price * 1 - latestPrice * 1) / position.price;
+			upl = position.size * (position.price * 1 - latestPrice * 1) / position.price;
 		}
 		// Add interest
 		let interest = await getInterest(position);
@@ -355,10 +355,26 @@ export async function getInterest(position) {
 		if (!position.price || !position.timestamp || now < position.timestamp * 1 + 900) {
 			interest = 0;
 		} else {
-			interest = position.margin * position.leverage * ((productInfo.interest * 1 || 0) / 100) * (now - position.timestamp * 1) / (360 * 24 * 3600);
+			interest = position.size * ((productInfo.interest * 1 || 0) / 100) * (now - position.timestamp * 1) / (360 * 24 * 3600);
 		}
 		if (interest < 0) interest = 0;
 		return -1 * interest;
+}
+
+export function getPriceImpact(size, _productId, _currencyLabel) {
+	if (!size || !_productId || !_currencyLabel) return 0;
+	
+	const productParams = PRODUCTS[_productId];
+	const {
+		baseSpread,
+		maxSlippage,
+		slippageExponent,
+		maxLiquidity
+	} = productParams;
+
+	// console.log('l', $size, productParams, $currencyLabel);
+
+	return -1 * (baseSpread * 100 + maxSlippage * (1 - Math.exp(-1 * Math.pow(size / maxLiquidity[_currencyLabel], slippageExponent))));
 }
 
 // UI

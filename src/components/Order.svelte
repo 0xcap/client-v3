@@ -13,6 +13,8 @@
 
 	import { address, productId, product, currencyLabel, leverage, size, margin, marginPlusFee, isSubmittingShort, isSubmittingLong, prices, allowances, slippage } from '../lib/stores'
 
+	import { getPriceImpact } from '../lib/utils'
+
 	// functions
 
 	function focusAmount() {
@@ -88,6 +90,9 @@
 	}
 
 	$: getSizeInUSD($currencyLabel, $prices, $size);
+
+	let priceImpact = 0;
+	$: priceImpact = getPriceImpact($size, $productId, $currencyLabel);
 
 </script>
 
@@ -243,10 +248,12 @@
 				<div class='detail-label'>Margin</div>
 				<div class='detail-value'>{formatToDisplay($marginPlusFee || 0)} {formatCurrency($currencyLabel)}</div>
 			</div>
+			{#if Math.abs(priceImpact * 1) > $product.fee * 1}
 			<div class='row'>
-				<div class='detail-label'>Slippage</div>
-				<div class='detail-value'>{formatToDisplay($slippage)}%</div>
+				<div class='detail-label'>Price Impact</div>
+				<div class='detail-value'>{formatToDisplay(priceImpact)}%</div>
 			</div>
+			{/if}
 			<div class='sep'></div>
 		{/if}
 		<div class='row'>
