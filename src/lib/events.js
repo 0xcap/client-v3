@@ -28,7 +28,7 @@ async function handleEvent() {
 
 	const ev = arguments[arguments.length - 1];
 
-	// console.log('got event', ev);
+	// console.log('got event', ev.event, ev);
 
 	if (ev.event == 'NewOrder') {
 		await getUserOrders();
@@ -38,6 +38,7 @@ async function handleEvent() {
 		// From listener only - oracle triggered
 		await getUserOrders();
 		await getUserPositions();
+		// console.log('refreshed orders and positions');
 	}
 
 	if (ev.event == 'ClosePosition') {

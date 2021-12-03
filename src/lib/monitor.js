@@ -33,6 +33,8 @@ export async function monitorOracleResponse() {
 		if (_orders.length) {
 			await getUserOrders();
 			await getUserPositions();
+			// console.log('M: refreshed orders and positions');
+
 			requests++;
 			if (requests > 100) {
 				clearInterval(c);
@@ -56,7 +58,7 @@ async function handleTxComplete(type, details) {
 	} else if (type == 'cancel-order') {
 		showToast('Order cancelled.', 'success');
 		await getUserOrders();
-		// await getUserPositions();
+		await getUserPositions();
 	} else if (type == 'approve') {
 		await getAllowance(details.currencyLabel, details.spenderName);
 	} else if (type == 'pool-deposit') {

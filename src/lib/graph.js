@@ -67,7 +67,7 @@ export async function getUserOrders() {
 	if (!contract) return;
 
 	const filter = contract.filters.NewOrder(null, _address);
-	const _events = await contract.queryFilter(filter, -250);
+	const _events = await contract.queryFilter(filter, -100);
 
 	// console.log('NewOrder _events', _events);
 
@@ -111,7 +111,7 @@ export async function getUserPositions() {
 	if (!contract) return;
 
 	const filter = contract.filters.PositionUpdated(null, _address);
-	const _events = await contract.queryFilter(filter, -250);
+	const _events = await contract.queryFilter(filter, -100);
 
 	// console.log('_events', _events);
 

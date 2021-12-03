@@ -6,7 +6,7 @@
 
 	import { positions, prices, orders, enhancedPositions } from '../lib/stores'
 
-	import { CANCEL_ICON } from '../lib/icons'
+	import { CANCEL_ICON, CIRCLE_ICON } from '../lib/icons'
 
 	import { formatPnl, showModal, getUPL, formatCurrency, formatToDisplay } from '../lib/utils'
 
@@ -94,6 +94,10 @@
 
 	}
 
+	.dim {
+		color: var(--sonic-silver);
+	}
+
 	.column-product {
 		width: 15%;
 	}
@@ -133,8 +137,13 @@
 		color: var(--green);
 	}
 
+	.status :global(svg) {
+		fill: currentColor;
+		height: 10px;
+	}
+
 	.status {
-		color: var(--dim-gray);
+		color: var(--orange);
 	}
 
 	.empty {
@@ -189,9 +198,9 @@
 				<div class='position' on:click={() => {showModal('PositionDetails', position)}} data-intercept="true">
 
 					<div class='column column-product'>{#if position.isLong}<span class='pos'>↑</span>{:else}<span class='neg'>↓</span>{/if} {position.product}</div>
-					<div class='column column-price'>
-						{#if position.price == 0}
-						-
+					<div class='column column-price' class:dim={!position.price}>
+						{#if !position.price}
+							{$prices[position.productId]}
 						{:else}
 							{formatToDisplay(position.price)}
 						{/if}
@@ -202,19 +211,13 @@
 						{formatToDisplay(position.leverage)}×
 					</div>
 					<div class={`column column-pnl ${upls[position.key] * 1 < 0 ? 'neg' : 'pos'}`}>
-						{#if position.price == 0}
-							-
-						{:else}
-							{formatPnl(upls[position.key]) || '-'}
-						{/if}
+						{formatPnl(upls[position.key]) || '-'}
 					</div>
 
 					<div class='column column-close'>
 
-						{#if position.isClosing}
-							<span class='status'>Closing</span>
-						{:else if position.isSettling}
-							<span class='status'>Settling</span>
+						{#if position.isClosing || position.isSettling}
+							<span class='status' title='Settling'>{@html CIRCLE_ICON}</span>
 						{:else}
 							<a class='close' title='Close Position' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">
 								{@html CANCEL_ICON}
