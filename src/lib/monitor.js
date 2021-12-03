@@ -58,7 +58,7 @@ async function handleTxComplete(type, details) {
 	} else if (type == 'cancel-order') {
 		showToast('Order cancelled.', 'success');
 		await getUserOrders();
-		// await getUserPositions();
+		await getUserPositions();
 	} else if (type == 'approve') {
 		await getAllowance(details.currencyLabel, details.spenderName);
 	} else if (type == 'pool-deposit') {
