@@ -9,7 +9,6 @@ import { onNewPrice } from './chart'
 import { setTitle, shortSymbol, showToast, hideToast } from './utils'
 
 let ws;
-let lastTimestamp = {};
 let h;
 let subscribedProducts = {
 	'ETH-USD': true
@@ -76,19 +75,16 @@ export function initWebsocket() {
 
 	// console.log('initWebsocket');
 
-	let time_initialized = Date.now();
+	let lastMessageReceived = Date.now();
 
-	let error_last_shown = Date.now();
-
-	let unopened = true;
-
-	// Check open
-	setInterval(() => {
-		if (unopened && Date.now() - time_initialized > 10 * 1000 && error_last_shown < Date.now() - 10 * 1000) {
-			showToast('Price stream: still connecting...');
-			error_last_shown = Date.now();
-		}
-	}, 1000);
+	// // Check last ticker
+	// setInterval(() => {
+	// 	if (lastMessageReceived < Date.now() - 60 * 1000) {
+	// 		showToast('Price stream is stale. Try refreshing the page.', 'error', 'stream-error');
+	// 	} else {
+	// 		hideToast('stream-error');
+	// 	}
+	// }, 1000);
 
 	if (ws) {
 		try {
@@ -104,10 +100,6 @@ export function initWebsocket() {
 
 		//console.log('onopen', ws.readyState, e);
 
-		unopened = false;
-
-		hideToast();
-
 		if (ws.readyState != 1) return;
 
 		heartbeat();
@@ -119,6 +111,9 @@ export function initWebsocket() {
 	ws.onmessage = (e) => {
 
 		try {
+
+			lastMessageReceived = Date.now();
+
 			const message = JSON.parse(e.data);
 
 			const { type, product_id, open_24h, price } = message;
@@ -126,12 +121,6 @@ export function initWebsocket() {
 			if (type == 'heartbeat') return heartbeat();
 
 			if (!product_id || type != 'ticker') return;
-
-			if (!lastTimestamp[product_id]) lastTimestamp[product_id] = 0;
-
-			//if (lastTimestamp[product_id] > Date.now() - 1000) return; // throttle to 1 per sec
-
-			lastTimestamp[product_id] = Date.now();
 
 			prices.update((x) => {
 				x[product_id] = price * 1;

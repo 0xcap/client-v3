@@ -33,6 +33,8 @@ export async function monitorOracleResponse() {
 		if (_orders.length) {
 			await getUserOrders();
 			await getUserPositions();
+			// console.log('M: refreshed orders and positions');
+
 			requests++;
 			if (requests > 100) {
 				clearInterval(c);

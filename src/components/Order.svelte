@@ -4,14 +4,14 @@
 
 	import Button from './layout/Button.svelte'
 
-	import { PRODUCTS } from '../lib/constants'
+	import { PRODUCTS } from '../lib/products'
 
 	import { submitOrder, approveCurrency, getBalanceOf } from '../lib/methods'
 
 	import { showModal, showToast, shortSymbol, getCachedLeverage, formatToDisplay, formatCurrency } from '../lib/utils'
 	import { CARET_DOWN } from '../lib/icons'
 
-	import { address, productId, product, currencyLabel, leverage, size, margin, marginPlusFee, isSubmittingShort, isSubmittingLong, prices, allowances, slippage } from '../lib/stores'
+	import { address, productId, product, currencyLabel, leverage, size, margin, marginPlusFee, isSubmittingShort, isSubmittingLong, prices, allowances } from '../lib/stores'
 
 	import { getPriceImpact } from '../lib/utils'
 
@@ -283,7 +283,7 @@
 		</div>
 	</div>
 
-	{#if balance * 1 == 0}
+	{#if $address && balance * 1 == 0}
 	<div class='note'><a href='https://docs.cap.finance/setting-up-your-wallet' target='_blank'>Bridge funds</a> to Arbitrum to start trading.</div>
 	{/if}
 	
