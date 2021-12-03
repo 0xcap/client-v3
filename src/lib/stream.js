@@ -77,14 +77,14 @@ export function initWebsocket() {
 
 	let lastMessageReceived = Date.now();
 
-	// Check last ticker
-	setInterval(() => {
-		if (lastMessageReceived < Date.now() - 60 * 1000) {
-			showToast('Price stream is stale. Try refreshing the page.', 'error', 'stream-error');
-		} else {
-			hideToast('stream-error');
-		}
-	}, 1000);
+	// // Check last ticker
+	// setInterval(() => {
+	// 	if (lastMessageReceived < Date.now() - 60 * 1000) {
+	// 		showToast('Price stream is stale. Try refreshing the page.', 'error', 'stream-error');
+	// 	} else {
+	// 		hideToast('stream-error');
+	// 	}
+	// }, 1000);
 
 	if (ws) {
 		try {
