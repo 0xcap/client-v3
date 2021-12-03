@@ -7,19 +7,19 @@
             "docs":"Docs" 
         },
         "home":{
-            "desc":"Decentralized trading protocol.",
+            "desc":"Decentralized Trading Protocol",
             "vol":"Protocol Volume",
-            "trade00":"Fast",
-            "trade01":"Trades are executed and confirmed in seconds.",
-            "trade10":"Permissionless",
-            "trade11":"Trade directly from your wallet, no account needed.",
+            "trade00":"Permissionless",
+            "trade01":"Trade directly from your wallet, no account needed.",
+            "trade10":"Fast",
+            "trade11":"Trades are executed and settled in seconds.",
             "trade20":"Leverage",
             "trade21":"Adjust leverage from 1x to 50x on each trade.",
             
             "pool00":"Liquidity",
-            "pool01":"Pool funds to back trader profits and receive their losses.",
+            "pool01":"Pools pay out trader profits and in exchange receive their losses.",
             "pool10":"Rewards",
-            "pool11":"Get fee rewards directly in ETH and USDC, not inflation tokens.",
+            "pool11":"Get fee rewards directly in ETH and USDC.",
             "pool20":"Flexible",
             "pool21":"Deposit and withdraw without time constraints.",
             
@@ -39,7 +39,7 @@
         "pool":{
             "asset":"Asset",
             "tvl":"TVL",
-            "poolDesc":"This pool backs trader profits and receives trader losses plus <strong>{poolShare}%</strong> of {currency} fees as rewards.<br/>Open interest: {interest} ({utilization}% utilization)",
+            "poolDesc":"This pool backs trader profits and receives trader losses plus <strong>{poolShare}%</strong> of {currency} fees as rewards.<br/>",
             "approve": "Approve {currency}",
             "myShare":"My Share",
             "myRewards":"My Rewards", 
@@ -53,7 +53,7 @@
             "buyCapL1":"Buy CAP (Ethereum L1) ",
             "buyCapL2":"Buy CAP (Arbitrum L2) ",
 
-            "balance":"Balance",
+            "walbalance":"Wallet Balance",
             "amount":"Amount",
             "btnDeposit":"Deposit into {currency} pool",
             "withdrawNote":"{fee}% is retained and awarded to the rest of the pool.",

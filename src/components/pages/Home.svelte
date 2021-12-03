@@ -36,7 +36,7 @@
 	.main-title {
 		color: var(--green);
 		font-weight: 700;
-		font-size: 160%;
+		font-size: 200%;
 	}
 
 	.tagline {

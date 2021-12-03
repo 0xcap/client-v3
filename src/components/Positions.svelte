@@ -8,7 +8,7 @@
 
 	import { positions, prices, orders, enhancedPositions } from '../lib/stores'
 
-	import { CANCEL_ICON, SPINNER_ICON } from '../lib/icons'
+	import { CANCEL_ICON } from '../lib/icons'
 
 	import { formatPnl, showModal, getUPL, formatCurrency, formatToDisplay } from '../lib/utils'
 
@@ -166,13 +166,6 @@
 
 	}
 
-	.loading-icon :global(svg) {
-		height: 23px;
-		fill: none;
-		margin-right: 6px;
-		margin-bottom: -2px;
-	}
-
 </style>
 
 <div class='positions'>
@@ -219,12 +212,9 @@
 					</div>
 
 					<div class='column column-close'>
-
 						{#if position.isClosing}
-							<div class='loading-icon'>{@html SPINNER_ICON}</div>
 							<span class='status'>{$_('p.closing')}</span>
 						{:else if position.isSettling}
-							<div class='loading-icon'>{@html SPINNER_ICON}</div>
 							<span class='status'>{$_('p.settling')}</span>
 						{:else}
 							<a class='close' title='Close Position' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">

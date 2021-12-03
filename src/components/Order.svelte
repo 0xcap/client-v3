@@ -33,7 +33,10 @@
 		if (error) {
 			focusAmount();
 		} else {
+			balance -= $margin * 1;
 			available -= $size * 1;
+			if (balance < 0) balance = 0;
+			if (available < 0) available = 0;
 			size.set();
 		}
 
@@ -58,11 +61,12 @@
 
 	$: setInitialLeverage($product, $productId);	
 
+	let balance = 0;
 	let available = 0;
 
 	async function getBalance(_currencyLabel, _leverage, _address) {
 		if (!_leverage || !_currencyLabel || !_address) return;
-		let balance = await getBalanceOf(_currencyLabel);
+		balance = await getBalanceOf(_currencyLabel);
 		available = balance * _leverage * 1;
 	}
 
@@ -169,7 +173,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding-bottom: 10px;
+		padding-bottom: 12px;
+		font-size: 90%;
 	}
 	.row:last-child {
 		padding-bottom: 0;
@@ -177,6 +182,13 @@
 
 	.detail-label {
 		color: var(--sonic-silver);
+	}
+
+	.sep {
+		height: 1px;
+		line-height: 0;
+		border-top: 1px solid var(--jet);
+		margin: 4px 0 var(--base-padding);
 	}
 
 	.note {
@@ -237,15 +249,20 @@
 			<div class='detail-value'>{$product.fee}%</div>
 		</div>
 		{/if}
-		{:else}
+		<div class='sep'></div>
+		{/if}
 		<div class='row'>
 			<div class='detail-label'>{$_('page.order.power')}</div>
 			<div class='detail-value'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
 		</div>
-		{/if}
+		<div class='row'>
+			<div class='detail-label'>Wallet Balance</div>
+			<div class='detail-value'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
+		</div>
 	</div>
 
-	{#if available * 1 == 0}
+
+	{#if balance * 1 == 0}
 	<div class='note'>{@html $_('page.order.note')}</div>
 	{/if}
 	

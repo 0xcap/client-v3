@@ -62,7 +62,7 @@
 			onKeyUp: calculateShare
 		},
 		{
-			label: $_('page.pool.balance'),
+			label: $_('page.pool.walbalance'),
 			value: `${formatToDisplay(balance)}`,
 			onclick: setMaxAmount,
 			isEmpty: loading

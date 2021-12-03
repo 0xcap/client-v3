@@ -18,10 +18,10 @@ export async function initEventListeners() {
 	tradingContract.on(tradingContract.filters.PositionUpdated(null, _address), handleEvent);
 	tradingContract.on(tradingContract.filters.ClosePosition(null, _address), handleEvent);
 
-	const oracleContract = await getContract('oracle');
-	if (!oracleContract) return;
+	// const oracleContract = await getContract('oracle');
+	// if (!oracleContract) return;
 	
-	oracleContract.on(oracleContract.filters.SettlementError(), console.log);
+	// oracleContract.on(oracleContract.filters.SettlementError(), console.log);
 }
 
 async function handleEvent() {
@@ -30,19 +30,19 @@ async function handleEvent() {
 
 	// console.log('got event', ev);
 
-	// if (ev.event == 'NewOrder') {
-	// 	await getUserOrders();
-	// }
+	if (ev.event == 'NewOrder') {
+		await getUserOrders();
+	}
 
-	// if (ev.event == 'PositionUpdated') {
-	// 	// From listener only - oracle triggered
-	// 	await getUserOrders();
-	// 	await getUserPositions();
-	// }
+	if (ev.event == 'PositionUpdated') {
+		// From listener only - oracle triggered
+		await getUserOrders();
+		await getUserPositions();
+	}
 
-	// if (ev.event == 'ClosePosition') {
-	// 	// From listener only - oracle triggered
-	// 	await getUserHistory();
-	// }
+	if (ev.event == 'ClosePosition') {
+		// From listener only - oracle triggered
+		await getUserHistory();
+	}
 
 }
