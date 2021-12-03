@@ -554,10 +554,11 @@ export async function submitOrder(isLong) {
 		}
 
 		margin = margin.toFixed(8);
+		marginEth = marginEth.toFixed(12);
 
 		// console.log('parseUnits(margin, 18)', parseUnits(margin, 18));
 
-		// console.log('sm', size, margin, parseUnits(size));
+		// console.log('sm', size, margin, marginEth, parseUnits(size));
 
 		let tx = await contract.submitOrder(
 			toBytes32(productId),

@@ -5,6 +5,7 @@ const DEFAULT_ERROR = "Unidentified error. Check your browser console for more d
 const ERROR_STRINGS = {
 	'User denied': null,
 	'User rejected': null,
+	'insufficient balance': "You have insufficient funds to complete this transaction.",
 	'exceeds balance': "You have insufficient funds to complete this transaction.",
 	'allowance': "You have to approve spending this ERC20 before depositing.",
 	'!position': 'Position not found.',

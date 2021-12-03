@@ -7,7 +7,7 @@
 	import { selectProduct } from '../../lib/methods'
 
 	import { hideModal } from '../../lib/utils'
-	import { PRODUCTS } from '../../lib/constants'
+	import { PRODUCTS } from '../../lib/products'
 	
 </script>
 

@@ -4,12 +4,16 @@
 
 	import Button from './layout/Button.svelte'
 
+	import { PRODUCTS } from '../lib/products'
+
 	import { submitOrder, approveCurrency, getBalanceOf } from '../lib/methods'
 
 	import { showModal, showToast, shortSymbol, getCachedLeverage, formatToDisplay, formatCurrency } from '../lib/utils'
 	import { CARET_DOWN } from '../lib/icons'
 
 	import { address, productId, product, currencyLabel, leverage, size, margin, marginPlusFee, isSubmittingShort, isSubmittingLong, prices, allowances } from '../lib/stores'
+
+	import { getPriceImpact } from '../lib/utils'
 
 	// functions
 
@@ -19,8 +23,11 @@
 	}
 
 	async function _submitNewPosition(isLong) {
+		
 		if (!$size) return focusAmount();
 		if (!$address) return showToast('Connect your wallet to trade.');
+
+		if ($size * 1 > PRODUCTS[$productId].maxLiquidity[$currencyLabel]) return showToast('Order size exceeds maximum allowed on this market.');
 
 		if (isLong) {
 			isSubmittingLong.set(true);
@@ -83,6 +90,9 @@
 	}
 
 	$: getSizeInUSD($currencyLabel, $prices, $size);
+
+	let priceImpact = 0;
+	$: priceImpact = getPriceImpact($size, $productId, $currencyLabel);
 
 </script>
 
@@ -243,6 +253,12 @@
 				<div class='detail-label'>Margin</div>
 				<div class='detail-value'>{formatToDisplay($marginPlusFee || 0)} {formatCurrency($currencyLabel)}</div>
 			</div>
+      {#if Math.abs(priceImpact * 1) > $product.fee * 1}
+			<div class='row'>
+				<div class='detail-label'>Price Impact</div>
+				<div class='detail-value'>{formatToDisplay(priceImpact)}%</div>
+			</div>
+			{/if}
 		{:else}
 			<div class='row'>
 				<div class='detail-label'>Buying Power</div>
@@ -274,7 +290,7 @@
 		</div>
 	</div>
 
-	{#if balance * 1 == 0}
+	{#if $address && balance * 1 == 0}
 	<div class='note'><a href='https://docs.cap.finance/setting-up-your-wallet' target='_blank'>Bridge funds</a> to Arbitrum to start trading.</div>
 	{/if}
 	

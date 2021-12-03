@@ -1,16 +1,5 @@
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
-export const PRODUCTS = {
-	'ETH-USD': {
-		hours: '24/7',
-		logo: '/logos/ETH.svg',
-	},
-	'BTC-USD': {
-		hours: '24/7',
-		logo: '/logos/BTC.svg'
-	}
-};
-
 export const CURRENCY_LOGOS = {
 	weth: '/logos/ETH.svg',
 	usdc: '/logos/USDC.svg',
