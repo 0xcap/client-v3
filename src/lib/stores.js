@@ -1,7 +1,13 @@
 import { writable, derived } from 'svelte/store'
+import { PRODUCTS } from './products'
 
 // History
 export const history = writable([]);
+
+// Prices
+export const activeProducts = writable({'ETH-USD': true});
+export const prices = writable({});
+export const prices24h = writable({});
 
 // New order
 export const productId = writable(localStorage.getItem('productId') || 'ETH-USD');
@@ -22,10 +28,29 @@ export const margin = derived([size, leverage], ([$size, $leverage]) => {
 }, 0);
 
 export const marginPlusFee = derived([size, leverage, product], ([$size, $leverage, $product]) => {
-	if (!$size || !$leverage) return 0;
-	if (!$product) return 0;
+	if (!$size || !$leverage || !$product) return 0;
 	let fee = $product.fee || 0;
 	return $size * fee * 1 / 100 + ($size || 0) / $leverage;
+}, 0);
+
+export const slippage = derived([size, productId, currencyLabel], ([$size, $productId, $currencyLabel]) => {
+	
+	// console.log('p', $size, $productId, $prices, $currencyLabel);
+
+	if (!$size || !$productId || !$prices[$productId] || !$currencyLabel) return 0;
+	
+	const productParams = PRODUCTS[$productId];
+	const {
+		baseSpread,
+		maxSlippage,
+		slippageExponent,
+		maxLiquidity
+	} = productParams;
+
+	// console.log('l', $size, productParams, $currencyLabel);
+
+	return -1 * (baseSpread * 100 + maxSlippage * (1 - Math.exp(-1 * Math.pow($size / maxLiquidity[$currencyLabel], slippageExponent))));
+
 }, 0);
 
 // Pools
@@ -72,11 +97,6 @@ export const enhancedPositions = derived([orders, positions], ([$orders, $positi
 	new_orders.reverse();
 	return new_orders.concat(enhanced_positions);
 }, []);
-
-// Prices
-export const activeProducts = writable({'ETH-USD': true});
-export const prices = writable({});
-export const prices24h = writable({});
 
 // Router
 export const component = writable();

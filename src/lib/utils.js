@@ -2,7 +2,8 @@
 import { ethers } from 'ethers'
 import { get } from 'svelte/store'
 
-import { PRODUCT_LOGOS, CHAINDATA } from './constants'
+import { CHAINDATA } from './constants'
+import { PRODUCTS } from './products'
 
 // Pages
 import Home from '../components/pages/Home.svelte'
@@ -86,7 +87,7 @@ export function setActiveProducts() {
 		positionProducts[p.productId] = true;
 	}
 	activeProducts.update((x) => {
-		for (const p in PRODUCT_LOGOS) {
+		for (const p in PRODUCTS) {
 			if (!positionProducts[p] && p != _productId && p != 'ETH-USD') {
 				delete x[p];
 			} else {
@@ -135,17 +136,20 @@ export function calculateLiquidationPrice(params) {
 
 // Toasts
 let timer;
-export function showToast(data, type) {
+export function showToast(data, type, id) {
 	let message = parseErrorToString(data);
 	if (!type) type = 'error';
 	if (!message) return;
-	toast.set({message: message, type});
+	toast.set({message: message, type, id});
 	clearTimeout(timer);
 	timer = setTimeout(() => {hideToast()}, 7*1000);
 }
-export function hideToast() {
-	clearTimeout(timer);
-	toast.set(null);
+export function hideToast(id) {
+	const _toast = get(toast);
+	if (!id || id && _toast && _toast.id == id) {
+		clearTimeout(timer);
+		toast.set(null);
+	}
 }
 
 // Modals
@@ -203,7 +207,8 @@ export function formatProduct(id, product) {
 	return {
 		productId: id,
 		symbol: id,
-		logo: PRODUCT_LOGOS[id],
+		logo: PRODUCTS[id].logo,
+		hours: PRODUCTS[id].hours,
 		maxLeverage: formatUnits(product.maxLeverage),
 		liquidationThreshold: formatUnits(product.liquidationThreshold, 2),
 		fee: formatUnits(product.fee, 4),
@@ -335,9 +340,9 @@ export async function getUPL(position, latestPrice) {
 	if (latestPrice) {
 		const productInfo = await getProduct(position.productId);
 		if (position.isLong) {
-			upl = position.margin * position.leverage * (latestPrice * 1 - position.price * 1) / position.price;
+			upl = position.size * (latestPrice * 1 - position.price * 1) / position.price;
 		} else {
-			upl = position.margin * position.leverage * (position.price * 1 - latestPrice * 1) / position.price;
+			upl = position.size * (position.price * 1 - latestPrice * 1) / position.price;
 		}
 		// Add interest
 		let interest = await getInterest(position);
@@ -354,10 +359,26 @@ export async function getInterest(position) {
 		if (!position.price || !position.timestamp || now < position.timestamp * 1 + 900) {
 			interest = 0;
 		} else {
-			interest = position.margin * position.leverage * ((productInfo.interest * 1 || 0) / 100) * (now - position.timestamp * 1) / (360 * 24 * 3600);
+			interest = position.size * ((productInfo.interest * 1 || 0) / 100) * (now - position.timestamp * 1) / (360 * 24 * 3600);
 		}
 		if (interest < 0) interest = 0;
 		return -1 * interest;
+}
+
+export function getPriceImpact(size, _productId, _currencyLabel) {
+	if (!size || !_productId || !_currencyLabel) return 0;
+	
+	const productParams = PRODUCTS[_productId];
+	const {
+		baseSpread,
+		maxSlippage,
+		slippageExponent,
+		maxLiquidity
+	} = productParams;
+
+	// console.log('l', $size, productParams, $currencyLabel);
+
+	return -1 * (baseSpread * 100 + maxSlippage * (1 - Math.exp(-1 * Math.pow(size / maxLiquidity[_currencyLabel], slippageExponent))));
 }
 
 // UI

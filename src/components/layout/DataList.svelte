@@ -102,7 +102,7 @@
 			{#if row.value !== null}
 				<div class='row'>
 					<div class='label'>{row.label}</div>
-					<div class:error={!row.isEmpty && row.hasError} class:dim={row.dim} class:clickable={Boolean(row.onclick)} on:click={row.onclick} class='value'>
+					<div class:error={!row.isEmpty && row.hasError} class:dim={row.dim} class:clickable={Boolean(row.onclick)} on:click={row.onclick} class:pos={row.isPnl && row.rawValue * 1 >= 0}  class:neg={row.isPnl && row.rawValue * 1 < 0} class='value'>
 						{#if row.renderHTML}
 							{@html row.value}
 						{:else if row.isEmpty}

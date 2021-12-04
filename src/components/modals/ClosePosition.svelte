@@ -3,7 +3,9 @@
 
 	import { submitCloseOrder, getProduct } from '../../lib/methods'
 	
-	import { formatToDisplay, formatCurrency } from '../../lib/utils'
+	import { formatToDisplay, formatCurrency, getPriceImpact, formatPnl, getUPL } from '../../lib/utils'
+	
+	import { prices } from '../../lib/stores'
 
 	import Modal from './Modal.svelte'
 	
@@ -30,8 +32,9 @@
 	}
 
 	function setMaxAmount(_entire) {
-		size = data.size;
+		size = data.size * 1;
 		calculateAmounts();
+		calculatePnl($prices, size);
 	}
 
 	let canSubmit;
@@ -56,6 +59,34 @@
 		);
 		submitIsPending = false;
 	}
+
+	let priceImpact = 0;
+	$: priceImpact = getPriceImpact(Math.min(size * 1, data.size * 1), data.productId, data.currencyLabel);
+
+	let pnl;
+
+	async function calculatePnl(_prices, _size) {
+		// console.log('calculatePnl', _prices, _size);
+		if (!_size) {
+			pnl = undefined;
+			return;
+		}
+		let price = _prices[data.productId]
+		// Add price impact to price
+		if (data.isLong) {
+			price = price * (1 + priceImpact/100);
+		} else {
+			price = price * (1 - priceImpact/100);
+		}
+		// console.log('priceImpact', priceImpact);
+		let _data = JSON.parse(JSON.stringify(data));
+		_data.size = Math.min(_size * 1, data.size * 1);
+		// console.log('getUPL', _data, price);
+		pnl = await getUPL(_data, price);
+		// console.log('pnl', pnl);
+	}
+
+	$: calculatePnl($prices, size);
 
 	let rows = [];
 
@@ -87,13 +118,28 @@
 			},
 			{
 				label: 'Fee',
-				value: `${product && product.fee || 0}%`
+				value: `${product && product.fee || 0}%`,
+				isEmpty: !size
 			},
+			{
+				label: 'P/L (approx.)',
+				value: `${formatPnl(pnl)}`,
+				isEmpty: pnl == undefined,
+				isPnl: true,
+				rawValue: pnl * 1
+			}
 		];
+
+		if (Math.abs(priceImpact * 1) > product.fee * 1) {
+			rows.push({
+				label: 'Price Impact',
+				value: `${formatToDisplay(priceImpact)}%`
+			});
+		}
 
 	}
 
-	$: calculateRows(newAmount)
+	$: calculateRows(size, newAmount, pnl)
 
 </script>
 

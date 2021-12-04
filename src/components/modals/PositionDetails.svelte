@@ -71,7 +71,8 @@
 			rows.push({
 				label: $_('p.PL'),
 				value: `${formatPnl(upl)} ${formatCurrency(data.currencyLabel)} (${formatPnl(100*upl/data.margin, true)}%)`,
-				hasError: liquidatingSoon
+				isPnl: true,
+				rawValue: upl * 1
 			},
 			{
 				label: $_('p.INT'),

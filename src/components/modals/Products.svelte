@@ -7,7 +7,7 @@
 	import { selectProduct } from '../../lib/methods'
 
 	import { hideModal } from '../../lib/utils'
-	import { PRODUCT_LOGOS } from '../../lib/constants'
+	import { PRODUCTS } from '../../lib/products'
 	
 </script>
 
@@ -48,12 +48,12 @@
 
 <Modal title='Select Product' showHeader={true}>
 
-	{#each Object.entries(PRODUCT_LOGOS) as [_productId, _logo]}
+	{#each Object.entries(PRODUCTS) as [_productId, info]}
 
 		<div class='row' class:selected={_productId == $productId} on:click={async () => {await selectProduct(_productId); hideModal()}} data-intercept="true">
 
 			<div class='product-wrap'>
-				<img src={_logo} alt={`${_productId} logo`}>
+				<img src={info.logo} alt={`${_productId} logo`}>
 				<span>{_productId}</span>
 			</div>
 

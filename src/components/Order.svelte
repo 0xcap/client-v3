@@ -5,12 +5,16 @@
 
 	import Button from './layout/Button.svelte'
 
+	import { PRODUCTS } from '../lib/products'
+
 	import { submitOrder, approveCurrency, getBalanceOf } from '../lib/methods'
 
 	import { showModal, showToast, shortSymbol, getCachedLeverage, formatToDisplay, formatCurrency } from '../lib/utils'
 	import { CARET_DOWN } from '../lib/icons'
 
 	import { address, productId, product, currencyLabel, leverage, size, margin, marginPlusFee, isSubmittingShort, isSubmittingLong, prices, allowances } from '../lib/stores'
+
+	import { getPriceImpact } from '../lib/utils'
 
 	// functions
 
@@ -20,8 +24,11 @@
 	}
 
 	async function _submitNewPosition(isLong) {
+		
 		if (!$size) return focusAmount();
 		if (!$address) return showToast('Connect your wallet to trade.');
+
+		if ($size * 1 > PRODUCTS[$productId].maxLiquidity[$currencyLabel]) return showToast('Order size exceeds maximum allowed on this market.');
 
 		if (isLong) {
 			isSubmittingLong.set(true);
@@ -77,13 +84,16 @@
 	async function getSizeInUSD(_currencyLabel, _prices, _size) {
 		if (!_prices || !_currencyLabel || !_size) return 0;
 		if (_currencyLabel == 'weth') {
-			sizeInUSD = _prices[1] * _size;
+			sizeInUSD = _prices['ETH-USD'] * _size;
 		} else if (_currencyLabel == 'usdc') {
 			sizeInUSD = 0;
 		}
 	}
 
 	$: getSizeInUSD($currencyLabel, $prices, $size);
+
+	let priceImpact = 0;
+	$: priceImpact = getPriceImpact($size, $productId, $currencyLabel);
 
 </script>
 
@@ -169,6 +179,11 @@
 		padding-top: 0;
 	}
 
+	.product-info {
+		padding-top: var(--base-padding) !important;
+		border-top: 1px solid var(--rich-black);
+	}
+
 	.row {
 		display: flex;
 		align-items: center;
@@ -229,41 +244,55 @@
 
 	<div class='details'>
 		{#if $margin * 1 > 0}
+			{#if sizeInUSD}
+			<div class='row'>
+				<div class='detail-label'>Size in USD</div>
+				<div class='detail-value'>${formatToDisplay(sizeInUSD, 2)}</div>
+			</div>
+			{/if}
+			<div class='row'>
+				<div class='detail-label'>Margin</div>
+				<div class='detail-value'>{formatToDisplay($marginPlusFee || 0)} {formatCurrency($currencyLabel)}</div>
+			</div>
+      {#if Math.abs(priceImpact * 1) > $product.fee * 1}
+			<div class='row'>
+				<div class='detail-label'>Price Impact</div>
+				<div class='detail-value'>{formatToDisplay(priceImpact)}%</div>
+			</div>
+			{/if}
+		{:else}
+			<div class='row'>
+				<div class='detail-label'>Buying Power</div>
+				<div class='detail-value'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
+			</div>
+			<div class='row'>
+				<div class='detail-label'>Wallet Balance</div>
+				<div class='detail-value'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
+			</div>
+		{/if}
+	</div>
+
+	<div class='details product-info'>
 		<div class='row'>
-			<div class='detail-label'>{$_('p.prod')}</div>
+			<div class='detail-label'>Product</div>
 			<div class='detail-value'>{$product.symbol}</div>
 		</div>
-		{#if sizeInUSD}
 		<div class='row'>
-			<div class='detail-label'>{$_('p.sizeUSD')}</div>
-			<div class='detail-value'>${formatToDisplay(sizeInUSD, 2)}</div>
-		</div>
-		{/if}
-		<div class='row'>
-			<div class='detail-label'>{$_('p.margin')}</div>
-			<div class='detail-value'>{formatToDisplay($marginPlusFee || 0)} {formatCurrency($currencyLabel)}</div>
-		</div>
-		{#if $product.fee}
-		<div class='row'>
-			<div class='detail-label'>{$_('p.fee')}</div>
-			<div class='detail-value'>{$product.fee}%</div>
-		</div>
-		{/if}
-		<div class='sep'></div>
-		{/if}
-		<div class='row'>
-			<div class='detail-label'>{$_('page.order.power')}</div>
-			<div class='detail-value'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
+			<div class='detail-label'>Fee</div>
+			<div class='detail-value'>{$product.fee || 0}%</div>
 		</div>
 		<div class='row'>
-			<div class='detail-label'>Wallet Balance</div>
-			<div class='detail-value'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
+			<div class='detail-label'>Funding</div>
+			<div class='detail-value'>-{formatToDisplay($product.interest/(360*24)) || 0}% / hr</div>
+		</div>
+		<div class='row'>
+			<div class='detail-label'>Trading Hours</div>
+			<div class='detail-value'>{$product.hours}</div>
 		</div>
 	</div>
 
-
-	{#if balance * 1 == 0}
-	<div class='note'>{@html $_('page.order.note')}</div>
+	{#if $address && balance * 1 == 0}
+	<div class='note'><a href='https://docs.cap.finance/setting-up-your-wallet' target='_blank'>Bridge funds</a> to Arbitrum to start trading.</div>
 	{/if}
 	
 
