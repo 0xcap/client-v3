@@ -1,7 +1,10 @@
 <script>
+	import { _ } from '../../services/i18n';
+	
 	import Wallet from '../Wallet.svelte'
 
-	import { currentPage } from '../../lib/stores'
+	import { currentPage } from '../../lib/stores' 
+	
 </script>
 
 <style>
@@ -54,10 +57,10 @@
 		<a class:active={$currentPage == 'home' || !$currentPage} href='/'>
 			<img src='/logos/CAP.svg' title='Cap logo' alt='Cap logo' />
 		</a>
-		<a class:active={$currentPage == 'trade'} href='#/trade'>Trade</a>
-		<a class:active={$currentPage == 'pool'} href='#/pool'>Pool</a>
-		<a class:active={$currentPage == 'stake'} href='#/stake'>Stake</a>
-		<a href='https://docs.cap.finance' target='_blank'>Docs</a>
+		<a class:active={$currentPage == 'trade'} href='#/trade'>{$_('page.header.trade')}</a>
+		<a class:active={$currentPage == 'pool'} href='#/pool'>{$_('page.header.pool')}</a>
+		<a class:active={$currentPage == 'stake'} href='#/stake'>{$_('page.header.stake')}</a>
+		<a href='https://docs.cap.finance' target='_blank'>{$_('page.header.docs')}</a>
 	</div>
 
 	<div class='right'>

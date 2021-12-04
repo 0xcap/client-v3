@@ -1,4 +1,5 @@
 <script>
+	import {_} from "../services/i18n"
 
 	import { CURRENCY_LOGOS } from '../lib/constants'
 
@@ -191,9 +192,9 @@
 
 	<div class='columns'>
 
-		<div class='column column-asset'>Asset</div>
+		<div class='column column-asset'>{$_('page.pool.asset')}</div>
 		<div class='column column-apr'></div>
-		<div class='column column-tvl'>TVL</div>
+		<div class='column column-tvl'>{$_('page.pool.tvl')}</div>
 
 	</div>
 
@@ -226,33 +227,36 @@
 			</div>
 
 			<div class='description'>
-				This pool backs trader profits and receives trader losses plus <strong>{formatToDisplay(poolInfo.poolShare)}%</strong> of {formatCurrency(_currencyLabel)} fees as rewards.<br/>
-				<!--Open interest: {formatToDisplay(poolInfo.openInterest)} {formatCurrency(_currencyLabel)} / {formatToDisplay(poolInfo.tvl / (poolInfo.utilizationMultiplier/100))} {formatCurrency(_currencyLabel)} ({formatToDisplay(poolInfo.utilization)}% utilization)-->
+				{@html $_('page.pool.poolDesc',{values:{
+					"poolShare": formatToDisplay(poolInfo.poolShare), "currency": formatCurrency(_currencyLabel),
+					"interest": `${formatToDisplay(poolInfo.openInterest)} ${formatCurrency(_currencyLabel)} / ${formatToDisplay(poolInfo.tvl / (poolInfo.utilizationMultiplier/100))} ${formatCurrency(_currencyLabel)}` ,
+					"utilization":formatToDisplay(poolInfo.utilization)
+					}})}
 			</div>
 
 			<div class='my-share'>
 
 				<div class='row'>
-					<div class='column column-asset label'>My Share</div>
+					<div class='column column-asset label'>{$_('page.pool.myShare')}</div>
 					<div class='column column-apr'>{formatToDisplay(poolInfo.userBalance) || 0} {formatCurrency(_currencyLabel)} ({formatToDisplay(poolInfo.tvl*1 == 0 ? 0 : 100*poolInfo.userBalance/poolInfo.tvl)}%)</div>
 					<div class='column column-tvl'>
 						{#if $allowances[_currencyLabel] && $allowances[_currencyLabel]['pool' + _currencyLabel] * 1 == 0}
-							<a on:click={() => {_approveCurrency(_currencyLabel)}}>Approve {formatCurrency(_currencyLabel)}</a>
+							<a on:click={() => {_approveCurrency(_currencyLabel)}}>{$_('page.pool.approve',{values:{"currency":formatCurrency(_currencyLabel)}})}</a>
 						{:else}
-						<a data-intercept="true" class:disabled={!poolInfo.tvl} on:click={() => {showModal('PoolDeposit', {currencyLabel: _currencyLabel})}}>Deposit</a><span class='sep'>|</span><a class:disabled={poolInfo.userBalance == 0} data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: _currencyLabel, withdrawFee: poolInfo.withdrawFee})}}>Withdraw</a>
+						<a data-intercept="true" class:disabled={!poolInfo.tvl} on:click={() => {showModal('PoolDeposit', {currencyLabel: _currencyLabel})}}>{$_('page.pool.deposit')}</a><span class='sep'>|</span><a class:disabled={poolInfo.userBalance == 0} data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: _currencyLabel, withdrawFee: poolInfo.withdrawFee})}}>{$_('page.pool.withdraw')}</a>
 						{/if}
 					</div>
 				</div>
 
 				<div class='row'>
-					<div class='column column-asset label'>My Rewards</div>
+					<div class='column column-asset label'>{$_('page.pool.myRewards')}</div>
 					<div class='column column-apr'>{formatToDisplay(poolInfo.claimableReward) || 0} {formatCurrency(_currencyLabel)} 
 						{#if _currencyLabel == 'weth'}
 						<span class='dollar-amount'>(${formatToDisplay($prices['ETH-USD'] * poolInfo.claimableReward || 0)})</span>
 						{/if}
 					</div>
 					<div class='column column-tvl'>
-						<a class:disabled={poolInfo.claimableReward == 0} on:click={() => {collectPoolReward(_currencyLabel)}}>Collect</a>
+						<a class:disabled={poolInfo.claimableReward == 0} on:click={() => {collectPoolReward(_currencyLabel)}}>{$_('page.pool.collect')}</a>
 					</div>
 				</div>
 

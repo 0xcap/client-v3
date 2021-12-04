@@ -1,6 +1,8 @@
 <script>
 
-	import { onMount } from 'svelte'
+	import {_} from "../services/i18n"
+
+ 	import { onMount } from 'svelte'
 
 	import { getUserOrders, getUserPositions } from '../lib/graph'
 
@@ -179,12 +181,12 @@
 
 	<div class='columns'>
 
-		<div class='column column-product'>Product</div>
-		<div class='column column-price'>Price</div>
-		<div class='column column-size'>Size</div>
-		<div class='column column-margin'>Margin</div>
-		<div class='column column-leverage'>Leverage</div>
-		<div class='column column-pnl'>P/L</div>
+		<div class='column column-product'>{$_('p.prod')}</div>
+		<div class='column column-price'>{$_('p.price')}</div>
+		<div class='column column-size'>{$_('p.size')}</div>
+		<div class='column column-margin'>{$_('p.margin')}</div>
+		<div class='column column-leverage'>{$_('p.leverage')}</div>
+		<div class='column column-pnl'>{$_('p.PL2')}</div>
 		<div class='column column-close'></div>
 
 	</div>
@@ -192,7 +194,7 @@
 	<div class='positions-list no-scrollbar'>
 
 		{#if $enhancedPositions.length == 0}
-			<div class='empty'>No positions to show.</div>
+			<div class='empty'>{$_('p.nodata')}</div>
 		{:else}
 			{#each $enhancedPositions as position}
 				<div class='position' on:click={() => {showModal('PositionDetails', position)}} data-intercept="true">

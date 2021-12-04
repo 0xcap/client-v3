@@ -1,4 +1,6 @@
 <script>
+	import { _  } from "../services/i18n";
+
 	import { onMount } from 'svelte'
 
 	import Button from './layout/Button.svelte'
@@ -62,7 +64,7 @@
 		</div>
 	{:else}
 		{#if $currentPage != 'home'}
-		<Button small={true} onClick={() => {showModal('Connect')}} label={`Connect Wallet`} />
+		<Button small={true} onClick={() => {showModal('Connect')}} label={$_('net.connwallet')} />
 		{/if}
 	{/if}
 

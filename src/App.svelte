@@ -1,4 +1,5 @@
 <script>
+	import { setupI18n,isLocaleLoaded} from './services/i18n';
 
 	import { onMount } from 'svelte'
 
@@ -10,7 +11,8 @@
 	import { initWebsocket } from './lib/stream'
 	import { component } from './lib/stores'
 	import { loadRoute, navigateTo, catchLinks, hidePopoversOnClick } from './lib/utils'
-
+	import {SPINNER_ICON} from "./lib/icons"
+	
 	// localstorage clearance for v2
 	if (localStorage.getItem('productId')*1 > 0) {
 		localStorage.removeItem('productId');
@@ -18,7 +20,7 @@
 		localStorage.removeItem('cachedLeverages');
 	}
 
-	onMount(async () => {
+	onMount(async () => { 
 		loadRoute(location.hash, true);
 		catchLinks((path) => navigateTo(path));
 		hidePopoversOnClick();
@@ -30,6 +32,9 @@
 		monitorOracleResponse();
 	});
 
+	$: if (!$isLocaleLoaded) {
+        setupI18n({ withLocale: 'en' });
+    }
 </script>
 
 <style>
@@ -101,10 +106,24 @@
 		color: var(--red);
 	}
 
+	.loading-icon {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+	}
+	.loading-icon :global(svg) {
+		height: 24px;
+	}
+
 </style>
+ 
+{#if $isLocaleLoaded}
 
 <Modals />
 <Toasts />
 
-<Header />
-<svelte:component this={$component}/>
+<Header />	
+<svelte:component this={$component}/>  
+{:else}
+	<div class='loading-icon'>{@html SPINNER_ICON}</div>
+{/if}

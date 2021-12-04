@@ -1,4 +1,6 @@
 <script>
+	import { _ } from '../../services/i18n';
+
 	import Modal from '../modals/Modal.svelte'
 	import Button from '../layout/Button.svelte'
 
@@ -14,12 +16,12 @@
 
 </style>
 
-<Modal title='Invalid Network' showHeader={true}>
+<Modal title={$_('net.invalid')} showHeader={true}>
 
 	<div class='note'>
-		Select Arbitrum as your wallet's network to trade or pool on Cap.
+		{$_('net.note')}
 	</div>
 
-	<Button wrap={true} onClick={() => {switchChains()}} label={`Switch to Arbitrum`} />
+	<Button wrap={true} onClick={() => {switchChains()}} label={$_('net.switch')} />
 
 </Modal>

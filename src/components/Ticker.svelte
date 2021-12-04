@@ -1,4 +1,5 @@
 <script>
+	import {_} from "../services/i18n"
 
 	import Volume from './Volume.svelte'
 
@@ -99,7 +100,7 @@
 
 	<div class='volume'>
 		<div class='value'><Volume/></div>
-		<div class='label'>Protocol Volume</div>
+		<div class='label'>{$_("comm.vol")}</div>
 	</div>
 
 </div>

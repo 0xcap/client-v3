@@ -1,4 +1,5 @@
 <script>
+	import { _ } from '../../services/i18n';
 
 	import { onMount } from 'svelte'
 
@@ -57,11 +58,11 @@
 	$: rows = [
 		{
 			type: 'input',
-			label: 'Amount (' + formatCurrency(data.currencyLabel) + ')',
+			label: $_('page.pool.amount')+' (' + formatCurrency(data.currencyLabel) + ')',
 			onKeyUp: calculateShare
 		},
 		{
-			label: 'Wallet Balance',
+			label: $_('page.pool.walbalance'),
 			value: `${formatToDisplay(balance)}`,
 			onclick: setMaxAmount,
 			isEmpty: loading
@@ -75,5 +76,5 @@
 
 <Modal>
 	<DataList data={rows} bind:value={amount} onSubmit={_submit} />
-	<Button wrap={true} isLoading={!amount || submitIsPending} onClick={_submit} label={`Deposit into ${formatCurrency(data.currencyLabel)} pool`} />
+	<Button wrap={true} isLoading={!amount || submitIsPending} onClick={_submit} label={$_('page.pool.btnDeposit',{values:{"currency":formatCurrency(data.currencyLabel)}})} />
 </Modal>

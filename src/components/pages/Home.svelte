@@ -1,4 +1,6 @@
 <script>
+	import { _ } from '../../services/i18n';
+
 	import Volume from '../Volume.svelte'
 
 </script>
@@ -122,15 +124,15 @@
 
 				<div class='main-title'>Cap</div>
 					
-				<div class='tagline'>Decentralized Trading Protocol</div>
+				<div class='tagline'>{$_('page.home.desc')}</div>
 				
 				<div class='button-wrap'>
-					<a class='button' href='#/trade'>Trade</a>
+					<a class='button' href='#/trade'>{$_('comm.trade')}</a>
 				</div>
 
 				<div class='volume'>
 					<div class='value'><Volume/></div>
-					<div class='label'>Protocol Volume</div>
+					<div class='label'>{$_('page.home.vol')}</div>
 				</div>
 
 			</div>
@@ -141,71 +143,71 @@
 
 			<div class='benefits'>
 
-				<div class='benefits-title'><a href='/#/trade'>Trade</a></div>
+				<div class='benefits-title'><a href='/#/trade'>{$_('comm.trade')}</a></div>
 
 				<div class='item'>
-					<div class='title'>Permissionless</div>
-					<div class='description'>Trade directly from your wallet, no account needed.</div>
+					<div class='title'>{$_('page.home.trade00')}</div>
+					<div class='description'>{$_('page.home.trade01')}</div>
 				</div>
 
 				<div class='item'>
-					<div class='title'>Fast</div>
-					<div class='description'>Trades are executed and settled in seconds.</div>
+					<div class='title'>{$_('page.home.trade10')}</div>
+					<div class='description'>{$_('page.home.trade11')}</div>
 				</div>
 
 				<div class='item'>
-					<div class='title'>Leverage</div>
-					<div class='description'>Adjust leverage from none to 50x on each trade.</div>
-				</div>
-
-			</div>
-
-			<div class='benefits'>
-
-				<div class='benefits-title'><a href='/#/pool'>Pool</a></div>
-
-				<div class='item'>
-					<div class='title'>Liquidity</div>
-					<div class='description'>Pools pay out trader profits and in exchange receive their losses.</div>
-				</div>
-
-				<div class='item'>
-					<div class='title'>Rewards</div>
-					<div class='description'>Get fee rewards directly in ETH and USDC.</div>
-				</div>
-
-				<div class='item'>
-					<div class='title'>Flexible</div>
-					<div class='description'>Deposit and withdraw without time constraints.</div>
+					<div class='title'>{$_('page.home.trade20')}</div>
+					<div class='description'>{$_('page.home.trade21')}</div>
 				</div>
 
 			</div>
 
 			<div class='benefits'>
 
-				<div class='benefits-title'><a href='/#/stake'>Stake</a></div>
+				<div class='benefits-title'><a href='/#/pool'>{$_('comm.pool')}</a></div>
 
 				<div class='item'>
-					<div class='title'>Passive Income</div>
-					<div class='description'>Stake CAP to receive a share of protocol fees.</div>
+					<div class='title'>{$_('page.home.pool00')}</div>
+					<div class='description'>{$_('page.home.pool01')}</div>
 				</div>
 
 				<div class='item'>
-					<div class='title'>No Inflation</div>
-					<div class='description'>CAP's supply is fixed at 100,000.</div>
+					<div class='title'>{$_('page.home.pool10')}</div>
+					<div class='description'>{$_('page.home.pool11')}</div>
 				</div>
 
 				<div class='item'>
-					<div class='title'>Participate</div>
-					<div class='description'>Join other CAP holders in deciding the protocol's future.</div>
+					<div class='title'>{$_('page.home.pool20')}</div>
+					<div class='description'>{$_('page.home.pool21')}</div>
+				</div>
+
+			</div>
+
+			<div class='benefits'>
+
+				<div class='benefits-title'><a href='/#/stake'>{$_('comm.stake')}</a></div>
+
+				<div class='item'>
+					<div class='title'>{$_('page.home.stake00')}</div>
+					<div class='description'>{$_('page.home.stake01')}</div>
+				</div>
+
+				<div class='item'>
+					<div class='title'>{$_('page.home.stake10')}</div>
+					<div class='description'>{$_('page.home.stake11')}</div>
+				</div>
+
+				<div class='item'>
+					<div class='title'>{$_('page.home.stake20')}</div>
+					<div class='description'>{$_('page.home.stake21')}</div>
 				</div>
 
 			</div>
 
 		</div>
 
-		<div class='community'>Cap is a community-funded project. Join us on <a href='https://t.me/capfin' target='_blank'>Telegram</a> and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
-
+		<div class='community'>
+			{@html $_('page.home.community',{values:{"Twitter":"https://twitter.com/CapDotFinance","Telegram":"https://t.me/capfin"}} )}</div>
 	</div>
 
 </div>

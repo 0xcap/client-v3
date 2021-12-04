@@ -1,4 +1,5 @@
 <script>
+	import {_} from "../services/i18n"
 
 	import { onMount } from 'svelte'
 
@@ -218,7 +219,7 @@
 
 	<div class='header'>
 
-		<div class='title'>Place Order</div>
+		<div class='title'>{$_('page.order.title')}</div>
 		<div class='pills'>
 			<div class='pill' on:click={() => {if ($address) {showModal('Currencies')}}} data-intercept="true">{formatCurrency($currencyLabel)}</div>
 			<div class='pill' on:click={() => {showModal('Leverage')}} data-intercept="true">{formatToDisplay($leverage)}×</div>
@@ -237,7 +238,7 @@
 		{#if $currencyLabel != 'weth' && $allowances[$currencyLabel] && $allowances[$currencyLabel]['trading'] * 1 == 0}
 		<Button label={`Approve ${formatCurrency($currencyLabel)}`} onClick={() => {_approveCurrency()}} />
 		{:else}
-		<Button isRed={true} isLoading={$isSubmittingShort} label='Short' onClick={() => {_submitNewPosition(false)}} /> <Button isLoading={$isSubmittingLong} label='Long' onClick={() => {_submitNewPosition(true)}} />
+		<Button isRed={true} isLoading={$isSubmittingShort} label={$_('p.short')} onClick={() => {_submitNewPosition(false)}} /> <Button isLoading={$isSubmittingLong} label={$_('p.long')} onClick={() => {_submitNewPosition(true)}} />
 		{/if}
 	</div>
 

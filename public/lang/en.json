@@ -1,0 +1,114 @@
+{
+    "page":{
+        "header":{
+            "trade":"Trade",
+            "pool":"Pool",
+            "stake":"Stake",
+            "docs":"Docs" 
+        },
+        "home":{
+            "desc":"Decentralized Trading Protocol",
+            "vol":"Protocol Volume",
+            "trade00":"Permissionless",
+            "trade01":"Trade directly from your wallet, no account needed.",
+            "trade10":"Fast",
+            "trade11":"Trades are executed and settled in seconds.",
+            "trade20":"Leverage",
+            "trade21":"Adjust leverage from 1x to 50x on each trade.",
+            
+            "pool00":"Liquidity",
+            "pool01":"Pools pay out trader profits and in exchange receive their losses.",
+            "pool10":"Rewards",
+            "pool11":"Get fee rewards directly in ETH and USDC.",
+            "pool20":"Flexible",
+            "pool21":"Deposit and withdraw without time constraints.",
+            
+            "stake00":"Passive Income",
+            "stake01":"Stake CAP to receive a share of protocol fees.",
+            "stake10":"No Inflation",
+            "stake11":"CAP's supply is fixed at 100,000.",
+            "stake20":"Participate",
+            "stake21":"Join other CAP holders in deciding the protocol's future.",
+            "community":"Cap is a community-funded project. Join us on <a href=\"{Telegram}\" target=\"_blank\">Telegram</a> and <a href=\"{Twitter}\" target=\"_blank\">Twitter</a>."
+        },
+        "order":{
+            "title":"Place Order", 
+            "power":"Buying Power",
+            "note":"<a href='https://docs.cap.finance/setting-up-your-wallet' target='_blank'>Bridge funds</a> to Arbitrum to start trading."
+        },
+        "pool":{
+            "asset":"Asset",
+            "tvl":"TVL",
+            "poolDesc":"This pool backs trader profits and receives trader losses plus <strong>{poolShare}%</strong> of {currency} fees as rewards.<br/>",
+            "approve": "Approve {currency}",
+            "myShare":"My Share",
+            "myRewards":"My Rewards", 
+            "deposit":"Deposit",
+            "collect":"Collect" ,
+            "withdraw":"Withdraw",
+
+            "stakeDesc":"Stake your CAP to receive a share of trading fees. There are no restrictions on deposits or withdrawals.",
+            "stakeRewards": "My {currency} Rewards",
+            "receives":"Receives <strong>{fee}%</strong> of fees",
+            "buyCapL1":"Buy CAP (Ethereum L1) ",
+            "buyCapL2":"Buy CAP (Arbitrum L2) ",
+
+            "walbalance":"Wallet Balance",
+            "amount":"Amount",
+            "btnDeposit":"Deposit into {currency} pool",
+            "withdrawNote":"{fee}% is retained and awarded to the rest of the pool.",
+            "btnWithdraw":"Withdraw from {currency} pool"
+        }
+    },
+    "p":{
+        "close":"Close Position",
+        "date":"Date",
+        "prod":"Product",
+        "dir":"Direction",
+        "long":"Long",
+        "short":"Short",
+        "pexec":"Execution Price",
+        "pcurr":"Current Price",
+        "pentry":"Entry Price",
+        "pclose":"Close Price",
+        "settling":"Settling",
+        "closing":"Closing",
+        "size":"Size",
+        "margin":"Margin",
+        "leverage":"Leverage",
+        "liqed":"Was Liquidated",
+        "block":"Block",
+        "tx":"Transaction",
+        "PL1":"Profit or Loss",
+        "PL":"Unrealized P/L",
+        "PL2":"P/L",
+        "INT":"Interest",
+        "LIQP":"Liquidation Price",
+        "cancel1":"Cancel Order",
+        "cancel2":"Cancel Close Order",
+        "status1":"Settling.",
+        "status2":"Closing.",
+        "detailTitle":"Position Details",
+        "tradeTitle":"Trade Details",
+        "price":"Price",
+        "fee":"Fee",
+        "sizeUSD":"Size in USD",
+        "nodata":"No positions to show.",
+        "noTrades":"No trades to show."
+    }, 
+    "net":{
+        "note":"Select Arbitrum as your wallet's network to trade or pool on Cap.",
+        "switch":"Switch to Arbitrum",
+        "invalid":"Invalid Network",
+        "connwallet":"Connect Wallet"
+    },
+    "comm":{ 
+        "trade":"Trade",
+        "pool":"Pool",
+        "stake":"Stake",
+        "positions":"Positions",
+        "history":"History",
+        "done":"Done",
+        "vol":"Protocol Volume"
+    }
+}
