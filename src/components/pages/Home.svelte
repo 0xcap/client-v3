@@ -1,6 +1,8 @@
 <script>
 	import Volume from '../Volume.svelte'
 
+	import { EXTERNAL_ICON } from '../../lib/icons'
+
 </script>
 <style>
 
@@ -110,6 +112,17 @@
 		line-height: 1.618;
 	}
 
+	.links {
+		padding-top: 36px;
+		text-align: center;
+		line-height: 1.618;
+	}
+
+	.links :global(svg) {
+		height: 11px;
+		fill: currentColor;
+	}
+
 </style>
 
 <div class='home-wrap'>
@@ -205,6 +218,10 @@
 		</div>
 
 		<div class='community'>Cap is a community-funded project. Join us on <a href='https://t.me/capfin' target='_blank'>Telegram</a> and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
+		
+		<div class='links'>
+			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal {@html EXTERNAL_ICON}</a>
+		</div>
 
 	</div>
 
