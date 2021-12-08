@@ -52,7 +52,7 @@
 
 	<div class='left'>
 		<a class:active={$currentPage == 'home' || !$currentPage} href='/'>
-			<img src='/logos/CAP.svg' title='Cap logo' alt='Cap logo' />
+			<img src='/logos/CAP.svg' title='CAP logo' alt='CAP logo' />
 		</a>
 		<a class:active={$currentPage == 'trade'} href='#/trade'>Trade</a>
 		<a class:active={$currentPage == 'pool'} href='#/pool'>Pool</a>
