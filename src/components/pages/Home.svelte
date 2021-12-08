@@ -133,7 +133,7 @@
 
 			<div class='hero-inner'>
 
-				<div class='main-title'>Cap</div>
+				<div class='main-title'>CAP</div>
 					
 				<div class='tagline'>Decentralized Trading Protocol</div>
 				
@@ -217,7 +217,7 @@
 
 		</div>
 
-		<div class='community'>Cap is a community-funded project. Join us on <a href='https://t.me/capfin' target='_blank'>Telegram</a> and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
+		<div class='community'>CAP is a community-funded project. Join us on <a href='https://discord.gg/zkdr8vnujz' target='_blank'>Discord</a>, <a href='https://t.me/capfin' target='_blank'>Telegram</a>, and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
 		
 		<div class='links'>
 			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal {@html EXTERNAL_ICON}</a>

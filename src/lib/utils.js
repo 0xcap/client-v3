@@ -20,7 +20,7 @@ import { component, currentPage, activeModal, toast, chainId, activeProducts, pr
 // Price title
 export function setTitle(product, price) {
 	if (get(currentPage) == 'trade') {
-		document.title = `${product} ${price} | Cap`;
+		document.title = `${product} ${price} | CAP`;
 	}
 }
 
@@ -52,9 +52,9 @@ export function formatToDisplay(amount, maxPrecision, fixPrecision) {
 	if (amount == undefined || isNaN(amount)) return '';
 	if (!maxPrecision) maxPrecision = 100;
 
-	if (!fixPrecision && (amount*1 == 0 || amount * 1 >= 1) && (amount * 1).toFixed(3)*1 == Math.round(amount * 1)) return Math.round(amount).toLocaleString();
+	if (!fixPrecision && (amount*1 == 0 || amount * 1 >= 1) && (amount * 1).toFixed(3)*1 == Math.round(amount * 1)) return Math.round(amount);
 	
-	if (amount * 1 >= 1000 || amount * 1 <= -1000) {
+	if (amount * 1 >= 100000 || amount * 1 <= -100000) {
 		return Math.round(amount*1).toLocaleString();
 	} else if (amount * 1 >= 100 || amount * 1 <= -100) {
 		return (amount * 1).toFixed(2);
@@ -165,19 +165,19 @@ export function loadRoute(path, isInitial) {
 	if (!path || path == '/') {
 		component.set(Home);
 		currentPage.set('home');
-		document.title = `Cap`;
+		document.title = `CAP`;
 	} else if (path.includes('/trade')) {
 		component.set(Trade);
 		currentPage.set('trade');
-		document.title = `Trade | Cap`;
+		document.title = `Trade | CAP`;
 	} else if (path.includes('/pool')) {
 		component.set(Pool);
 		currentPage.set('pool');
-		document.title = `Pool | Cap`;
+		document.title = `Pool | CAP`;
 	} else if (path.includes('/stake')) {
 		component.set(Stake);
 		currentPage.set('stake');
-		document.title = `Stake | Cap`;
+		document.title = `Stake | CAP`;
 	}
 	hydrateData();
 }
