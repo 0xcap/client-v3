@@ -52,7 +52,7 @@ export function formatToDisplay(amount, maxPrecision, fixPrecision) {
 	if (amount == undefined || isNaN(amount)) return '';
 	if (!maxPrecision) maxPrecision = 100;
 
-	if (!fixPrecision && (amount * 1).toFixed(3)*1 == 0) return 0;
+	if (!fixPrecision && amount * 1 <= 100 && (amount * 1).toFixed(3)*1 == Math.round(amount * 1)) return Math.round(amount);
 	
 	if (amount * 1 >= 100000 || amount * 1 <= -100000) {
 		return Math.round(amount*1).toLocaleString();
