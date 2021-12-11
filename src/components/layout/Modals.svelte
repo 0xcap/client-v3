@@ -5,6 +5,7 @@
 	import Connect from '../modals/Connect.svelte'
 	import Products from '../modals/Products.svelte'
 	import Leverage from '../modals/Leverage.svelte'
+	import Confirmation from '../modals/Confirmation.svelte'
 	import Currencies from '../modals/Currencies.svelte'
 	import ClosePosition from '../modals/ClosePosition.svelte'
 	import PositionDetails from '../modals/PositionDetails.svelte'
@@ -35,6 +36,10 @@
 
 {#if $activeModal && $activeModal.name == 'Currencies'}
 <Currencies />
+{/if}
+
+{#if $activeModal && $activeModal.name == 'Confirmation'}
+<Confirmation data={$activeModal.data} />
 {/if}
 
 {#if $activeModal && $activeModal.name == 'ClosePosition'}

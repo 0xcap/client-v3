@@ -56,10 +56,10 @@ export function formatToDisplay(amount, maxPrecision, fixPrecision) {
 	
 	if (amount * 1 >= 100000 || amount * 1 <= -100000) {
 		return Math.round(amount*1).toLocaleString();
-	} else if (amount * 1 >= 100 || amount * 1 <= -100) {
+	} else if (amount * 1 >= 10 || amount * 1 <= -10) {
 		return (amount * 1).toFixed(2);
 	} else if (amount * 1 >= 1 || amount * 1 <= -1) {
-		return (amount * 1).toFixed(Math.min(maxPrecision,2));
+		return (amount * 1).toFixed(Math.min(maxPrecision,4));
 	} else if (amount * 1 >= 0.1 || amount * 1 <= -0.1) {
 		return (amount * 1).toFixed(Math.min(maxPrecision,5));
 	} else {

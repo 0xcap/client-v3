@@ -29,25 +29,35 @@
 
 		if ($size * 1 > PRODUCTS[$productId].maxLiquidity[$currencyLabel]) return showToast('Order size exceeds maximum allowed on this market.');
 
-		if (isLong) {
-			isSubmittingLong.set(true);
-		} else {
-			isSubmittingShort.set(true);
-		}
+		showModal('Confirmation', {
+			isLong,
+			size: $size,
+			margin: $margin,
+			marginPlusFee: $marginPlusFee,
+			productId: $productId,
+			currencyLabel: $currencyLabel,
+			leverage: $leverage
+		});
 
-		const error = await submitOrder(isLong);
-		if (error) {
-			focusAmount();
-		} else {
-			balance -= $margin * 1;
-			available -= $size * 1;
-			if (balance < 0) balance = 0;
-			if (available < 0) available = 0;
-			size.set();
-		}
+		// if (isLong) {
+		// 	isSubmittingLong.set(true);
+		// } else {
+		// 	isSubmittingShort.set(true);
+		// }
 
-		isSubmittingLong.set(false);
-		isSubmittingShort.set(false);
+		// const error = await submitOrder(isLong);
+		// if (error) {
+		// 	focusAmount();
+		// } else {
+		// 	balance -= $margin * 1;
+		// 	available -= $size * 1;
+		// 	if (balance < 0) balance = 0;
+		// 	if (available < 0) available = 0;
+		// 	size.set();
+		// }
+
+		// isSubmittingLong.set(false);
+		// isSubmittingShort.set(false);
 	}
 
 	async function _approveCurrency() {
@@ -251,9 +261,17 @@
 			{/if}
 			<div class='row'>
 				<div class='detail-label'>Margin</div>
-				<div class='detail-value'>{formatToDisplay($marginPlusFee || 0)} {formatCurrency($currencyLabel)}</div>
+				<div class='detail-value'>{formatToDisplay($margin || 0)} {formatCurrency($currencyLabel)}</div>
 			</div>
-      {#if Math.abs(priceImpact * 1) > $product.fee * 1}
+			<div class='row'>
+				<div class='detail-label'>Fee</div>
+				<div class='detail-value'>{$product.fee || 0}%</div>
+			</div>
+			<div class='row'>
+				<div class='detail-label'>Funding</div>
+				<div class='detail-value'>-{formatToDisplay($product.interest/(360*24)) || 0}% / h</div>
+			</div>
+      		{#if Math.abs(priceImpact * 1) > $product.fee * 1}
 			<div class='row'>
 				<div class='detail-label'>Price Impact</div>
 				<div class='detail-value'>{formatToDisplay(priceImpact)}%</div>
@@ -269,25 +287,6 @@
 				<div class='detail-value'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
 			</div>
 		{/if}
-	</div>
-
-	<div class='details product-info'>
-		<div class='row'>
-			<div class='detail-label'>Product</div>
-			<div class='detail-value'>{$product.symbol}</div>
-		</div>
-		<div class='row'>
-			<div class='detail-label'>Fee</div>
-			<div class='detail-value'>{$product.fee || 0}%</div>
-		</div>
-		<div class='row'>
-			<div class='detail-label'>Funding</div>
-			<div class='detail-value'>-{formatToDisplay($product.interest/(360*24)) || 0}% / hr</div>
-		</div>
-		<div class='row'>
-			<div class='detail-label'>Trading Hours</div>
-			<div class='detail-value'>{$product.hours}</div>
-		</div>
 	</div>
 
 	{#if $address && balance * 1 == 0}

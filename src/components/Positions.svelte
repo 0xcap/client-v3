@@ -8,7 +8,7 @@
 
 	import { CANCEL_ICON, CIRCLE_ICON } from '../lib/icons'
 
-	import { formatPnl, showModal, getUPL, formatCurrency, formatToDisplay } from '../lib/utils'
+	import { formatPnl, showModal, getUPL, formatCurrency, formatToDisplay, getPriceImpact } from '../lib/utils'
 
 	let upls = {};
 	let upls_percent = {};
@@ -46,6 +46,15 @@
 		await getUserOrders();
 		await getUserPositions();
 	});
+
+	function getPendingPrice(position, price) {
+		let priceImpact = Math.abs(getPriceImpact(position.size, position.productId, position.currencyLabel));
+		if (position.isLong) {
+			return price * (1 + priceImpact / 100);
+		} else {
+			return price * (1 - priceImpact / 100);
+		}
+	}
 
 </script>
 
@@ -200,7 +209,7 @@
 					<div class='column column-product'>{#if position.isLong}<span class='pos'>↑</span>{:else}<span class='neg'>↓</span>{/if} {position.product}</div>
 					<div class='column column-price' class:dim={!position.price}>
 						{#if !position.price}
-							{$prices[position.productId]}
+							{formatToDisplay(getPendingPrice(position, $prices[position.productId]))}
 						{:else}
 							{formatToDisplay(position.price)}
 						{/if}
