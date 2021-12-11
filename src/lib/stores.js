@@ -55,6 +55,7 @@ export const slippage = derived([size, productId, currencyLabel], ([$size, $prod
 
 // Pools
 export const pools = writable({});
+export const poolStats = writable({});
 export const oldPools = writable({});
 export const capPool = writable({});
 
