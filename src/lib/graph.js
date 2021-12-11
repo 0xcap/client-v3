@@ -76,11 +76,57 @@ export async function getUserOrders() {
 		_details[ev.args.key] = ev.args;
 	}
 
+	// graph
+
+	const response = await fetch(graph_url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			query: `
+				query {
+				  orders(
+				    orderBy: createdAtTimestamp,
+				    orderDirection: desc,
+				    first:30,
+				    where: {user: "${_address}"}
+				  ) {
+				  	id,
+				    productId,
+				    currency,
+				    margin,
+				    size,
+				    isClose,
+				    isLong,
+				    createdAtTimestamp
+				  }
+				}
+			`
+		})
+	});
+
+	const json = await response.json();
+
+	let graph_orders = json.data && json.data.orders;
+
+	if (!graph_orders) graph_orders = [];
+
+	for (const order of graph_orders) {
+		_details[order.id] = order;
+	}
+
+	let graph_keys = graph_orders.map((e) => {return e.id;});
+
 	let keys = _events.map((e) => {return e.args.key;});
 
 	// uniq keys
 	let unique_keys = [];
 	for (const k of keys) {
+		if (unique_keys.includes(k)) continue;
+		unique_keys.push(k);
+	}
+	for (const k of graph_keys) {
 		if (unique_keys.includes(k)) continue;
 		unique_keys.push(k);
 	}
