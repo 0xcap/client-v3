@@ -2,7 +2,7 @@
 
 	import { submitOrder, getProduct } from '../../lib/methods'
 	
-	import { formatToDisplay, formatCurrency, calculateLiquidationPrice, getPriceImpact, showToast } from '../../lib/utils'
+	import { formatToDisplay, formatCurrency, calculateLiquidationPrice, getPriceImpact, showToast, hideModal } from '../../lib/utils'
 	
 	import { prices, size, leverage, positions } from '../../lib/stores'
 
@@ -34,6 +34,7 @@
 			const _leverage = $leverage;
 			leverage.set(0);
 			leverage.set(_leverage);
+			hideModal();
 		}
 
 		isSubmitting = false;
@@ -109,24 +110,24 @@
 				value: data.isLong ? 'Long' : 'Short'
 			},
 			{
-				label: 'Average Entry Price',
+				label: 'Entry Price',
 				value: `${formatToDisplay(averagePrice)}`,
-				anteriorValue: _existingPosition.price
+				anteriorValue: formatToDisplay(_existingPosition.price)
 			},
 			{
 				label: 'Size',
 				value: `${formatToDisplay(newSize)} ${formatCurrency(data.currencyLabel)}`,
-				anteriorValue: _existingPosition.size
+				anteriorValue: formatToDisplay(_existingPosition.size)
 			},
 			{
 				label: 'Margin',
 				value: `${formatToDisplay(newMargin)} ${formatCurrency(data.currencyLabel)}`,
-				anteriorValue: _existingPosition.margin
+				anteriorValue: formatToDisplay(_existingPosition.margin)
 			},
 			{
 				label: 'Leverage',
 				value: `${formatToDisplay(newLeverage)}×`,
-				anteriorValue: _existingPosition.leverage
+				anteriorValue: _existingPosition.leverage && `${formatToDisplay(_existingPosition.leverage)}×`
 			},
 			{
 				label: 'Liquidation Price',
