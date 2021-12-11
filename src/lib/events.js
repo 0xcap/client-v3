@@ -5,6 +5,8 @@ import { getUserOrders, getUserPositions, getUserHistory } from './graph'
 
 import { address } from './stores'
 
+import { formatToDisplay, formatUnits, formatPnl, getCurrencyLabelFromAddress, formatCurrency, fromBytes32, showToast } from './utils'
+
 export async function initEventListeners() {
 	const tradingContract = await getContract('trading');
 	if (!tradingContract) return;
@@ -30,6 +32,8 @@ async function handleEvent() {
 
 	// console.log('got event', ev.event, ev);
 
+	const args = ev.args;
+
 	if (ev.event == 'NewOrder') {
 		await getUserOrders();
 	}
@@ -39,11 +43,54 @@ async function handleEvent() {
 		await getUserOrders();
 		await getUserPositions();
 		// console.log('refreshed orders and positions');
+
+		// event PositionUpdated(
+		// 	bytes32 indexed key,
+		// 	address indexed user,
+		// 	bytes32 indexed productId,
+		// 	address currency,
+		// 	bool isLong,
+		// 	uint256 margin,
+		// 	uint256 size,
+		// 	uint256 price,
+		// 	uint256 fee
+		// );
+
+		// notify
+		let size = formatToDisplay(formatUnits(args.size));
+		let currency = formatCurrency(getCurrencyLabelFromAddress(args.currency));
+		let price = formatToDisplay(formatUnits(args.price));
+		showToast(`Order executed: ${size} ${currency} ${args.isLong ? 'long' : 'short'} on ${fromBytes32(args.productId)} at ${price}.`, 'success');
+
 	}
 
 	if (ev.event == 'ClosePosition') {
 		// From listener only - oracle triggered
 		await getUserHistory();
+
+		// event ClosePosition(
+		// 	bytes32 indexed key,
+		// 	address indexed user,
+		// 	bytes32 indexed productId,
+		// 	address currency,
+		// 	bool isLong,
+		// 	uint256 price,
+		// 	uint256 margin,
+		// 	uint256 size,
+		// 	uint256 fee,
+		// 	int256 pnl,
+		// 	bool wasLiquidated
+		// );
+
+		if (args.wasLiquidated) return;
+
+		// notify
+		let size = formatToDisplay(formatUnits(args.size));
+		let currency = formatCurrency(getCurrencyLabelFromAddress(args.currency));
+		let price = formatToDisplay(formatUnits(args.price));
+		let pnl = formatPnl(formatUnits(args.pnl));
+		showToast(`Position closed on ${fromBytes32(args.productId)}. P/L: ${pnl} ${currency}.`, 'success');
+
 	}
 
 }
