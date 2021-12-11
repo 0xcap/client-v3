@@ -110,6 +110,8 @@ export async function getUserOrders() {
 
 	let graph_orders = json.data && json.data.orders;
 
+	// console.log('graph_orders', graph_orders);
+	
 	if (!graph_orders) graph_orders = [];
 
 	for (const order of graph_orders) {

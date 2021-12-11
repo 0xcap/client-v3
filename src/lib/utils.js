@@ -226,7 +226,7 @@ export function formatOrders(orders, info) {
 		}
 		//console.log('o', o);
 		formattedOrders.push({
-			key: info[i].key,
+			key: info[i].key || info[i].id,
 			price: 0,
 			isClose: o.isClose,
 			margin: formatUnits(o.margin),
