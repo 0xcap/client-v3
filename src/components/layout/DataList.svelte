@@ -36,7 +36,7 @@
 	.input-row {
 		position: relative;
 		padding: var(--base-padding);
-		border-bottom: 1px solid var(--jet-dim);
+		border-bottom: 1px solid var(--rich-black);
 	}
 
 	.input-label {

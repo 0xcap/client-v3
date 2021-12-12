@@ -33,11 +33,15 @@
 		cursor: pointer;
 	}
 
+	.selector:hover {
+		color: #ddd;
+	}
+
 	.selector :global(svg) {
 		margin-left: 10px;
 		height: 8px;
 		fill: transparent;
-		stroke: #fff;
+		stroke: currentColor;
 	}
 
 	.selector img {

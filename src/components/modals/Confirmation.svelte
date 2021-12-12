@@ -155,17 +155,16 @@
 		padding: var(--base-padding);
 		line-height: 1.618;
 		border-bottom: 1px solid var(--rich-black);
-		background-color: var(--jet-dim);
 	}
 
 </style>
 
 <Modal title={existingPosition ? 'Resulting Position' : 'New Position'} showHeader={true} showCancel={true}>
 	{#if existingPosition}
-	<div class='note'>You're adding to an existing position.</div>
+	<div class='note'>You're adding to an existing {data.isLong ? 'long' : 'short'} position.</div>
 	{:else}
-	<div class='note'>You're opening a new position.</div>
+	<div class='note'>You're opening a new {data.isLong ? 'long' : 'short'} position.</div>
 	{/if}
 	<DataList data={rows} onSubmit={_submitNewPosition} />
-	<Button wrap={true} isLoading={isSubmitting} onClick={_submitNewPosition} label='Confirm Order' />
+	<Button wrap={true} isLoading={isSubmitting} onClick={_submitNewPosition} label={`Confirm ${data.isLong ? 'Long' : 'Short'} Order`} />
 </Modal>

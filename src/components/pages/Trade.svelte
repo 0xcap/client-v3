@@ -80,7 +80,7 @@
 		margin-right: var(--base-padding);
 	}
 	.account-nav a:hover {
-		color: var(--green);
+		color: var(--silver-chalice);
 	}
 	.account-nav a.active {
 		color: var(--green);

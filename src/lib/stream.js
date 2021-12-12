@@ -71,20 +71,21 @@ function subscribeToProducts() {
 
 }
 
+let lastMessageReceived = Date.now();
+let s;
 export function initWebsocket() {
 
 	// console.log('initWebsocket');
 
-	let lastMessageReceived = Date.now();
-
-	// // Check last ticker
-	// setInterval(() => {
-	// 	if (lastMessageReceived < Date.now() - 60 * 1000) {
-	// 		showToast('Price stream is stale. Try refreshing the page.', 'error', 'stream-error');
-	// 	} else {
-	// 		hideToast('stream-error');
-	// 	}
-	// }, 1000);
+	// Check last ticker
+	clearInterval(s);
+	s = setInterval(() => {
+		if (lastMessageReceived < Date.now() - 60 * 1000) {
+			showToast('Price stream is stale. Try refreshing the page or changing your VPN/proxy.', 'error', 'stream-error');
+		} else {
+			hideToast('stream-error');
+		}
+	}, 1000);
 
 	if (ws) {
 		try {
@@ -98,7 +99,7 @@ export function initWebsocket() {
 
 	ws.onopen = (e) => {
 
-		//console.log('onopen', ws.readyState, e);
+		// console.log('onopen', ws.readyState, e);
 
 		if (ws.readyState != 1) return;
 
@@ -110,9 +111,11 @@ export function initWebsocket() {
 
 	ws.onmessage = (e) => {
 
-		try {
+		// console.log('m', e);
 
-			lastMessageReceived = Date.now();
+		lastMessageReceived = Date.now();
+
+		try {
 
 			const message = JSON.parse(e.data);
 

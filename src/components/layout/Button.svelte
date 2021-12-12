@@ -37,14 +37,15 @@
 
 	button.loading {
 		pointer-events: none;
-		cursor: default;
+		cursor: not-allowed !important;
 		color: var(--sonic-silver);
 		background-color: var(--onyx);
 	}
 
 	.wrap {
 		padding: var(--base-padding);
-		border-top: 1px solid var(--jet-dim);
+		border-top: 1px solid var(--rich-black);
+		background-color: var(--jet-dim);
 	}
 
 </style>

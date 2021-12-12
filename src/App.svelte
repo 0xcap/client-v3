@@ -56,6 +56,7 @@
 		--onyx: #3D3D3D;
 		--dim-gray: #616161;
 		--sonic-silver: #707070;
+		--silver-chalice:  #ADADAD;
 		--orange: rgb(253,167,20);
 		
 		--base-padding: 16px;

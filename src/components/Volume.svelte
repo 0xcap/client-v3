@@ -47,8 +47,8 @@
 	}
 </style>
 
-{#if volume_eth && volume_usd}
-	{formatToDisplay(volume_eth)} ETH (${formatToDisplay(volume_usd)})
+{#if volume_eth}
+	{formatToDisplay(volume_eth)} ETH {#if volume_usd}(${formatToDisplay(volume_usd)}){/if}
 {:else}
 	<div class='loading-icon'>{@html SPINNER_ICON}</div>
 {/if}

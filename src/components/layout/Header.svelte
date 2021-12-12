@@ -26,7 +26,7 @@
 	}
 
 	.left a:hover {
-		color: var(--green);
+		color: var(--silver-chalice);
 	}
 
 	.left a.active {
@@ -40,7 +40,12 @@
 		opacity: 0.5;
 	}
 
-	a:hover img, a.active img {
+	a:hover img {
+		filter: grayscale(1);
+		opacity: 0.8;
+	}
+
+	a.active img {
 		filter: grayscale(0);
 		opacity: 1;
 	}
