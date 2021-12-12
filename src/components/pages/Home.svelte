@@ -9,12 +9,12 @@
 	.home-wrap {
 		padding: var(--base-padding);
 		background-color: var(--eerie-black);
-		padding-bottom: 100px;
+		padding-bottom: 260px;
 	}
 
 	.home {
 		margin: 0 auto;
-		max-width: 1280px;
+		max-width: 800px;
 	}
 
 	.hero {
@@ -41,6 +41,10 @@
 
 	.tagline {
 		line-height: 1.618;
+		font-size: 140%;
+		font-weight: 500;
+		max-width: 480px;
+		margin: 0 auto;
 	}
 
 	.button-wrap {
@@ -61,7 +65,6 @@
 	.volume .label {
 		color: var(--sonic-silver);
 		margin-top: 8px;
-		font-size: 90%;
 	}
 
 	.volume .value {
@@ -105,6 +108,8 @@
 		text-align: center;
 		line-height: 1.618;
 		color: var(--sonic-silver);
+		max-width: 600px;
+		margin: 0 auto;
 	}
 
 	.links {
@@ -136,7 +141,7 @@
 					<img src='/logos/CAP.svg' title='CAP logo' alt='CAP logo' />
 				</div>
 					
-				<div class='tagline'>CAP is the best place to trade perpetuals on Arbitrum.</div>
+				<div class='tagline'>Trade cryptos with up to 50× leverage directly from your wallet</div>
 
 				<div class='button-wrap'>
 					<a class='button' href='#/trade'>Trade</a>
@@ -151,35 +156,7 @@
 
 		</div>
 
-		<div class='benefits-wrap'>
-
-			<div class='benefits'>
-
-				<div class='benefits-title'><a href='/#/trade'>Trade</a></div>
-
-				<div class='description'>Go long or short directly from your wallet.</div>
-
-			</div>
-
-			<div class='benefits'>
-
-				<div class='benefits-title'><a href='/#/pool'>Pool</a></div>
-
-				<div class='description'>Pools pay out profits and receive losses + fees.</div>
-
-			</div>
-
-			<div class='benefits'>
-
-				<div class='benefits-title'><a href='/#/stake'>Stake</a></div>
-
-				<div class='description'>Stake CAP to receive a share of protocol revenue.</div>
-
-			</div>
-
-		</div>
-
-		<div class='community'>CAP is a community-funded protocol. Join us on <a href='https://discord.gg/zkdr8vnujz' target='_blank'>Discord</a> (new), <a href='https://t.me/capfin' target='_blank'>Telegram</a>, and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
+		<div class='community'>CAP is a decentralized perpetual exchange that is fast, cheap, and secure. Join the community on <a href='https://discord.gg/zkdr8vnujz' target='_blank'>Discord</a>, <a href='https://t.me/capfin' target='_blank'>Telegram</a>, and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
 		
 		<div class='links'>
 			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal</a>

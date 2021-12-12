@@ -23,7 +23,7 @@
 	.left a {
 		color: var(--silver-chalice);
 		margin-right: 26px;
-		font-weight: 600;
+		font-weight: 500;
 	}
 
 	@media (max-width: 600px) {
@@ -68,7 +68,6 @@
 		</a>
 		<a class:active={$currentPage == 'trade'} href='#/trade'>Trade</a>
 		<a class:active={$currentPage == 'pool'} href='#/pool'>Pool</a>
-		<a class:active={$currentPage == 'stake'} href='#/stake'>Stake</a>
 		<a href='https://docs.cap.finance' target='_blank'>Docs</a>
 	</div>
 

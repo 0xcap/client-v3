@@ -9,7 +9,6 @@ import { PRODUCTS } from './products'
 import Home from '../components/pages/Home.svelte'
 import Trade from '../components/pages/Trade.svelte'
 import Pool from '../components/pages/Pool.svelte'
-import Stake from '../components/pages/Stake.svelte'
 
 import { hydrateData } from './data'
 import { getProduct } from './methods'
@@ -174,10 +173,6 @@ export function loadRoute(path, isInitial) {
 		component.set(Pool);
 		currentPage.set('pool');
 		document.title = `Pool | CAP`;
-	} else if (path.includes('/stake')) {
-		component.set(Stake);
-		currentPage.set('stake');
-		document.title = `Stake | CAP`;
 	}
 	hydrateData();
 }
