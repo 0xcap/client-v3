@@ -59,7 +59,7 @@
 
 </style>
 
-
+{#if $currentPage != 'home'}
 <header>
 
 	<div class='left'>
@@ -76,3 +76,4 @@
 	</div>
 	
 </header>
+{/if}

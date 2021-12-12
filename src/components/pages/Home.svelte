@@ -9,12 +9,13 @@
 	.home-wrap {
 		padding: var(--base-padding);
 		background-color: var(--eerie-black);
-		padding-bottom: 260px;
+		padding-bottom: 100px;
 	}
 
 	.home {
 		margin: 0 auto;
 		max-width: 800px;
+		padding: 48px 0;
 	}
 
 	.hero {
@@ -104,7 +105,7 @@
 	}
 
 	.community {
-		padding: 64px 0 0;
+		padding: 36px 0 0;
 		text-align: center;
 		line-height: 1.618;
 		color: var(--sonic-silver);
@@ -144,7 +145,7 @@
 				<div class='tagline'>Trade cryptos with up to 50× leverage directly from your wallet</div>
 
 				<div class='button-wrap'>
-					<a class='button' href='#/trade'>Trade</a>
+					<a class='button' href='#/trade'>Start Trading</a>
 				</div>
 
 				<div class='volume'>
@@ -154,6 +155,12 @@
 
 			</div>
 
+		</div>
+
+		<div class='links'>
+			<a href='#/trade'>Trade</a>
+			<a href='#/pool'>Pool</a>
+			<a href='https://docs.cap.finance' target='_blank'>Docs</a>
 		</div>
 
 		<div class='community'>CAP is a decentralized perpetual exchange that is fast, cheap, and secure. Join the community on <a href='https://discord.gg/zkdr8vnujz' target='_blank'>Discord</a>, <a href='https://t.me/capfin' target='_blank'>Telegram</a>, and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
