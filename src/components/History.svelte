@@ -84,19 +84,79 @@
 	}
 
 	.column-product {
-		width: 20%;
+		width: 12.5%;
+	}
+	.column-entry-price {
+		width: 12.5%;
 	}
 	.column-price {
-		width: 20%;
+		width: 12.5%;
+	}
+	.column-margin {
+		width: 12.5%;
 	}
 	.column-size {
-		width: 20%;
+		width: 12.5%;
 	}
 	.column-leverage {
-		width: 20%;
+		width: 12.5%;
 	}
 	.column-pnl {
 		width: 20%;
+	}
+	.column-wasliq {
+		width: 5%;
+	}
+
+	@media (max-width: 1200px) {
+		.pnl-percent {
+			display: none;
+		}
+	}
+
+	@media (max-width: 1000px) {
+		.column-wasliq, .column-margin {
+			display: none;
+		}
+		.column-product {
+			width: 16%;
+		}
+		.column-entry-price {
+			width: 16%;
+		}
+		.column-price {
+			width: 16%;
+		}
+		.column-size {
+			width: 16%;
+		}
+		.column-leverage {
+			width: 16%;
+		}
+		.column-pnl {
+			width: 20%;
+		}
+	}
+
+	@media (max-width: 780px) {
+
+		.column-leverage, .column-entry-price {
+			display: none;
+		}
+
+		.column-product {
+			width: 25%;
+		}
+		.column-price {
+			width: 25%;
+		}
+		.column-size {
+			width: 25%;
+		}
+		.column-pnl {
+			width: 25%;
+		}
+
 	}
 
 	.empty {
@@ -109,26 +169,7 @@
 		height: 24px;
 	}
 
-	@media (max-width: 600px) {
-
-		.column-leverage {
-			display: none;
-		}
-
-		.column-product {
-			width: 30%;
-		}
-		.column-price {
-			width: 25%;
-		}
-		.column-size {
-			width: 20%;
-		}
-		.column-pnl {
-			width: 25%;
-		}
-
-	}
+	
 
 </style>
 
@@ -137,10 +178,13 @@
 	<div class='columns'>
 
 		<div class='column column-product'>Product</div>
+		<div class='column column-entry-price'>Entry Price</div>
 		<div class='column column-price'>Close Price</div>
+		<div class='column column-margin'>Margin</div>
 		<div class='column column-size'>Size</div>
 		<div class='column column-leverage'>Leverage</div>
 		<div class='column column-pnl'>P/L</div>
+		<div class='column column-wasliq'>Was Liq.</div>
 
 	</div>
 
@@ -160,10 +204,13 @@
 					<div class='trade' on:click={() => {showModal('TradeDetails', trade)}} data-intercept="true">
 
 						<div class='column column-product'>{#if trade.isLong}<span class='pos'>↑</span>{:else}<span class='neg'>↓</span>{/if} {trade.product}</div>
+						<div class='column column-entry-price'>{formatToDisplay(trade.entryPrice)}</div>
 						<div class='column column-price'>{formatToDisplay(trade.price)}</div>
+						<div class='column column-margin'>{formatToDisplay(trade.margin)} {formatCurrency(trade.currencyLabel)}</div>
 						<div class='column column-size'>{formatToDisplay(trade.size)} {formatCurrency(trade.currencyLabel)}</div>
 						<div class='column column-leverage'>{formatToDisplay(trade.leverage)}×</div>
-						<div class={`column column-pnl ${trade.pnl * 1 < 0 ? 'neg' : 'pos'}`}>{formatPnl(trade.pnl)}</div>
+						<div class={`column column-pnl ${trade.pnl * 1 < 0 ? 'neg' : 'pos'}`}>{formatPnl(trade.pnl)} <span class='pnl-percent'>({formatPnl(100*trade.pnl/trade.margin, true)}%)</span></div>
+						<div class='column column-wasliq'>{trade.wasLiquidated ? 'Yes' : ''}</div>
 
 					</div>
 
