@@ -62,7 +62,7 @@
 		color: var(--onyx);
 	}
 
-	@media (max-width: 600px) {
+	@media (max-width: 780px) {
 
 		.volume {
 			display: none;
