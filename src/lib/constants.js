@@ -78,6 +78,11 @@ export const CHAINDATA = {
 			weth: ADDRESS_ZERO,
 			usdc: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707'
 		},
+		poolInception: {
+			weth: 1637154307000,
+			usdc: 1637154307000,
+			cap: 1637154307000
+		},
 		cap: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9'
 	},
 	42161: {
@@ -91,7 +96,8 @@ export const CHAINDATA = {
 		},
 		poolInception: {
 			weth: 1637154307000,
-			usdc: 1637154307000
+			usdc: 1637154307000,
+			cap: 1637154307000
 		},
 		cap: '0x031d35296154279DC1984dCD93E392b1f946737b'
 	}

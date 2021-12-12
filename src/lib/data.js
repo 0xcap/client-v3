@@ -24,6 +24,7 @@ export function hydrateData() {
 		getPoolInfo('usdc');
 		getPoolStats('weth');
 		getPoolStats('usdc');
+		getCapPoolInfo();
 	} else if (_currentPage == 'stake') {
 		getCapPoolInfo();
 	}

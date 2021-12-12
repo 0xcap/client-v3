@@ -44,12 +44,12 @@
 	img {
 		height: 12px;
 		filter: grayscale(1);
-		opacity: 0.5;
+		opacity: 0.65;
 	}
 
 	a:hover img {
 		filter: grayscale(1);
-		opacity: 0.8;
+		opacity: 1;
 	}
 
 	a.active img {
