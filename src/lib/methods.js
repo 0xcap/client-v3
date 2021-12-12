@@ -32,11 +32,17 @@ export async function selectProduct(productId) {
 
 	if (!productId) productId = get(Stores.productId);
 
+	// console.log('productId', productId);
+
 	let product = await getProduct(productId);
+
+	// console.log('product', product);
 
 	if (!product.symbol) {
 		product = formatProduct('ETH-USD', {symbol: 'ETH-USD', productId: 'ETH-USD', maxLeverage: 50 * 10**8, fee: 1000});
 	}
+
+	// console.log('product2', product);
 
 	Stores.product.set(product);
 	Stores.productId.set(productId);

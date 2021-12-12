@@ -230,7 +230,7 @@
 
 		<div class='title'>Place Order</div>
 		<div class='pills'>
-			<div class='pill' on:click={() => {if ($address) {showModal('Currencies')}}} data-intercept="true">{formatCurrency($currencyLabel)}</div>
+			<div class='pill' on:click={() => {showModal('Currencies')}} data-intercept="true">{formatCurrency($currencyLabel)}</div>
 			<div class='pill' on:click={() => {showModal('Leverage')}} data-intercept="true">{formatToDisplay($leverage)}×</div>
 		</div>
 
@@ -263,6 +263,7 @@
 				<div class='detail-label'>Margin</div>
 				<div class='detail-value'>{formatToDisplay($margin || 0)} {formatCurrency($currencyLabel)}</div>
 			</div>
+			{#if $address}
 			<div class='row'>
 				<div class='detail-label'>Fee</div>
 				<div class='detail-value'>{$product.fee || 0}%</div>
@@ -276,6 +277,7 @@
 				<div class='detail-label'>Price Impact</div>
 				<div class='detail-value'>{formatToDisplay(priceImpact)}%</div>
 			</div>
+			{/if}
 			{/if}
 		{:else}
 			<div class='row'>

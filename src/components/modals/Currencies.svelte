@@ -4,7 +4,7 @@
 	
 	import Modal from './Modal.svelte'
 
-	import { currencyLabel } from '../../lib/stores'
+	import { currencyLabel, address } from '../../lib/stores'
 
 	import { selectCurrency, getBalanceOf } from '../../lib/methods'
 
@@ -74,9 +74,11 @@
 				<span>{formatCurrency(_currencyLabel)}</span>
 			</div>
 
+			{#if $address}
 			<div class='balance'>
 				{formatToDisplay(balances[_currencyLabel])} 
 			</div>
+			{/if}
 
 		</div>
 

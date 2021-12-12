@@ -7,6 +7,7 @@
 <style>
 
 	.home-wrap {
+		height: 100vh;
 		padding: var(--base-padding);
 		background-color: var(--eerie-black);
 		border-top: 1px solid var(--jet);
@@ -15,7 +16,7 @@
 
 	.home {
 		margin: 0 auto;
-		max-width: 1260px;
+		max-width: 1280px;
 	}
 
 	.hero {
@@ -69,15 +70,18 @@
 
 	.benefits-wrap {
 		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
 		grid-auto-flow: column;
-		grid-gap: 48px;
+		grid-gap: 36px;
 		padding: 36px 0;
+		border-bottom: 1px solid var(--jet);
 	}
 
 	@media (max-width: 900px) {
 
 		.benefits-wrap {
 			grid-auto-flow: row;
+			grid-template-columns: unset;
 		}
 
 	}
@@ -101,15 +105,16 @@
 		margin-bottom: 4px;
 	}
 
-	.item .description {
-		line-height: 1.418;
-		color: var(--sonic-silver);
+	.description {
+		line-height: 1.618;
 	}
 
 	.community {
-		padding-top: 36px;
+		padding: 36px 0;
 		text-align: center;
 		line-height: 1.618;
+		color: var(--sonic-silver);
+		border-bottom: 1px solid var(--jet);
 	}
 
 	.links {
@@ -140,6 +145,7 @@
 				<div class='main-title'>CAP</div>
 					
 				<div class='tagline'>Decentralized Trading Protocol</div>
+				<div class='tagline'>Fast. Cheap. Secure.</div>
 				
 				<div class='button-wrap'>
 					<a class='button' href='#/trade'>Trade</a>
@@ -160,20 +166,7 @@
 
 				<div class='benefits-title'><a href='/#/trade'>Trade</a></div>
 
-				<div class='item'>
-					<div class='title'>Permissionless</div>
-					<div class='description'>Trade directly from your wallet, no account needed.</div>
-				</div>
-
-				<div class='item'>
-					<div class='title'>Fast</div>
-					<div class='description'>Trades are executed and settled in seconds.</div>
-				</div>
-
-				<div class='item'>
-					<div class='title'>Leverage</div>
-					<div class='description'>Adjust leverage from none to 50x on each trade.</div>
-				</div>
+				<div class='description'>Go long or short directly from your wallet.</div>
 
 			</div>
 
@@ -181,20 +174,7 @@
 
 				<div class='benefits-title'><a href='/#/pool'>Pool</a></div>
 
-				<div class='item'>
-					<div class='title'>Liquidity</div>
-					<div class='description'>Pools pay out trader profits and in exchange receive their losses.</div>
-				</div>
-
-				<div class='item'>
-					<div class='title'>Rewards</div>
-					<div class='description'>Get fee rewards directly in ETH and USDC.</div>
-				</div>
-
-				<div class='item'>
-					<div class='title'>Flexible</div>
-					<div class='description'>Deposit and withdraw without time constraints.</div>
-				</div>
+				<div class='description'>Pools pay out profits and receive losses + fees.</div>
 
 			</div>
 
@@ -202,20 +182,7 @@
 
 				<div class='benefits-title'><a href='/#/stake'>Stake</a></div>
 
-				<div class='item'>
-					<div class='title'>Passive Income</div>
-					<div class='description'>Stake CAP to receive a share of protocol fees.</div>
-				</div>
-
-				<div class='item'>
-					<div class='title'>No Inflation</div>
-					<div class='description'>CAP's supply is fixed at 100,000.</div>
-				</div>
-
-				<div class='item'>
-					<div class='title'>Participate</div>
-					<div class='description'>Join other CAP holders in deciding the protocol's future.</div>
-				</div>
+				<div class='description'>Stake CAP to receive a share of protocol revenue.</div>
 
 			</div>
 
@@ -224,9 +191,9 @@
 		<div class='community'>CAP is a community-funded project. Join us on <a href='https://discord.gg/zkdr8vnujz' target='_blank'>Discord</a>, <a href='https://t.me/capfin' target='_blank'>Telegram</a>, and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
 		
 		<div class='links'>
-			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal {@html EXTERNAL_ICON}</a>
-			<a href='https://defillama.com/protocol/cap' target='_blank'>Defi Llama {@html EXTERNAL_ICON}</a>
-			<a href='https://www.immunefi.com/bounty/cap' target='_blank'>Immunefi {@html EXTERNAL_ICON}</a>
+			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal</a>
+			<a href='https://defillama.com/protocol/cap' target='_blank'>Defi Llama</a>
+			<a href='https://www.immunefi.com/bounty/cap' target='_blank'>Immunefi</a>
 		</div>
 
 	</div>
