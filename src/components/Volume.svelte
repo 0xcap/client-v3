@@ -34,6 +34,8 @@
 		if (!_prices['ETH-USD']) return;
 		volume_eth = _volumeUSD * 1 / _prices['ETH-USD'] + _volumeETH * 1;
 		volume_usd = _volumeUSD * 1 + _prices['ETH-USD'] * _volumeETH * 1;
+		volume_usd /= 10**6;
+		volume_usd = volume_usd.toFixed(1);
 	}
 
 	$: calculateVolume($prices, volumeETH, volumeUSD);
@@ -45,10 +47,14 @@
 		height: 16px;
 		fill: none;
 	}
+	.dollar-amount {
+		color: var(--sonic-silver);
+		font-weight: 400;
+	}
 </style>
 
 {#if volume_eth}
-	{formatToDisplay(volume_eth)} ETH {#if volume_usd}(${formatToDisplay(volume_usd)}){/if}
+	{formatToDisplay(volume_eth)} ETH {#if volume_usd}<span class='dollar-amount'>(${volume_usd}M)</span>{/if}
 {:else}
 	<div class='loading-icon'>{@html SPINNER_ICON}</div>
 {/if}
