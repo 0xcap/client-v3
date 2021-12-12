@@ -123,6 +123,10 @@
 		fill: currentColor;
 	}
 
+	.links a {
+		margin: 0 8px;
+	}
+
 </style>
 
 <div class='home-wrap'>
@@ -221,6 +225,8 @@
 		
 		<div class='links'>
 			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal {@html EXTERNAL_ICON}</a>
+			<a href='https://defillama.com/protocol/cap' target='_blank'>Defi Llama {@html EXTERNAL_ICON}</a>
+			<a href='https://www.immunefi.com/bounty/cap' target='_blank'>Immunefi {@html EXTERNAL_ICON}</a>
 		</div>
 
 	</div>

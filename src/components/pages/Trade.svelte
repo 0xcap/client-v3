@@ -20,8 +20,8 @@
 	.trade {
 		display: grid;
 		grid-gap: var(--grid-gap);
-		grid-auto-flow: column;
-		grid-template-columns: 300px auto;
+		grid-auto-flow: row;
+		grid-template-rows: calc(var(--ticker-height) + var(--chart-resolution-height) + var(--chart-height) + 3 * var(--grid-gap)) auto;
 		background-color: var(--rich-black-fogra);
 		position: absolute;
 		top: calc(var(--header-height) + var(--grid-gap));
@@ -30,12 +30,20 @@
 		right: 0;
 	}
 
-	.sidebar {
+	.core {
+		order: 1;
+		display: grid;
+		grid-gap: var(--grid-gap);
+		grid-auto-flow: column;
+		grid-template-columns: 300px auto;
+	}
+
+	.core .sidebar {
 		order: 1;
 		background-color: var(--eerie-black);
 	}
 
-	.core {
+	.core .data {
 		order: 2;
 		display: grid;
 		grid-gap: var(--grid-gap);
@@ -44,12 +52,9 @@
 	}
 
 	.account {
+		order: 2;
 		position: relative;
 		background-color: var(--eerie-black);
-	}
-
-	.chart {
-
 	}
 
 	.account-nav {
@@ -88,17 +93,16 @@
 			display: grid;
 			grid-gap: var(--grid-gap);
 			grid-auto-flow: row;
-			grid-template-rows: auto;
+			grid-template-rows: unset;
 			grid-template-columns: unset;
 			overflow-y: scroll;
 		}
 
 		.core {
-			order: 2;
-		}
-
-		.sidebar {
-			order: 1;
+			display: grid;
+			grid-gap: var(--grid-gap);
+			grid-auto-flow: row;
+			grid-template-columns: unset;
 		}
 
 		.account-list {
@@ -113,32 +117,34 @@
 
 	<div class='core'>
 
-		<Ticker />
+		<div class='sidebar'>
+			<Order />
+		</div>
 
-		<ChartResolution />
-		<Chart/>
-
-		<div class='account'>
-
-			<div class='account-nav'>
-				<a class:active={panel == 'positions'} on:click={() => {selectPanel('positions')}}>Positions</a>
-				<a class:active={panel == 'history'} on:click={() => {selectPanel('history')}}>History</a>
-			</div>
-
-			<div class='account-list'>
-				{#if panel == 'positions'}
-					<Positions />
-				{/if}
-				{#if panel == 'history'}
-					<History />
-				{/if}
-			</div>
+		<div class='data'>
+			<Ticker />
+			<ChartResolution />
+			<Chart/>
 		</div>
 
 	</div>
 
-	<div class='sidebar'>
-		<Order />
+	<div class='account'>
+
+		<div class='account-nav'>
+			<a class:active={panel == 'positions'} on:click={() => {selectPanel('positions')}}>Positions</a>
+			<a class:active={panel == 'history'} on:click={() => {selectPanel('history')}}>History</a>
+		</div>
+
+		<div class='account-list'>
+			{#if panel == 'positions'}
+				<Positions />
+			{/if}
+			{#if panel == 'history'}
+				<History />
+			{/if}
+		</div>
+
 	</div>
 
 </div>

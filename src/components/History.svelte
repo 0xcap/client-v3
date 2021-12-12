@@ -24,7 +24,7 @@
 		const historyList = document.getElementById('history-list');
 		historyList.onscroll = async () => {
 			// console.log('scrolling', historyList.scrollTop, historyList.scrollHeight);
-			if (historyList.scrollTop > historyList.scrollHeight - 200) {
+			if (historyList.scrollTop > historyList.scrollHeight - 350) {
 				if (loadingMore || lastTrades.length < HISTORY_COUNT) return;
 				loadingMore = true;
 				// console.log('loading more');

@@ -256,7 +256,7 @@
 			{#if sizeInUSD}
 			<div class='row'>
 				<div class='detail-label'>Size in USD</div>
-				<div class='detail-value'>{formatToDisplay(sizeInUSD, 2)}</div>
+				<div class='detail-value'>${formatToDisplay(sizeInUSD, 2)}</div>
 			</div>
 			{/if}
 			<div class='row'>
