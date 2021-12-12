@@ -224,18 +224,23 @@
 		color: var(--sonic-silver);
 	}
 
+	.note {
+		color: var(--red);
+		padding: var(--base-padding);
+	}
+
 </style>
 
 <div class='pools'>
 
 	{#each poolEntries as [_currencyLabel, poolInfo]}
 
-		<div class='pool' class:loading={poolIsLoading[_currencyLabel] || !poolInfo.tvl}>
+		<div class='pool' class:loading={poolIsLoading[_currencyLabel] || poolInfo.tvl == undefined}>
 
 			<div class='asset'>
 				<img src={CURRENCY_LOGOS[_currencyLabel]}>
 				{formatCurrency(_currencyLabel)} 
-				{#if !poolInfo.tvl || poolIsLoading[_currencyLabel]}
+				{#if poolInfo.tvl == undefined || poolIsLoading[_currencyLabel]}
 					<div class='loading-icon'>{@html SPINNER_ICON}</div>
 				{/if}
 			</div>
@@ -248,6 +253,10 @@
 				<div class='label'>Projected Yield (APY)</div>
 				<div class='value'>{getAPY(_currencyLabel, poolInfo, $poolStats)}</div>
 			</div>
+
+			{#if !$address}
+			<div class='note'>Connect your wallet to see pool stats.</div>
+			{/if}
 
 			<div class='stats'>
 				<div class='row'>

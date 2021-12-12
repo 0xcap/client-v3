@@ -17,10 +17,12 @@
 		font-weight: 700;
 		color: var(--green-dark);
 		background-color: var(--green);
+		white-space: nowrap;
 	}
 
 	button.small {
 		height: 36px;
+		padding: 0 12px;
 	}
 
 	button.red {

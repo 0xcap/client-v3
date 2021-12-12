@@ -232,6 +232,8 @@ let dataCache = {};
 
 export async function getPoolInfo(currencyLabel, reloading) {
 
+	// console.log('getPoolInfo', currencyLabel, reloading);
+	
 	let info = {
 		tvl: 0,
 		userBalance: 0,
@@ -253,6 +255,7 @@ export async function getPoolInfo(currencyLabel, reloading) {
 			return x;
 		});
 	}
+	// console.log('contract', contract);
 
 	if (!contract) return;
 

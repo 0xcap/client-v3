@@ -78,9 +78,10 @@
 	.account-nav a {
 		color: var(--sonic-silver);
 		margin-right: var(--base-padding);
+		font-weight: 600;
 	}
 	.account-nav a:hover {
-		color: var(--silver-chalice);
+		color: #fff;
 	}
 	.account-nav a.active {
 		color: var(--green);

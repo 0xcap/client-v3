@@ -21,21 +21,28 @@
 	}
 
 	.left a {
-		color: var(--sonic-silver);
-		margin-right: var(--base-padding);
+		color: var(--silver-chalice);
+		margin-right: 26px;
+		font-weight: 600;
+	}
+
+	@media (max-width: 600px) {
+		.left a {
+			margin-right: 12px;
+		}
 	}
 
 	.left a:hover {
-		color: var(--silver-chalice);
+		color: #fff;
 	}
 
 	.left a.active {
 		color: var(--green);
-		font-weight: 700;
+		font-weight: 600;
 	}
 
 	img {
-		height: 11px;
+		height: 12px;
 		filter: grayscale(1);
 		opacity: 0.5;
 	}

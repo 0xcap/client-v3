@@ -7,10 +7,8 @@
 <style>
 
 	.home-wrap {
-		height: 100vh;
 		padding: var(--base-padding);
 		background-color: var(--eerie-black);
-		border-top: 1px solid var(--jet);
 		padding-bottom: 100px;
 	}
 
@@ -24,31 +22,32 @@
 		align-items: center;
 		justify-content: center;
 		padding: 64px 0;
-		border-bottom: 1px solid var(--jet);
+		border-bottom: 2px dotted var(--jet);
 	}
 
 	.hero-inner {		
 		display: grid;
 		grid-auto-flow: row;
-		grid-gap: 28px;
+		grid-gap: 36px;
 		text-align: center;
 	}
 
 	.main-title {
-		color: var(--green);
-		font-weight: 800;
-		font-size: 300%;
-		letter-spacing: 3px;
+	}
+
+	.main-title img {
+		height: 60px;
 	}
 
 	.tagline {
+		line-height: 1.618;
 	}
 
 	.button-wrap {
 	}
 
 	.button {
-		padding: 12px var(--base-padding);
+		padding: 12px 26px;
 		border-radius: var(--base-radius);
 		font-weight: 700;
 		color: var(--green-dark);
@@ -75,7 +74,7 @@
 		grid-auto-flow: column;
 		grid-gap: 36px;
 		padding: 36px 0;
-		border-bottom: 1px solid var(--jet);
+		border-bottom: 2px dotted var(--jet);
 	}
 
 	@media (max-width: 900px) {
@@ -102,11 +101,10 @@
 	}
 
 	.community {
-		padding: 36px 0;
+		padding: 64px 0 0;
 		text-align: center;
 		line-height: 1.618;
 		color: var(--sonic-silver);
-		border-bottom: 1px solid var(--jet);
 	}
 
 	.links {
@@ -134,9 +132,11 @@
 
 			<div class='hero-inner'>
 
-				<div class='main-title'>CAP</div>
+				<div class='main-title'>
+					<img src='/logos/CAP.svg' title='CAP logo' alt='CAP logo' />
+				</div>
 					
-				<div class='tagline'>The best way to trade perpetuals on Arbitrum.</div>
+				<div class='tagline'>CAP is the best place to trade perpetuals on Arbitrum.</div>
 
 				<div class='button-wrap'>
 					<a class='button' href='#/trade'>Trade</a>

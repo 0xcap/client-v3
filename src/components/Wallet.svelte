@@ -62,7 +62,7 @@
 		</div>
 	{:else}
 		{#if $currentPage != 'home'}
-		<Button small={true} onClick={() => {showModal('Connect')}} label={`Connect Wallet`} />
+		<Button small={true} onClick={() => {showModal('Connect')}} label={`Connect`} />
 		{/if}
 	{/if}
 

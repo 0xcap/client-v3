@@ -29,7 +29,7 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 	const _chainId = get(Stores.chainId);
 	const _provider = get(Stores.provider);
 
-	// console.log('_chainId', _chainId, _provider);
+	// console.log('_chainId', _chainId, _provider, CHAINDATA[_chainId]);
 
 	if (!_chainId || !_provider) return;
 
@@ -120,7 +120,7 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 
 	contracts[contractName] = new ethers.Contract(address, abi, _provider);
 
-	//console.log('contracts', contracts);
+	// console.log('contracts', contracts);
 
 	if (withSigner) {
 		return contracts[contractName].connect(_signer);
