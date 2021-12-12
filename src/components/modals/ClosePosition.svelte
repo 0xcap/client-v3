@@ -71,12 +71,6 @@
 			return;
 		}
 		let price = _prices[data.productId]
-		// Add price impact to price
-		if (data.isLong) {
-			price = price * (1 + priceImpact/100);
-		} else {
-			price = price * (1 - priceImpact/100);
-		}
 		// console.log('priceImpact', priceImpact);
 		let _data = JSON.parse(JSON.stringify(data));
 		_data.size = Math.min(_size * 1, data.size * 1);

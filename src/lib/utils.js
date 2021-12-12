@@ -338,11 +338,15 @@ export function getCurrencyLabelFromAddress(_address) {
 export async function getUPL(position, latestPrice) {
 	let upl = 0;
 	if (position.price * 1 == 0) return undefined;
+
+	let priceImpact = getPriceImpact(position.size, position.productId, position.currencyLabel);
 	if (latestPrice) {
 		const productInfo = await getProduct(position.productId);
 		if (position.isLong) {
+			latestPrice = latestPrice * (1 + priceImpact / 100);
 			upl = position.size * (latestPrice * 1 - position.price * 1) / position.price;
 		} else {
+			latestPrice = latestPrice * (1 - priceImpact / 100);
 			upl = position.size * (position.price * 1 - latestPrice * 1) / position.price;
 		}
 		// Add interest

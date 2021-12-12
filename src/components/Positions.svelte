@@ -17,24 +17,28 @@
 	let count = 0;
 	$: count = $positions && $positions.length || 0;
 
-	async function calculateUPLs(_prices) {
+	async function calculateUPLs(_positions, _prices) {
 		totalUPL = 0;
-		for (const position of $positions) {
-			const upl = await getUPL(position, _prices[position.productId]);
-			upls[position.key] = upl;
-			if (!upl) continue;
-			upls_percent[position.key] = (100 * upl * 1 / position.margin);
-			totalUPL += upl * 1;
+		for (const position of _positions) {
 
 			// Liq prices
 			const lp = await calculateLiquidationPrice(position);
 			liqPrices[position.key] = lp && lp.toFixed(6);
+
+			// UPL
+			if (!_prices[position.productId]) continue;
+			const upl = await getUPL(position, _prices[position.productId]);			
+			if (upl == undefined) continue;
+			upls[position.key] = upl;
+			upls_percent[position.key] = (100 * upl * 1 / position.margin);
+			totalUPL += upl * 1;
+			
 		}
 		if (isNaN(totalUPL)) totalUPL = 0;
 		totalUPL = totalUPL.toFixed(4);
 	}
 
-	$: calculateUPLs($prices);
+	$: calculateUPLs($positions, $prices);
 
 	let items_to_show = [];
 
@@ -268,10 +272,10 @@
 						{formatToDisplay(position.leverage)}×
 					</div>
 					<div class={`column column-pnl ${upls[position.key] * 1 < 0 ? 'neg' : 'pos'}`}>
-						{formatPnl(upls[position.key]) || '--'} <span class='pnl-percent'>({formatPnl(100*upls[position.key]/position.margin, true)}%)</span>
+						{formatPnl(upls[position.key]) || '--'} {#if upls[position.key] != undefined}<span class='pnl-percent'>({formatPnl(100*upls[position.key]/position.margin, true)}%)</span>{/if}
 					</div>
 					<div class='column column-liqprice'>
-						{formatToDisplay(liqPrices[position.key])}
+						{formatToDisplay(liqPrices[position.key]) || '--'}
 					</div>
 					<div class='column column-close'>
 
