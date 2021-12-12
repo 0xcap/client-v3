@@ -11,6 +11,7 @@
 	import { getUserHistory } from '../lib/graph'
 
 	let loading;
+	let loadingMore = false;
 	onMount(async () => {
 		if (!$history.length) {
 			loading = true;
@@ -20,7 +21,6 @@
 
 		// monitor scoll
 		let skip = HISTORY_COUNT;
-		let loadingMore = false;
 		const historyList = document.getElementById('history-list');
 		historyList.onscroll = async () => {
 			// console.log('scrolling', historyList.scrollTop, historyList.scrollHeight);
@@ -168,6 +168,12 @@
 					</div>
 
 				{/each}
+
+				{#if loadingMore}
+					<div class='empty'>
+						<div class='loading-icon'>{@html SPINNER_ICON}</div>
+					</div>
+				{/if}
 
 			{/if}
 		{/if}

@@ -1,6 +1,6 @@
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
-export const HISTORY_COUNT = 50;
+export const HISTORY_COUNT = 10;
 
 export const CURRENCY_LOGOS = {
 	weth: '/logos/ETH.svg',
