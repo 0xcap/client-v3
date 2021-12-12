@@ -30,14 +30,15 @@
 	.hero-inner {		
 		display: grid;
 		grid-auto-flow: row;
-		grid-gap: 24px;
+		grid-gap: 28px;
 		text-align: center;
 	}
 
 	.main-title {
 		color: var(--green);
-		font-weight: 700;
-		font-size: 200%;
+		font-weight: 800;
+		font-size: 300%;
+		letter-spacing: 3px;
 	}
 
 	.tagline {
@@ -144,9 +145,8 @@
 
 				<div class='main-title'>CAP</div>
 					
-				<div class='tagline'>Decentralized Trading Protocol</div>
-				<div class='tagline'>Fast. Cheap. Secure.</div>
-				
+				<div class='tagline'>The best way to trade perpetuals on Arbitrum.</div>
+
 				<div class='button-wrap'>
 					<a class='button' href='#/trade'>Trade</a>
 				</div>
@@ -188,7 +188,7 @@
 
 		</div>
 
-		<div class='community'>CAP is a community-funded project. Join us on <a href='https://discord.gg/zkdr8vnujz' target='_blank'>Discord</a>, <a href='https://t.me/capfin' target='_blank'>Telegram</a>, and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
+		<div class='community'>CAP is a community-funded protocol. Join us on <a href='https://discord.gg/zkdr8vnujz' target='_blank'>Discord</a> (new), <a href='https://t.me/capfin' target='_blank'>Telegram</a>, and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
 		
 		<div class='links'>
 			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal</a>

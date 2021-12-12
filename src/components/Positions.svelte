@@ -268,7 +268,7 @@
 						{formatToDisplay(position.leverage)}×
 					</div>
 					<div class={`column column-pnl ${upls[position.key] * 1 < 0 ? 'neg' : 'pos'}`}>
-						{formatPnl(upls[position.key]) || '-'} <span class='pnl-percent'>({formatPnl(100*upls[position.key]/position.margin, true)}%)</span>
+						{formatPnl(upls[position.key]) || '--'} <span class='pnl-percent'>({formatPnl(100*upls[position.key]/position.margin, true)}%)</span>
 					</div>
 					<div class='column column-liqprice'>
 						{formatToDisplay(liqPrices[position.key])}
