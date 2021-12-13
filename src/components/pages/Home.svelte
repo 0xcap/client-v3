@@ -70,8 +70,9 @@
 	}
 
 	.volume .label {
-		color: var(--sonic-silver);
+		color: var(--dim-gray);
 		margin-top: 8px;
+		font-size: 90%;
 	}
 
 	.volume .value {

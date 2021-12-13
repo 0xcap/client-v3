@@ -204,8 +204,8 @@
 		padding-bottom: 0;
 	}
 
-	.detail-label {
-		color: var(--sonic-silver);
+	.detail-label, .dim {
+		color: #858585;
 	}
 
 	.sep {
@@ -253,42 +253,35 @@
 
 	<div class='details'>
 		{#if $margin * 1 > 0}
+			<div class='row'>
+				<div class='detail-label'>Margin Used</div>
+				<div class='detail-value'>{formatToDisplay($margin || 0)} {formatCurrency($currencyLabel)}</div>
+			</div>
 			{#if sizeInUSD}
 			<div class='row'>
 				<div class='detail-label'>Size in USD</div>
 				<div class='detail-value'>${formatToDisplay(sizeInUSD, 2)}</div>
 			</div>
 			{/if}
-			<div class='row'>
-				<div class='detail-label'>Margin</div>
-				<div class='detail-value'>{formatToDisplay($margin || 0)} {formatCurrency($currencyLabel)}</div>
-			</div>
 			{#if $address}
-			<div class='row'>
-				<div class='detail-label'>Fee</div>
-				<div class='detail-value'>{$product.fee || 0}%</div>
-			</div>
-			<div class='row'>
-				<div class='detail-label'>Funding</div>
-				<div class='detail-value'>-{formatToDisplay($product.interest/(360*24)) || 0}% / h</div>
-			</div>
-      		{#if Math.abs(priceImpact * 1) > $product.fee * 1}
-			<div class='row'>
-				<div class='detail-label'>Price Impact</div>
-				<div class='detail-value'>{formatToDisplay(priceImpact)}%</div>
-			</div>
+	      		{#if Math.abs(priceImpact * 1) > $product.fee * 1}
+				<div class='row'>
+					<div class='detail-label'>Price Impact</div>
+					<div class='detail-value'>{formatToDisplay(priceImpact)}%</div>
+				</div>
+				{/if}
 			{/if}
-			{/if}
-		{:else}
-			<div class='row'>
-				<div class='detail-label'>Buying Power</div>
-				<div class='detail-value'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
-			</div>
-			<div class='row'>
-				<div class='detail-label'>Wallet Balance</div>
-				<div class='detail-value'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
-			</div>
+			<div class='sep'></div>
 		{/if}
+		<div class='row'>
+			<div class='detail-label'>Buying Power</div>
+			<div class='detail-value dim'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
+		</div>
+		<div class='row'>
+			<div class='detail-label'>Wallet Balance</div>
+			<div class='detail-value dim'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
+		</div>
+		
 	</div>
 
 	{#if $address && balance * 1 == 0}

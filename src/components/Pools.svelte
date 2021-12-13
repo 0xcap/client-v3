@@ -105,8 +105,6 @@
 		max-width: 500px;
 		overflow: hidden;
 		margin-right: var(--base-padding);
-		border: 1px solid var(--rich-black);
-		box-shadow: 0 0 5px var(--jet);
 	}
 
 	@media (max-width: 960px) {

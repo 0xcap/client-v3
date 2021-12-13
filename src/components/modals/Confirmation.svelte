@@ -130,9 +130,12 @@
 				anteriorValue: _existingPosition.leverage && `${formatToDisplay(_existingPosition.leverage)}×`
 			},
 			{
-				label: 'Liquidation Price',
-				value: `${formatToDisplay(liqPrice)}`,
-				anteriorValue: formatToDisplay(_existingPosition.liqPrice)
+				label: 'Fee',
+				value: `${product.fee || 0}%`
+			},
+			{
+				label: 'Funding',
+				value: `-${formatToDisplay(product.interest/(360*24)) || 0}% / h`
 			}
 		];
 
@@ -166,5 +169,5 @@
 	<div class='note'>You're opening a new {data.isLong ? 'long' : 'short'} position.</div>
 	{/if}
 	<DataList data={rows} onSubmit={_submitNewPosition} />
-	<Button wrap={true} isLoading={isSubmitting} onClick={_submitNewPosition} label={`Confirm ${data.isLong ? 'Long' : 'Short'} Order`} />
+	<Button wrap={true} isLoading={isSubmitting} onClick={_submitNewPosition} label='Confirm Order' />
 </Modal>
