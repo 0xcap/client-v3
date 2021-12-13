@@ -5,6 +5,7 @@
 	export let title = '';
 	export let isActive;
 	export let showHeader = false;
+	export let showCancel = false;
 
 	if (isActive == undefined) isActive = true;
 
@@ -56,7 +57,6 @@
 	}
 
 	.done-button {
-		font-weight: 700;
 		cursor: pointer;
 		color: var(--green);
 	}
@@ -78,7 +78,7 @@
 		{#if showHeader}
 		<div class='modal-header'>
 			<div class='modal-title'>{title}</div>
-			<span class='done-button' on:click={hideModal}>Done</span>
+			<span class='done-button' on:click={hideModal}>{showCancel ? 'Cancel' : 'Done'}</span>
 		</div>
 		{/if}
 

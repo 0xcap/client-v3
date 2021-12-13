@@ -52,18 +52,18 @@ export function formatToDisplay(amount, maxPrecision, fixPrecision) {
 	if (amount == undefined || isNaN(amount)) return '';
 	if (!maxPrecision) maxPrecision = 100;
 
-	if (!fixPrecision && amount * 1 <= 100 && (amount * 1).toFixed(3)*1 == Math.round(amount * 1)) return Math.round(amount);
+	if (!fixPrecision && amount * 1 <= 100 && (amount * 1).toFixed(6)*1 == Math.round(amount * 1)) return Math.round(amount);
 	
 	if (amount * 1 >= 100000 || amount * 1 <= -100000) {
 		return Math.round(amount*1).toLocaleString();
-	} else if (amount * 1 >= 100 || amount * 1 <= -100) {
+	} else if (amount * 1 >= 10 || amount * 1 <= -10) {
 		return (amount * 1).toFixed(2);
 	} else if (amount * 1 >= 1 || amount * 1 <= -1) {
-		return (amount * 1).toFixed(Math.min(maxPrecision,2));
+		return +(amount * 1).toFixed(Math.min(maxPrecision,4));
 	} else if (amount * 1 >= 0.1 || amount * 1 <= -0.1) {
-		return (amount * 1).toFixed(Math.min(maxPrecision,5));
+		return +(amount * 1).toFixed(Math.min(maxPrecision,5));
 	} else {
-		return (amount * 1).toFixed(Math.min(maxPrecision,6));
+		return +(amount * 1).toFixed(Math.min(maxPrecision,6));
 	}
 }
 export function displayPricePercentChange(last, initial) {
@@ -311,6 +311,7 @@ export function formatPnl(pnl, isPercent) {
 	} else if (pnl > 0) {
 		string += '-';
 	}
+	// console.log('pnl', pnl);
 	string += formatToDisplay(pnl, isPercent ? 2 : null) || 0;
 	return string;
 }
