@@ -52,9 +52,9 @@
 		--eerie-black: #1A1A1A;
 		--jet-dim: #212121;
 		--jet: #292929;
-		--onyx-dim: #353535;
+		--onyx-dim: #303030;
 		--onyx: #3D3D3D;
-		--dim-gray: #616161;
+		--dim-gray: #4A4A4A;
 		--sonic-silver: #707070;
 		--silver-chalice:  #ADADAD;
 		--orange: rgb(253,167,20);

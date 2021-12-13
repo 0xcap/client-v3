@@ -26,7 +26,7 @@ export function setTitle(product, price) {
 // Text utils
 export function shortAddress(address) {
 	if (!address) return;
-	return address.substring(0,2) + '…' + address.slice(-6);
+	return address.substring(0,2) + '…' + address.slice(-4);
 }
 export function shortSymbol(symbol) {
 	if (!symbol) return '';
@@ -164,7 +164,7 @@ export function loadRoute(path, isInitial) {
 	if (!path || path == '/') {
 		component.set(Home);
 		currentPage.set('home');
-		document.title = `CAP`;
+		document.title = `Decentralized Perpetual Exchange | CAP`;
 	} else if (path.includes('/trade')) {
 		component.set(Trade);
 		currentPage.set('trade');

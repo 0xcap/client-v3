@@ -27,6 +27,9 @@
 	.address {
 		display: flex;
 		align-items: center;
+		justify-content: flex-end;
+		text-align: right;
+		white-space: nowrap;
 	}
 
 	.address :global(svg) {

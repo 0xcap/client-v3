@@ -8,14 +8,19 @@
 
 	.home-wrap {
 		padding: var(--base-padding);
-		background-color: var(--eerie-black);
-		padding-bottom: 100px;
+		background-color: #1A201A;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		overflow-y: scroll;
 	}
 
 	.home {
 		margin: 0 auto;
-		max-width: 800px;
-		padding: 48px 0;
+		max-width: 720px;
+		padding: 36px 0;
 	}
 
 	.hero {
@@ -23,7 +28,8 @@
 		align-items: center;
 		justify-content: center;
 		padding: 64px 0;
-		border-bottom: 2px dotted var(--jet);
+		margin-bottom: 28px;
+		border-bottom: 2px dotted #293329;
 	}
 
 	.hero-inner {		
@@ -42,7 +48,7 @@
 
 	.tagline {
 		line-height: 1.618;
-		font-size: 140%;
+		font-size: 150%;
 		font-weight: 500;
 		max-width: 480px;
 		margin: 0 auto;
@@ -109,8 +115,18 @@
 		text-align: center;
 		line-height: 1.618;
 		color: var(--sonic-silver);
-		max-width: 600px;
+		max-width: 520px;
 		margin: 0 auto;
+	}
+
+	.community span {
+		display: block;
+	}
+
+	@media (max-width: 600px) {
+		.community span {
+			display: inline;
+		}
 	}
 
 	.links {
@@ -163,7 +179,8 @@
 			<a href='https://docs.cap.finance' target='_blank'>Docs</a>
 		</div>
 
-		<div class='community'>CAP is a decentralized perpetual exchange that is fast, cheap, and secure. Join the community on <a href='https://discord.gg/zkdr8vnujz' target='_blank'>Discord</a>, <a href='https://t.me/capfin' target='_blank'>Telegram</a>, and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</div>
+		<div class='community'>
+			<span>CAP is an open protocol to trade perpetuals.</span> <span>Join our community on <a href='https://discord.gg/zkdr8vnujz' target='_blank'>Discord</a>, <a href='https://t.me/capfin' target='_blank'>Telegram</a>, and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</span></div>
 		
 		<div class='links'>
 			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal</a>
@@ -171,6 +188,7 @@
 			<a href='https://www.immunefi.com/bounty/cap' target='_blank'>Immunefi</a>
 			<a href='https://www.coingecko.com/en/coins/cap' target='_blank'>CoinGecko</a>
 			<a href='https://coinmarketcap.com/currencies/cap/' target='_blank'>CoinMarketCap</a>
+			<a href='https://github.com/0xcap' target='_blank'>Github</a>
 		</div>
 
 	</div>

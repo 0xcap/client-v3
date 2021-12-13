@@ -71,7 +71,7 @@ function subscribeToProducts() {
 
 }
 
-let lastMessageReceived = Date.now();
+let lastMessageReceived;
 let s;
 export function initWebsocket() {
 
@@ -79,13 +79,17 @@ export function initWebsocket() {
 
 	// Check last ticker
 	clearInterval(s);
-	s = setInterval(() => {
-		if (lastMessageReceived < Date.now() - 60 * 1000) {
-			showToast('Price stream is stale. Try refreshing the page, checking your internet connection, or changing your VPN/proxy.', 'error', 'stream-error');
-		} else {
-			hideToast('stream-error');
-		}
-	}, 1000);
+	setTimeout(() => {
+		s = setInterval(() => {
+			if (lastMessageReceived < Date.now() - 60 * 1000) {
+				showToast('Price stream is stale. Try refreshing the page, checking your internet connection, or changing your VPN/proxy.', 'error', 'stream-error');
+			} else if (!lastMessageReceived) {
+				showToast('Still connecting price feed...', 'error', 'stream-error');
+			} else {
+				hideToast('stream-error');
+			}
+		}, 1000);
+	}, 10 * 1000);
 
 	if (ws) {
 		try {
