@@ -49,9 +49,9 @@
 
 	.tagline {
 		line-height: 1.618;
-		font-size: 150%;
-		font-weight: 500;
-		max-width: 360px;
+		font-size: 200%;
+		font-weight: 600;
+		max-width: 420px;
 		margin: 0 auto;
 	}
 
@@ -72,9 +72,10 @@
 	}
 
 	.button {
-		padding: 12px 26px;
+		padding: 14px 26px;
 		border-radius: var(--base-radius);
 		font-weight: 700;
+		font-size: 125%;
 		color: var(--green-dark);
 		background-color: var(--green);
 		display: inline-block;

@@ -71,6 +71,40 @@
 		return formatToDisplay(timeScaler * 100 * (_poolStats[_currencyLabel].cumulativeFees * poolInfo.poolShare / 100 - 1 * _poolStats[_currencyLabel].cumulativePnl) / poolInfo.tvl) + '%';
 	}
 
+	function getAPYCAP(_capPool, _poolStats) {
+		if (!_poolStats || !_poolStats['weth'] || !_capPool || !_capPool.supply*1) return '--';
+		const poolInception = getChainData('poolInception');
+		if (!poolInception) return '--';
+		const inceptionDate = poolInception['cap'];
+		if (!inceptionDate) return '--';
+		const timeSinceInception = Date.now() - inceptionDate;
+		const timeInAYear = 365 * 24 * 3600 * 1000;
+		const timeScaler = timeInAYear / timeSinceInception;
+
+		const currencyLabels = Object.keys(_capPool.claimableRewards);
+
+		// console.log('currencyLabels', currencyLabels);
+
+		let cumulativeUSDFees = 0;
+		let capUSDSupply = 400 * _capPool.supply; // assuming CAP price of 400
+
+		// console.log('capUSDSupply', capUSDSupply);
+		for (const _currencyLabel of currencyLabels) {
+			if (_currencyLabel == 'weth') {
+				// ETH
+				cumulativeUSDFees += _poolStats[_currencyLabel].cumulativeFees * $prices['ETH-USD'] * 1;
+			} else {
+				// USDC
+				cumulativeUSDFees += _poolStats[_currencyLabel].cumulativeFees * 1;
+			}
+		}
+
+		// console.log('cumulativeUSDFees', cumulativeUSDFees);
+		// console.log('timeScaler', timeScaler);
+		
+		return formatToDisplay(timeScaler * 100 * (cumulativeUSDFees * 0.1) / capUSDSupply) + '%';
+	}
+
 	function getTVL(_currencyLabel, poolInfo, _address) {
 		if (!_address || !poolInfo || !poolInfo.tvl) return '';
 		return formatToDisplay(poolInfo.tvl);
@@ -335,6 +369,11 @@
     	<div class='description'>
     		Stake your CAP to receive a share of trading fees. There are no restrictions on deposits or withdrawals.
     	</div>
+
+    	<div class='apy'>
+			<div class='label'>Projected Yield (APY)</div>
+			<div class='value'>{getAPYCAP($capPool, $poolStats, $prices)}</div>
+		</div>
 
     	{#if !$address}
     	<div class='note'>Connect your wallet to see pool stats.</div>
