@@ -44,7 +44,7 @@
 
 <style>
 	.loading-icon :global(svg) {
-		height: 20px;
+		height: 16px;
 		fill: none;
 	}
 	.dollar-amount {
