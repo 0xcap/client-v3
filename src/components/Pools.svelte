@@ -6,7 +6,7 @@
 
 	import { capPool, pools, oldPools, poolStats, allowances, prices, address } from '../lib/stores'
 
-	import { getAllowance, collectPoolReward, approveCurrency, getPoolInfo, getOldPoolInfo } from '../lib/methods'
+	import { getAllowance, collectPoolReward, approveCurrency, getPoolInfo, getOldPoolInfo, collectCAPReward } from '../lib/methods'
 
 	import { showModal, formatCurrency, formatToDisplay, getChainData } from '../lib/utils'
 
