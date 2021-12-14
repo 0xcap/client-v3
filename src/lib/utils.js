@@ -59,9 +59,9 @@ export function formatToDisplay(amount, maxPrecision, fixPrecision) {
 	} else if (amount * 1 >= 10 || amount * 1 <= -10) {
 		return (amount * 1).toFixed(2);
 	} else if (amount * 1 >= 1 || amount * 1 <= -1) {
-		return +(amount * 1).toFixed(Math.min(maxPrecision,4));
+		return +(amount * 1).toFixed(Math.min(maxPrecision,2));
 	} else if (amount * 1 >= 0.1 || amount * 1 <= -0.1) {
-		return +(amount * 1).toFixed(Math.min(maxPrecision,5));
+		return +(amount * 1).toFixed(Math.min(maxPrecision,4));
 	} else {
 		return +(amount * 1).toFixed(Math.min(maxPrecision,6));
 	}
@@ -226,7 +226,7 @@ export function formatOrders(orders, info) {
 		}
 		//console.log('o', o);
 		formattedOrders.push({
-			key: info[i].key,
+			key: info[i].key || info[i].id,
 			price: 0,
 			isClose: o.isClose,
 			margin: formatUnits(o.margin),
