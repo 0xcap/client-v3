@@ -204,7 +204,7 @@
 		padding-bottom: 0;
 	}
 
-	.detail-label, .dim {
+	.detail-label {
 		color: #858585;
 	}
 
@@ -220,6 +220,7 @@
 		border-top: 1px solid var(--jet);
 		color: var(--sonic-silver);
 		font-size: 80%;
+		line-height: 1.618;
 	}
 
 </style>
@@ -275,16 +276,18 @@
 		{/if}
 		<div class='row'>
 			<div class='detail-label'>Buying Power</div>
-			<div class='detail-value dim'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
+			<div class='detail-value'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
 		</div>
 		<div class='row'>
 			<div class='detail-label'>Wallet Balance</div>
-			<div class='detail-value dim'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
+			<div class='detail-value'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
 		</div>
 		
 	</div>
 
-	{#if $address && balance * 1 == 0}
+	{#if !$address}
+	<div class='note'>CAP is an open protocol to trade crypto perpetuals. <a data-intercept="true" on:click={() => {showModal('Connect')}}>Connect</a> your wallet on Arbitrum to get started.</div>
+	{:else if $address && balance * 1 == 0}
 	<div class='note'><a href='https://docs.cap.finance/setting-up-your-wallet' target='_blank'>Bridge funds</a> to Arbitrum to start trading.</div>
 	{/if}
 	

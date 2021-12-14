@@ -23,6 +23,7 @@
 	.home {
 		margin: 0 auto;
 		max-width: 720px;
+		padding: 36px 0;
 	}
 
 	.hero {
@@ -46,17 +47,25 @@
 		height: 60px;
 	}
 
-	.tagline-wrapper {
-		height: 80px;
-		overflow: hidden;
-	}
-
 	.tagline {
 		line-height: 1.618;
 		font-size: 150%;
 		font-weight: 500;
-		max-width: 480px;
+		max-width: 360px;
 		margin: 0 auto;
+	}
+
+	.chains {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 90%;
+		font-weight: 500;
+	}
+	.chains :global(svg) {
+		height: 22px;
+		margin-right: 4px;
+		margin-left: 8px;
 	}
 
 	.button-wrap {
@@ -84,50 +93,21 @@
 		font-weight: 700;
 	}
 
-	.chains {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.chains :global(svg) {
-		height: 22px;
-		margin-right: 4px;
-		margin-left: 8px;
-	}
-
-	.sep {
-		height: 2px;
-		background-color: var(--onyx-dim);
-		width: 60px;
-		margin: 0 auto;
-	}
-
 	.links {
-		padding-top: 64px;
+		padding-top: 18px;
 		text-align: center;
 		line-height: 1.618;
-	}
-	.links.bt {
-		padding-top: 36px;
 	}
 	.links a {
 		margin: 0 8px;
-	}
-	.links :global(svg) {
-		height: 11px;
-		fill: currentColor;
-	}
-
-	.description {
-		padding-top: 36px;
-		text-align: center;
-		line-height: 1.618;
 		color: var(--sonic-silver);
+		font-size: 80%;
 	}
-
+	.links a:hover {
+		color: var(--green);
+	}
 	.community {
-		padding-top: 36px;
+		padding-top: 64px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -138,7 +118,7 @@
 	}
 
 	.community :global(svg) {
-		height: 22px;
+		height: 18px;
 		fill: currentColor;
 	}
 
@@ -156,9 +136,9 @@
 					<img src='/logos/CAP.svg' title='CAP logo' alt='CAP logo' />
 				</div>
 				
-				<div class='tagline-wrapper'>
-					<div class='tagline'>Trade cryptos with up to 50× leverage directly from your wallet.</div>
-				</div>
+				<div class='tagline'>Trade crypto perpetuals directly from your wallet</div>
+
+				<div class='chains'>Available on {@html ARBITRUM_ICON} Arbitrum</div>
 
 				<div class='button-wrap'>
 					<a class='button' href='#/trade'>Start Trading</a>
@@ -169,21 +149,9 @@
 					<div class='label'>Protocol Volume</div>
 				</div>
 
-				<div class='chains'>Available on {@html ARBITRUM_ICON} Arbitrum</div>
-
 			</div>
 
 		</div>
-
-		<div class='sep'></div>
-
-		<div class='links'>
-			<a href='#/trade'>Trade</a>
-			<a href='#/pool'>Pool</a>
-			<a href='https://docs.cap.finance' target='_blank'>Docs</a>
-		</div>
-
-		<div class='description'>CAP is an open protocol to trade perpetuals.</div>
 		
 		<div class='community'>
 			<a href='https://discord.gg/zkdr8vnujz' target='_blank' title='Discord'>{@html DISCORD_ICON}</a>
@@ -192,7 +160,7 @@
 			<a href='https://github.com/0xcap' target='_blank' title='Github'>{@html GITHUB_ICON}</a>
 		</div>
 
-		<div class='links bt'>
+		<div class='links'>
 			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal</a>
 			<a href='https://defillama.com/protocol/cap' target='_blank'>Defi Llama</a>
 			<a href='https://www.immunefi.com/bounty/cap' target='_blank'>Immunefi</a>

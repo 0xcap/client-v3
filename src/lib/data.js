@@ -12,9 +12,7 @@ export function hydrateData() {
 
 	// console.log('hydrateData', _currentPage);
 
-	if (!_currentPage || _currentPage == 'home') {
-		//selectProduct();
-	} else if (_currentPage == 'trade') {
+	if (_currentPage == 'trade') {
 		selectProduct();
 		selectCurrency();
 		getUserOrders();

@@ -82,13 +82,13 @@ export function initWebsocket() {
 	setTimeout(() => {
 		s = setInterval(() => {
 			if (lastMessageReceived < Date.now() - 60 * 1000) {
-				showToast('Price stream is stale. Try refreshing the page, checking your internet connection, or changing your VPN/proxy.', 'error', 'stream-error');
+				showToast('Price feed is stale. Try refreshing the page, checking your internet connection, or changing your VPN/proxy.', 'error', 'stream-error');
 			} else if (!lastMessageReceived) {
-				showToast('Still connecting price feed...', 'error', 'stream-error');
+				showToast('Price feed still connecting...', 'error', 'stream-error');
 			} else {
 				hideToast('stream-error');
 			}
-		}, 1000);
+		}, 3000);
 	}, 10 * 1000);
 
 	if (ws) {

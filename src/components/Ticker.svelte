@@ -31,6 +31,7 @@
 		display: flex;
 		align-items: center;
 		cursor: pointer;
+		padding: 6px 0;
 	}
 
 	.selector:hover {

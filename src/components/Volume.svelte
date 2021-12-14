@@ -35,7 +35,7 @@
 		volume_eth = _volumeUSD * 1 / _prices['ETH-USD'] + _volumeETH * 1;
 		volume_usd = _volumeUSD * 1 + _prices['ETH-USD'] * _volumeETH * 1;
 		volume_usd /= 10**6;
-		volume_usd = volume_usd.toFixed(1);
+		volume_usd = volume_usd.toFixed(2);
 	}
 
 	$: calculateVolume($prices, volumeETH, volumeUSD);

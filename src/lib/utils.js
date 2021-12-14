@@ -161,7 +161,7 @@ export function hideModal() {
 
 // Routing
 export function loadRoute(path, isInitial) {
-	if (!path || path == '/') {
+	if (!path || path == '/' || path.includes('/home')) {
 		component.set(Home);
 		currentPage.set('home');
 		document.title = `Decentralized Perpetual Exchange | CAP`;
