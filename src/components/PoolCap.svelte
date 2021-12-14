@@ -230,7 +230,7 @@
     </div>
 
     <div class='note'>
-    	<a target='_blank' href='https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x43044f861ec040db59a7e324c40507addb673142'>Buy CAP (Ethereum L1) {@html EXTERNAL_ICON}</a><br/><a target='_blank' class='button' href='https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x031d35296154279dc1984dcd93e392b1f946737b'>Buy CAP (Arbitrum L2) {@html EXTERNAL_ICON}</a>
+    	<a target='_blank' href='https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x43044f861ec040db59a7e324c40507addb673142'>Buy CAP (Ethereum Mainnet) {@html EXTERNAL_ICON}</a>
     </div>
 
 </div>

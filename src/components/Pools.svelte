@@ -4,11 +4,11 @@
 
 	import { SPINNER_ICON } from '../lib/icons'
 
-	import { pools, oldPools, allowances, prices, address } from '../lib/stores'
+	import { pools, oldPools, poolStats, allowances, prices, address } from '../lib/stores'
 
 	import { getAllowance, collectPoolReward, approveCurrency, getPoolInfo, getOldPoolInfo } from '../lib/methods'
 
-	import { showModal, formatCurrency, formatToDisplay } from '../lib/utils'
+	import { showModal, formatCurrency, formatToDisplay, getChainData } from '../lib/utils'
 
 	async function _approveCurrency(_currencyLabel) {
 		const result = await approveCurrency(_currencyLabel, 'pool' + _currencyLabel);
@@ -50,68 +50,78 @@
 		}
 		oldPoolsShown = !oldPoolsShown;
 	}
+
+	// getters
+
+	function getAPY(_currencyLabel, poolInfo, _poolStats) {
+		if (!_poolStats || !_poolStats[_currencyLabel] || !poolInfo || !poolInfo.tvl*1) return '--';
+		const poolInception = getChainData('poolInception');
+		if (!poolInception) return '--';
+		const inceptionDate = poolInception[_currencyLabel];
+		if (!inceptionDate) return '--';
+		const timeSinceInception = Date.now() - inceptionDate;
+		const timeInAYear = 365 * 24 * 3600 * 1000;
+		const timeScaler = timeInAYear / timeSinceInception;
+		return formatToDisplay(timeScaler * 100 * (_poolStats[_currencyLabel].cumulativeFees * poolInfo.poolShare / 100 - 1 * _poolStats[_currencyLabel].cumulativePnl) / poolInfo.tvl) + '%';
+	}
+
+	function getTVL(_currencyLabel, poolInfo, _address) {
+		if (!_address || !poolInfo || !poolInfo.tvl) return '';
+		return formatToDisplay(poolInfo.tvl);
+	}
+
+	function getInceptionDate(_currencyLabel, poolInfo) {
+		const poolInception = getChainData('poolInception');
+		if (!poolInception) return '--';
+		const inceptionDate = poolInception[_currencyLabel];
+		if (!inceptionDate) return '--';
+		const d = new Date(inceptionDate).toDateString();
+		return d.substring(4);
+	}
+
+	function getReturnSinceInception(_currencyLabel, poolInfo, _poolStats) {
+		if (!_poolStats || !_poolStats[_currencyLabel]) return '';
+		return formatToDisplay(_poolStats[_currencyLabel].cumulativeFees * poolInfo.poolShare / 100 - 1 * _poolStats[_currencyLabel].cumulativePnl);
+	}
+
 </script>
 
 <style>
 
 	.pools {
-		max-width: 720px;
-		margin: 0 auto;
-	}
-
-	.columns {
-		padding: 0 var(--base-padding);
-		color: var(--sonic-silver);
-		font-size: 90%;
+		padding: var(--base-padding);
+		display: flex;
 	}
 
 	.pool {
 		background-color: var(--eerie-black);
-		margin-bottom: var(--base-padding);
 		border-radius: var(--base-radius);
+		max-width: 520px;
 		overflow: hidden;
+		margin-right: var(--base-padding);
 	}
 
-	.column {
-
+	@media (max-width: 840px) {
+		.pools {
+			flex-direction: column;
+		}
+		.pool {
+			margin-right: 0;
+			margin-bottom: var(--base-padding);
+		}
 	}
 
-	.flex {
+	.asset {
 		display: flex;
 		align-items: center;
+		font-size: 160%;
+		font-weight: 600;
+		padding: var(--base-padding);
 	}
 
-	.columns, .info, .row {
-		display: flex;
-		align-items: center;
-		height: 54px;
-	}
-
-	.info {
-		padding: 0 var(--base-padding);
-	}
-	.info .column-asset {
-		font-weight: 700;
-	}
-
-	.column-asset {
-		flex: 1;
-	}
-
-	.column-asset img {
-		width: 24px;
+	.asset img {
+		width: 32px;
 		margin-right: 10px;
-	}
-
-	.column-apr {
-		flex: 1.5;
-		text-align: right;
-		margin-right: 10px;
-	}
-
-	.column-tvl {
-		flex: 1.5;
-		text-align: right;
 	}
 
 	.description {
@@ -119,22 +129,51 @@
 		background-color: var(--eerie-black);
 		padding-top: 0;
 		line-height: 1.618;
-		font-size: 80%;
 		color: var(--sonic-silver);
 	}
 
-	.my-share {
+	.apy {
+		padding: var(--base-padding);
+		border-bottom: 1px solid var(--rich-black);
+	}
+
+	.apy .label {
+		margin-bottom: 6px;
+	}
+
+	.apy .value {
+		font-size: 200%;
+		font-weight: 600;
+		text-align: left !important;
+	}
+
+	.stats {
+
+	}
+
+	.row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 54px;
 		padding: 0 var(--base-padding);
-		background-color: var(--jet-dim);
+		border-bottom: 1px solid var(--jet);
+	}
+	.row:last-child {
+		border-bottom: none;
 	}
 
 	.label {
 		color: var(--sonic-silver);
 	}
 
-	.sub-label {
-		font-size: 80%;
-		opacity: 0.75;
+	.value {
+		text-align: right;
+	}
+
+	.my-stats {
+		border-top: 1px solid var(--rich-black);
+		background-color: var(--jet-dim);
 	}
 
 	.sep {
@@ -172,7 +211,7 @@
 		margin-bottom: -3px;
 	}
 
-	.dollar-amount {
+	.grayed {
 		color: var(--sonic-silver);
 	}
 
@@ -189,18 +228,70 @@
 
 <div class='pools'>
 
-	<div class='columns'>
-
-		<div class='column column-asset'>Asset</div>
-		<div class='column column-apr'></div>
-		<div class='column column-tvl'>TVL</div>
-
-	</div>
-
 	{#each poolEntries as [_currencyLabel, poolInfo]}
+
 		<div class='pool' class:loading={poolIsLoading[_currencyLabel] || !poolInfo.tvl}>
 
-			<div class='info'>
+			<div class='asset'>
+				<img src={CURRENCY_LOGOS[_currencyLabel]}>
+				{formatCurrency(_currencyLabel)} 
+				{#if !poolInfo.tvl || poolIsLoading[_currencyLabel]}
+					<div class='loading-icon'>{@html SPINNER_ICON}</div>
+				{/if}
+			</div>
+
+			<div class='description'>
+				This pool backs trader profits and receives trader losses + <strong>{formatToDisplay(poolInfo.poolShare)}%</strong> of {formatCurrency(_currencyLabel)} fees as rewards.
+			</div>
+
+			<div class='apy'>
+				<div class='label'>Projected Yield (APY)</div>
+				<div class='value'>{getAPY(_currencyLabel, poolInfo, $poolStats)}</div>
+			</div>
+
+			<div class='stats'>
+				<div class='row'>
+					<div class='label'>TVL</div>
+					<div class='value'>{getTVL(_currencyLabel, poolInfo, $address)} {formatCurrency(_currencyLabel)} {#if _currencyLabel == 'weth' && poolInfo && poolInfo.tvl && $prices['ETH-USD']}
+						<span class='grayed'>(${formatToDisplay($prices['ETH-USD'] * poolInfo.tvl || 0)})</span>
+						{/if}</div>
+				</div>
+				<div class='row'>
+					<div class='label'>Return Since Inception ({getInceptionDate(_currencyLabel, poolInfo)})</div>
+					<div class='value pos'>+{getReturnSinceInception(_currencyLabel, poolInfo, $poolStats)} {formatCurrency(_currencyLabel)}</div>
+				</div>
+				<div class='row'>
+					<div class='label'>Open Interest</div>
+					<div class='value'>{formatToDisplay(poolInfo.openInterest)} {formatCurrency(_currencyLabel)}</div>
+				</div>
+				<div class='row'>
+					<div class='label'>Utilization</div>
+					<div class='value'>{formatToDisplay(poolInfo.utilization)}%</div>
+				</div>
+			</div>
+
+			<div class='stats my-stats'>
+				<div class='row'>
+					<div class='label'>My Share 
+						{#if $allowances[_currencyLabel] && $allowances[_currencyLabel]['pool' + _currencyLabel] * 1 == 0}
+							<a on:click={() => {_approveCurrency(_currencyLabel)}}>Approve {formatCurrency(_currencyLabel)}</a>
+						{:else}
+						<a data-intercept="true" class:disabled={!poolInfo.tvl} on:click={() => {showModal('PoolDeposit', {currencyLabel: _currencyLabel})}}>Deposit</a><span class='sep'>|</span><a class:disabled={poolInfo.userBalance == 0} data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: _currencyLabel, withdrawFee: poolInfo.withdrawFee})}}>Withdraw</a>
+						{/if}
+					</div>
+					<div class='value'>{formatToDisplay(poolInfo.userBalance) || 0} {formatCurrency(_currencyLabel)} <span class='grayed'>({formatToDisplay(poolInfo.tvl*1 == 0 ? 0 : 100*poolInfo.userBalance/poolInfo.tvl)}%)</span></div>
+				</div>
+				<div class='row'>
+					<div class='label'>My Rewards <a class:disabled={poolInfo.claimableReward == 0} on:click={() => {collectPoolReward(_currencyLabel)}}>Collect</a></div>
+					<div class='value'>{formatToDisplay(poolInfo.claimableReward) || 0} {formatCurrency(_currencyLabel)} 
+						{#if _currencyLabel == 'weth' && $prices['ETH-USD'] && poolInfo}
+						<span class='grayed'>(${formatToDisplay($prices['ETH-USD'] * poolInfo.claimableReward || 0)})</span>
+						{/if}
+					</div>
+				</div>
+			</div>
+
+			<!-- <div class='info'>
 				<div class='column column-asset flex'>
 					<img src={CURRENCY_LOGOS[_currencyLabel]}>
 					{formatCurrency(_currencyLabel)} 
@@ -225,9 +316,29 @@
 				</div>
 			</div>
 
+			<div class='row'>
+				<div class='column column-asset label'>
+					Cumulative return since 
+				</div>
+				<div class='column column-apr'></div>
+				<div class='column column-tvl'>
+					{$poolStats[_currencyLabel] && formatToDisplay($poolStats[_currencyLabel].cumulativeFees * poolInfo.poolShare / 100 - 1 * $poolStats[_currencyLabel].cumulativePnl)} {formatCurrency(_currencyLabel)}
+				</div>
+			</div>
+
+			<div class='row'>
+				<div class='column column-asset label'>
+					APY 
+				</div>
+				<div class='column column-apr'></div>
+				<div class='column column-tvl'>
+					{$poolStats[_currencyLabel] && formatToDisplay(12 * 100 * ($poolStats[_currencyLabel].cumulativeFees * poolInfo.poolShare / 100 - 1 * $poolStats[_currencyLabel].cumulativePnl) / poolInfo.tvl)}%
+				</div>
+			</div>
+
 			<div class='description'>
 				This pool backs trader profits and receives trader losses plus <strong>{formatToDisplay(poolInfo.poolShare)}%</strong> of {formatCurrency(_currencyLabel)} fees as rewards.<br/>
-				<!--Open interest: {formatToDisplay(poolInfo.openInterest)} {formatCurrency(_currencyLabel)} / {formatToDisplay(poolInfo.tvl / (poolInfo.utilizationMultiplier/100))} {formatCurrency(_currencyLabel)} ({formatToDisplay(poolInfo.utilization)}% utilization)-->
+				Open interest: {formatToDisplay(poolInfo.openInterest)} {formatCurrency(_currencyLabel)} / {formatToDisplay(poolInfo.tvl / (poolInfo.utilizationMultiplier/100))} {formatCurrency(_currencyLabel)} ({formatToDisplay(poolInfo.utilization)}% utilization)
 			</div>
 
 			<div class='my-share'>
@@ -256,12 +367,12 @@
 					</div>
 				</div>
 
-			</div>
+			</div> -->
 
 		</div>
     {/each}
 
-    <hr>
+    <!-- <hr>
 
     <h2>Old pools</h2>
 
@@ -326,6 +437,6 @@
 			</div>
 	    {/each}
 
-	{/if}
+	{/if} -->
 
 </div>

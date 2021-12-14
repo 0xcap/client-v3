@@ -78,7 +78,7 @@ export function initChart() {
 				timeVisible: true
 			},
 			crosshair: {
-				mode: 2,
+				mode: 0,
 				vertLine: {
 					width: 0.5,
 					labelBackgroundColor: '#3D3D3D'

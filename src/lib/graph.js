@@ -5,8 +5,8 @@ import { ADDRESS_ZERO } from './constants'
 import { getContract } from './contracts'
 import { getOrders, getPositions } from './methods'
 
-import { formatUnits, formatTrades, formatOrders, formatPositions, setActiveProducts } from './utils'
-import { history, orders, positions, address } from './stores'
+import { formatUnits, formatTrades, formatOrders, formatPositions, setActiveProducts, getChainData } from './utils'
+import { history, orders, positions, address, poolStats } from './stores'
 
 const graph_url = 'https://api.thegraph.com/subgraphs/name/0xcap/cap3';
 
@@ -262,4 +262,50 @@ export async function getUserHistory() {
 	});
 	const json = await response.json();
 	history.set(formatTrades(json.data && json.data.trades));
+}
+
+export async function getPoolStats(currencyLabel) {
+
+	const currencies = getChainData('currencies');
+	// console.log('currencies', currencies);
+	if (!currencies) return;
+
+	const currency = currencies[currencyLabel];
+
+	const response = await fetch(graph_url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			query: `
+				query {
+				  datas(where: {id: "${currency}"}) {
+				    id,
+				    cumulativeFees,
+				    cumulativePnl,
+				    cumulativeVolume,
+				    cumulativeMargin,
+				    openInterest,
+				    openInterestLong,
+				    openInterestShort
+				    positionCount,
+				    tradeCount
+				  }
+				}
+			`
+		})
+	});
+	const json = await response.json();
+	// console.log('json', json.data);
+
+	poolStats.update((x) => {
+		let d = json.data && json.data.datas && json.data.datas[0];
+		if (!d) return x;
+		x[currencyLabel] = {
+			cumulativeFees: formatUnits(d.cumulativeFees),
+			cumulativePnl: formatUnits(d.cumulativePnl)
+		};
+		return x;
+	})
 }
