@@ -1,7 +1,7 @@
 // Subgraph interaction
 import { get } from 'svelte/store'
 
-import { ADDRESS_ZERO } from './constants'
+import { ADDRESS_ZERO, HISTORY_COUNT } from './constants'
 import { getContract } from './contracts'
 import { getOrders, getPositions } from './methods'
 
@@ -111,7 +111,7 @@ export async function getUserOrders() {
 	let graph_orders = json.data && json.data.orders;
 
 	// console.log('graph_orders', graph_orders);
-	
+
 	if (!graph_orders) graph_orders = [];
 
 	for (const order of graph_orders) {
@@ -267,11 +267,15 @@ export async function getUserPositions() {
 
 }
 
-export async function getUserHistory() {
+export async function getUserHistory(first, skip) {
 
+	// console.log('first, skip', first, skip);
+	
 	const _address = get(address);
 	if (!_address) return;
 
+	if (!first) first = HISTORY_COUNT;
+	if (!skip) skip = 0;
 	const response = await fetch(graph_url, {
 		method: 'POST',
 		headers: {
@@ -283,7 +287,8 @@ export async function getUserHistory() {
 				  trades(
 				    orderBy: timestamp,
 				    orderDirection: desc,
-				    first:50,
+				    first:${first},
+				    skip:${skip},
 				    where: {user: "${_address}"}
 				  ) {
 				    id,
@@ -309,7 +314,16 @@ export async function getUserHistory() {
 		})
 	});
 	const json = await response.json();
-	history.set(formatTrades(json.data && json.data.trades));
+	const trades = formatTrades(json.data && json.data.trades);
+	if (skip) {
+		// append
+		let _history = get(history);
+		_history = _history.concat(trades);
+		history.set(_history);
+	} else {
+		history.set(trades);
+	}
+	return trades;
 }
 
 export async function getPoolStats(currencyLabel) {

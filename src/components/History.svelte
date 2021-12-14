@@ -2,6 +2,8 @@
 
 	import { onMount } from 'svelte'
 
+	import { HISTORY_COUNT } from '../lib/constants'
+
 	import { SPINNER_ICON } from '../lib/icons'
 
 	import { history } from '../lib/stores'
@@ -9,12 +11,29 @@
 	import { getUserHistory } from '../lib/graph'
 
 	let loading;
+	let loadingMore = false;
 	onMount(async () => {
 		if (!$history.length) {
 			loading = true;
 		}
-		await getUserHistory();
+		let lastTrades = await getUserHistory();
 		loading = false;
+
+		// monitor scoll
+		let skip = HISTORY_COUNT;
+		const historyList = document.getElementById('history-list');
+		historyList.onscroll = async () => {
+			// console.log('scrolling', historyList.scrollTop, historyList.scrollHeight);
+			if (historyList.scrollTop > historyList.scrollHeight - 200) {
+				if (loadingMore || lastTrades.length < HISTORY_COUNT) return;
+				loadingMore = true;
+				// console.log('loading more');
+				lastTrades = await getUserHistory(HISTORY_COUNT, skip);
+				// console.log('lastTrades', lastTrades);
+				loadingMore = false;
+				skip += HISTORY_COUNT;
+			}
+		}
 	});
 
 </script>
@@ -125,7 +144,7 @@
 
 	</div>
 
-	<div class='trades-list no-scrollbar'>
+	<div class='trades-list no-scrollbar' id='history-list'>
 
 		{#if loading}
 			<div class='empty'>
@@ -149,6 +168,12 @@
 					</div>
 
 				{/each}
+
+				{#if loadingMore}
+					<div class='empty'>
+						<div class='loading-icon'>{@html SPINNER_ICON}</div>
+					</div>
+				{/if}
 
 			{/if}
 		{/if}
