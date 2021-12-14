@@ -226,7 +226,7 @@
 					<div class='column column-close'>
 
 						{#if position.isClosing || position.isSettling}
-							<span class='status' title='Settling'>{@html CIRCLE_ICON}</span>
+							<span class='status' title={position.isClosing ? 'Closing' : 'Settling'}>{@html CIRCLE_ICON}</span>
 						{:else}
 							<a class='close' title='Close Position' on:click|stopPropagation={() => {showModal('ClosePosition', position)}} data-intercept="true">
 								{@html CANCEL_ICON}

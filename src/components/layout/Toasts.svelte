@@ -23,8 +23,14 @@
 		display: flex;
 		justify-content: space-between;
 		padding: 10px;
-		max-width: 420px;
+		max-width: 620px;
 		pointer-events: auto;
+	}
+
+	@media (max-width: 660px) {
+		.toast {
+			max-width: 420px;
+		}
 	}
 
 	.toast.error {
