@@ -27,6 +27,9 @@
 	.address {
 		display: flex;
 		align-items: center;
+		justify-content: flex-end;
+		text-align: right;
+		white-space: nowrap;
 	}
 
 	.address :global(svg) {
@@ -62,7 +65,7 @@
 		</div>
 	{:else}
 		{#if $currentPage != 'home'}
-		<Button small={true} onClick={() => {showModal('Connect')}} label={`Connect Wallet`} />
+		<Button small={true} onClick={() => {showModal('Connect')}} label={`Connect`} />
 		{/if}
 	{/if}
 

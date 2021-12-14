@@ -4,24 +4,30 @@
 
 	import { SPINNER_ICON } from '../lib/icons'
 
-	import { pools, oldPools, poolStats, allowances, prices, address } from '../lib/stores'
+	import { capPool, pools, oldPools, poolStats, allowances, prices, address } from '../lib/stores'
 
 	import { getAllowance, collectPoolReward, approveCurrency, getPoolInfo, getOldPoolInfo } from '../lib/methods'
 
 	import { showModal, formatCurrency, formatToDisplay, getChainData } from '../lib/utils'
 
 	async function _approveCurrency(_currencyLabel) {
-		const result = await approveCurrency(_currencyLabel, 'pool' + _currencyLabel);
+		if (_currencyLabel == 'cap') {
+			const result = await approveCurrency('cap', 'capPool');
+		} else {
+			const result = await approveCurrency(_currencyLabel, 'pool' + _currencyLabel);
+		}
 	}
 
-	async function getAllowances(_pools) {
+	async function getAllowances(_pools, _capPool) {
 		if (!_pools) return;
 		for (const _currencyLabel in _pools) {
 			await getAllowance(_currencyLabel, 'pool' + _currencyLabel);
 		}
+		if (!_capPool || !_capPool.supply) return;
+		await getAllowance('cap', 'capPool');
 	}
 
-	$: getAllowances($pools);
+	$: getAllowances($pools, $capPool);
 
 	let poolIsLoading = {};
 
@@ -96,12 +102,12 @@
 	.pool {
 		background-color: var(--eerie-black);
 		border-radius: var(--base-radius);
-		max-width: 520px;
+		max-width: 500px;
 		overflow: hidden;
 		margin-right: var(--base-padding);
 	}
 
-	@media (max-width: 840px) {
+	@media (max-width: 960px) {
 		.pools {
 			flex-direction: column;
 		}
@@ -155,8 +161,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		height: 54px;
-		padding: 0 var(--base-padding);
+		padding: 16px var(--base-padding);
 		border-bottom: 1px solid var(--jet);
 	}
 	.row:last-child {
@@ -167,6 +172,16 @@
 		color: var(--sonic-silver);
 	}
 
+	.top-label {
+		margin-bottom: 6px;
+	}
+
+	.sub-label {
+		font-size: 80%;
+		opacity: 0.75;
+		margin-bottom: 6px;
+	}
+
 	.value {
 		text-align: right;
 	}
@@ -175,6 +190,7 @@
 		border-top: 1px solid var(--rich-black);
 		background-color: var(--jet-dim);
 	}
+
 
 	.sep {
 		color: var(--dim-gray);
@@ -224,18 +240,23 @@
 		color: var(--sonic-silver);
 	}
 
+	.note {
+		color: var(--red);
+		padding: var(--base-padding);
+	}
+
 </style>
 
 <div class='pools'>
 
 	{#each poolEntries as [_currencyLabel, poolInfo]}
 
-		<div class='pool' class:loading={poolIsLoading[_currencyLabel] || !poolInfo.tvl}>
+		<div class='pool' class:loading={poolIsLoading[_currencyLabel] || $address && !poolInfo.tvl}>
 
 			<div class='asset'>
 				<img src={CURRENCY_LOGOS[_currencyLabel]}>
 				{formatCurrency(_currencyLabel)} 
-				{#if !poolInfo.tvl || poolIsLoading[_currencyLabel]}
+				{#if $address && !poolInfo.tvl || poolIsLoading[_currencyLabel]}
 					<div class='loading-icon'>{@html SPINNER_ICON}</div>
 				{/if}
 			</div>
@@ -248,6 +269,10 @@
 				<div class='label'>Projected Yield (APY)</div>
 				<div class='value'>{getAPY(_currencyLabel, poolInfo, $poolStats)}</div>
 			</div>
+
+			{#if !$address}
+			<div class='note'>Connect your wallet to see pool stats.</div>
+			{/if}
 
 			<div class='stats'>
 				<div class='row'>
@@ -272,7 +297,8 @@
 
 			<div class='stats my-stats'>
 				<div class='row'>
-					<div class='label'>My Share 
+					<div class='label'>
+						<div class='top-label'>My Share</div>
 						{#if $allowances[_currencyLabel] && $allowances[_currencyLabel]['pool' + _currencyLabel] * 1 == 0}
 							<a on:click={() => {_approveCurrency(_currencyLabel)}}>Approve {formatCurrency(_currencyLabel)}</a>
 						{:else}
@@ -282,7 +308,9 @@
 					<div class='value'>{formatToDisplay(poolInfo.userBalance) || 0} {formatCurrency(_currencyLabel)} <span class='grayed'>({formatToDisplay(poolInfo.tvl*1 == 0 ? 0 : 100*poolInfo.userBalance/poolInfo.tvl)}%)</span></div>
 				</div>
 				<div class='row'>
-					<div class='label'>My Rewards <a class:disabled={poolInfo.claimableReward == 0} on:click={() => {collectPoolReward(_currencyLabel)}}>Collect</a></div>
+					<div class='label'>
+						<div class='top-label'>My Rewards</div>
+						<a class:disabled={poolInfo.claimableReward == 0} on:click={() => {collectPoolReward(_currencyLabel)}}>Collect</a></div>
 					<div class='value'>{formatToDisplay(poolInfo.claimableReward) || 0} {formatCurrency(_currencyLabel)} 
 						{#if _currencyLabel == 'weth' && $prices['ETH-USD'] && poolInfo}
 						<span class='grayed'>(${formatToDisplay($prices['ETH-USD'] * poolInfo.claimableReward || 0)})</span>
@@ -291,86 +319,71 @@
 				</div>
 			</div>
 
-			<!-- <div class='info'>
-				<div class='column column-asset flex'>
-					<img src={CURRENCY_LOGOS[_currencyLabel]}>
-					{formatCurrency(_currencyLabel)} 
-					{#if poolIsLoading[_currencyLabel]}
-						<div class='loading-icon'>{@html SPINNER_ICON}</div>
-					{:else}
-						<div title='Reload' class='reload' on:click={() => {reloadPoolInfo(_currencyLabel)}}>&#8635;</div>
-					{/if}
-				</div>
-				<div class='column column-apr'></div>
-				<div class='column column-tvl'>
-					{#if poolInfo.tvl}
-						{formatToDisplay(poolInfo.tvl)} 
-						{#if _currencyLabel == 'weth'}
-						<span class='dollar-amount'>(${formatToDisplay($prices['ETH-USD'] * poolInfo.tvl || 0)})</span>
-						{/if}
-					{:else if !$address}
-						--
-					{:else}
-						<div class='loading-icon'>{@html SPINNER_ICON}</div>
-					{/if}
-				</div>
-			</div>
-
-			<div class='row'>
-				<div class='column column-asset label'>
-					Cumulative return since 
-				</div>
-				<div class='column column-apr'></div>
-				<div class='column column-tvl'>
-					{$poolStats[_currencyLabel] && formatToDisplay($poolStats[_currencyLabel].cumulativeFees * poolInfo.poolShare / 100 - 1 * $poolStats[_currencyLabel].cumulativePnl)} {formatCurrency(_currencyLabel)}
-				</div>
-			</div>
-
-			<div class='row'>
-				<div class='column column-asset label'>
-					APY 
-				</div>
-				<div class='column column-apr'></div>
-				<div class='column column-tvl'>
-					{$poolStats[_currencyLabel] && formatToDisplay(12 * 100 * ($poolStats[_currencyLabel].cumulativeFees * poolInfo.poolShare / 100 - 1 * $poolStats[_currencyLabel].cumulativePnl) / poolInfo.tvl)}%
-				</div>
-			</div>
-
-			<div class='description'>
-				This pool backs trader profits and receives trader losses plus <strong>{formatToDisplay(poolInfo.poolShare)}%</strong> of {formatCurrency(_currencyLabel)} fees as rewards.<br/>
-				Open interest: {formatToDisplay(poolInfo.openInterest)} {formatCurrency(_currencyLabel)} / {formatToDisplay(poolInfo.tvl / (poolInfo.utilizationMultiplier/100))} {formatCurrency(_currencyLabel)} ({formatToDisplay(poolInfo.utilization)}% utilization)
-			</div>
-
-			<div class='my-share'>
-
-				<div class='row'>
-					<div class='column column-asset label'>My Share</div>
-					<div class='column column-apr'>{formatToDisplay(poolInfo.userBalance) || 0} {formatCurrency(_currencyLabel)} ({formatToDisplay(poolInfo.tvl*1 == 0 ? 0 : 100*poolInfo.userBalance/poolInfo.tvl)}%)</div>
-					<div class='column column-tvl'>
-						{#if $allowances[_currencyLabel] && $allowances[_currencyLabel]['pool' + _currencyLabel] * 1 == 0}
-							<a on:click={() => {_approveCurrency(_currencyLabel)}}>Approve {formatCurrency(_currencyLabel)}</a>
-						{:else}
-						<a data-intercept="true" class:disabled={!poolInfo.tvl} on:click={() => {showModal('PoolDeposit', {currencyLabel: _currencyLabel})}}>Deposit</a><span class='sep'>|</span><a class:disabled={poolInfo.userBalance == 0} data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: _currencyLabel, withdrawFee: poolInfo.withdrawFee})}}>Withdraw</a>
-						{/if}
-					</div>
-				</div>
-
-				<div class='row'>
-					<div class='column column-asset label'>My Rewards</div>
-					<div class='column column-apr'>{formatToDisplay(poolInfo.claimableReward) || 0} {formatCurrency(_currencyLabel)} 
-						{#if _currencyLabel == 'weth'}
-						<span class='dollar-amount'>(${formatToDisplay($prices['ETH-USD'] * poolInfo.claimableReward || 0)})</span>
-						{/if}
-					</div>
-					<div class='column column-tvl'>
-						<a class:disabled={poolInfo.claimableReward == 0} on:click={() => {collectPoolReward(_currencyLabel)}}>Collect</a>
-					</div>
-				</div>
-
-			</div> -->
-
 		</div>
     {/each}
+
+    <div class='pool cap-pool' class:loading={poolIsLoading['cap'] || $address && !$capPool.supply}>
+
+    	<div class='asset'>
+    		<img src={CURRENCY_LOGOS['cap']}>
+    		CAP
+    		{#if $address && !$capPool.supply || poolIsLoading['cap']}
+    			<div class='loading-icon'>{@html SPINNER_ICON}</div>
+    		{/if}
+    	</div>
+
+    	<div class='description'>
+    		Stake your CAP to receive a share of trading fees. There are no restrictions on deposits or withdrawals.
+    	</div>
+
+    	{#if !$address}
+    	<div class='note'>Connect your wallet to see pool stats.</div>
+    	{/if}
+
+    	<div class='stats'>
+    		<div class='row'>
+    			<div class='label'>TVL</div>
+    			<div class='value'>{formatToDisplay($capPool.supply)}</div>
+    		</div>
+    	</div>
+
+    	<div class='stats my-stats'>
+
+    		<div class='row'>
+    			<div class='label'>
+    				<div class='top-label'>My Share</div>
+    				{#if $allowances['cap'] && $allowances['cap']['capPool'] * 1 == 0}
+    					<a on:click={() => {_approveCurrency('cap')}}>Approve CAP</a>
+    				{:else}
+    				<a data-intercept="true" on:click={() => {showModal('PoolDeposit', {currencyLabel: 'cap'})}}>Deposit</a><span class='sep'>|</span><a class:disabled={$capPool.userBalance == 0} data-intercept="true" on:click={() => {showModal('PoolWithdraw', {currencyLabel: 'cap'})}}>Withdraw</a>
+    				{/if}
+    			</div>
+    			<div class='value'>
+    				{formatToDisplay($capPool.userBalance)} CAP <span class='grayed'>({formatToDisplay($capPool.supply*1 == 0 ? 0 : 100*$capPool.userBalance/$capPool.supply)}%)</span>
+    			</div>
+    		</div>
+
+    		{#each Object.entries($capPool.claimableRewards || {}) as [_currencyLabel, reward]}
+
+	    		<div class='row'>
+	    			<div class='label'>
+	    				<div class='top-label'>My {formatCurrency(_currencyLabel)} Rewards</div>
+	    				<div class='sub-label'>Receives <strong>{formatToDisplay($capPool.poolShares[_currencyLabel])}%</strong> of fees</div>
+	    				<a class:disabled={reward == 0} on:click={() => {collectCAPReward(_currencyLabel)}}>Collect</a>
+	    			</div>
+	    			<div class='value'>
+	    				{formatToDisplay(reward)} {formatCurrency(_currencyLabel)} 
+    					{#if _currencyLabel == 'weth' && $prices['ETH-USD']}
+    					<span class='grayed'>(${formatToDisplay($prices['ETH-USD'] * reward || 0)})</span>
+    					{/if}
+	    			</div>
+	    		</div>
+
+	    	{/each}
+
+    	</div>
+
+    </div>
 
     <!-- <hr>
 

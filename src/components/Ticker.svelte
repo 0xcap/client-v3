@@ -31,13 +31,18 @@
 		display: flex;
 		align-items: center;
 		cursor: pointer;
+		padding: 6px 0;
+	}
+
+	.selector:hover {
+		color: #ddd;
 	}
 
 	.selector :global(svg) {
 		margin-left: 10px;
 		height: 8px;
 		fill: transparent;
-		stroke: #fff;
+		stroke: currentColor;
 	}
 
 	.selector img {
@@ -58,7 +63,7 @@
 		color: var(--onyx);
 	}
 
-	@media (max-width: 600px) {
+	@media (max-width: 780px) {
 
 		.volume {
 			display: none;

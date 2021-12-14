@@ -31,6 +31,7 @@ export async function getVolume() {
 		})
 	});
 	const json = await response.json();
+	// console.log('json', json);
 	if (!json.data) return {volume: 1099876787};
 
 	let datas = json.data && json.data.datas;

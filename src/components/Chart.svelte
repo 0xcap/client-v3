@@ -13,7 +13,7 @@
 <style>
 	#chart {
 		background-color: var(--eerie-black);
-		height: var(--chart-height);
+		height: calc(var(--chart-height) + var(--grid-gap));
 	}
 	.loading {
 		opacity: 0.8;

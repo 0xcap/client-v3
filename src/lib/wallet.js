@@ -16,7 +16,7 @@ export async function checkMetamaskSession() {
 export async function connectMetamask(resume) {
 
 	let metamask = window.ethereum;
-	if (!metamask) return showToast('Metamask is not installed.');
+	if (!metamask && !resume) return showToast('Metamask is not installed.');
 	
 	_provider = new ethers.providers.Web3Provider(metamask);
 
@@ -27,6 +27,8 @@ export async function connectMetamask(resume) {
 		accounts = await _provider.send("eth_requestAccounts", []);
 		hideModal();
 	}
+
+	if (!accounts || !accounts.length) return;
 
 	const network = await _provider.getNetwork();
 	chainId.set(network.chainId);

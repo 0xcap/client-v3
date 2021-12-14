@@ -205,7 +205,7 @@
 	}
 
 	.detail-label {
-		color: var(--sonic-silver);
+		color: #858585;
 	}
 
 	.sep {
@@ -220,6 +220,7 @@
 		border-top: 1px solid var(--jet);
 		color: var(--sonic-silver);
 		font-size: 80%;
+		line-height: 1.618;
 	}
 
 </style>
@@ -230,7 +231,7 @@
 
 		<div class='title'>Place Order</div>
 		<div class='pills'>
-			<div class='pill' on:click={() => {if ($address) {showModal('Currencies')}}} data-intercept="true">{formatCurrency($currencyLabel)}</div>
+			<div class='pill' on:click={() => {showModal('Currencies')}} data-intercept="true">{formatCurrency($currencyLabel)}</div>
 			<div class='pill' on:click={() => {showModal('Leverage')}} data-intercept="true">{formatToDisplay($leverage)}×</div>
 		</div>
 
@@ -253,43 +254,40 @@
 
 	<div class='details'>
 		{#if $margin * 1 > 0}
+			<div class='row'>
+				<div class='detail-label'>Margin Used</div>
+				<div class='detail-value'>{formatToDisplay($margin || 0)} {formatCurrency($currencyLabel)}</div>
+			</div>
 			{#if sizeInUSD}
 			<div class='row'>
 				<div class='detail-label'>Size in USD</div>
-				<div class='detail-value'>{formatToDisplay(sizeInUSD, 2)}</div>
+				<div class='detail-value'>${formatToDisplay(sizeInUSD, 2)}</div>
 			</div>
 			{/if}
-			<div class='row'>
-				<div class='detail-label'>Margin</div>
-				<div class='detail-value'>{formatToDisplay($margin || 0)} {formatCurrency($currencyLabel)}</div>
-			</div>
-			<div class='row'>
-				<div class='detail-label'>Fee</div>
-				<div class='detail-value'>{$product.fee || 0}%</div>
-			</div>
-			<div class='row'>
-				<div class='detail-label'>Funding</div>
-				<div class='detail-value'>-{formatToDisplay($product.interest/(360*24)) || 0}% / h</div>
-			</div>
-      		{#if Math.abs(priceImpact * 1) > $product.fee * 1}
-			<div class='row'>
-				<div class='detail-label'>Price Impact</div>
-				<div class='detail-value'>{formatToDisplay(priceImpact)}%</div>
-			</div>
+			{#if $address}
+	      		{#if Math.abs(priceImpact * 1) > $product.fee * 1}
+				<div class='row'>
+					<div class='detail-label'>Price Impact</div>
+					<div class='detail-value'>{formatToDisplay(priceImpact)}%</div>
+				</div>
+				{/if}
 			{/if}
-		{:else}
-			<div class='row'>
-				<div class='detail-label'>Buying Power</div>
-				<div class='detail-value'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
-			</div>
-			<div class='row'>
-				<div class='detail-label'>Wallet Balance</div>
-				<div class='detail-value'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
-			</div>
+			<div class='sep'></div>
 		{/if}
+		<div class='row'>
+			<div class='detail-label'>Buying Power</div>
+			<div class='detail-value'>{formatToDisplay(available)} {formatCurrency($currencyLabel)}</div>
+		</div>
+		<div class='row'>
+			<div class='detail-label'>Wallet Balance</div>
+			<div class='detail-value'>{formatToDisplay(balance)} {formatCurrency($currencyLabel)}</div>
+		</div>
+		
 	</div>
 
-	{#if $address && balance * 1 == 0}
+	{#if !$address}
+	<div class='note'>CAP is an open protocol to trade crypto perpetuals. <a data-intercept="true" on:click={() => {showModal('Connect')}}>Connect</a> your wallet on Arbitrum to get started.</div>
+	{:else if $address && balance * 1 == 0}
 	<div class='note'><a href='https://docs.cap.finance/setting-up-your-wallet' target='_blank'>Bridge funds</a> to Arbitrum to start trading.</div>
 	{/if}
 	

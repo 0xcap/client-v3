@@ -9,7 +9,6 @@ import { PRODUCTS } from './products'
 import Home from '../components/pages/Home.svelte'
 import Trade from '../components/pages/Trade.svelte'
 import Pool from '../components/pages/Pool.svelte'
-import Stake from '../components/pages/Stake.svelte'
 
 import { hydrateData } from './data'
 import { getProduct } from './methods'
@@ -27,7 +26,7 @@ export function setTitle(product, price) {
 // Text utils
 export function shortAddress(address) {
 	if (!address) return;
-	return address.substring(0,2) + '…' + address.slice(-6);
+	return address.substring(0,2) + '…' + address.slice(-4);
 }
 export function shortSymbol(symbol) {
 	if (!symbol) return '';
@@ -162,10 +161,10 @@ export function hideModal() {
 
 // Routing
 export function loadRoute(path, isInitial) {
-	if (!path || path == '/') {
+	if (!path || path == '/' || path.includes('/home')) {
 		component.set(Home);
 		currentPage.set('home');
-		document.title = `CAP`;
+		document.title = `Decentralized Perpetual Exchange | CAP`;
 	} else if (path.includes('/trade')) {
 		component.set(Trade);
 		currentPage.set('trade');
@@ -174,10 +173,6 @@ export function loadRoute(path, isInitial) {
 		component.set(Pool);
 		currentPage.set('pool');
 		document.title = `Pool | CAP`;
-	} else if (path.includes('/stake')) {
-		component.set(Stake);
-		currentPage.set('stake');
-		document.title = `Stake | CAP`;
 	}
 	hydrateData();
 }
@@ -338,11 +333,15 @@ export function getCurrencyLabelFromAddress(_address) {
 export async function getUPL(position, latestPrice) {
 	let upl = 0;
 	if (position.price * 1 == 0) return undefined;
+
+	let priceImpact = getPriceImpact(position.size, position.productId, position.currencyLabel);
 	if (latestPrice) {
 		const productInfo = await getProduct(position.productId);
 		if (position.isLong) {
+			latestPrice = latestPrice * (1 + priceImpact / 100);
 			upl = position.size * (latestPrice * 1 - position.price * 1) / position.price;
 		} else {
+			latestPrice = latestPrice * (1 - priceImpact / 100);
 			upl = position.size * (position.price * 1 - latestPrice * 1) / position.price;
 		}
 		// Add interest

@@ -8,28 +8,37 @@
 
 	import { CANCEL_ICON, CIRCLE_ICON } from '../lib/icons'
 
-	import { formatPnl, showModal, getUPL, formatCurrency, formatToDisplay, getPriceImpact } from '../lib/utils'
+	import { formatPnl, showModal, getUPL, formatCurrency, formatToDisplay, getPriceImpact, calculateLiquidationPrice } from '../lib/utils'
 
 	let upls = {};
+	let liqPrices = {};
 	let upls_percent = {};
 	let totalUPL = 0;
 	let count = 0;
 	$: count = $positions && $positions.length || 0;
 
-	async function calculateUPLs(_prices) {
+	async function calculateUPLs(_positions, _prices) {
 		totalUPL = 0;
-		for (const position of $positions) {
-			const upl = await getUPL(position, _prices[position.productId]);
+		for (const position of _positions) {
+
+			// Liq prices
+			const lp = await calculateLiquidationPrice(position);
+			liqPrices[position.key] = lp && lp.toFixed(6);
+
+			// UPL
+			if (!_prices[position.productId]) continue;
+			const upl = await getUPL(position, _prices[position.productId]);			
+			if (upl == undefined) continue;
 			upls[position.key] = upl;
-			if (!upl) continue;
 			upls_percent[position.key] = (100 * upl * 1 / position.margin);
 			totalUPL += upl * 1;
+			
 		}
 		if (isNaN(totalUPL)) totalUPL = 0;
 		totalUPL = totalUPL.toFixed(4);
 	}
 
-	$: calculateUPLs($prices);
+	$: calculateUPLs($positions, $prices);
 
 	let items_to_show = [];
 
@@ -108,7 +117,7 @@
 	}
 
 	.column-product {
-		width: 15%;
+		width: 10%;
 	}
 	.column-price {
 		width: 15%;
@@ -120,10 +129,73 @@
 		width: 15%;
 	}
 	.column-leverage {
-		width: 15%;
+		width: 10%;
 	}
 	.column-pnl {
 		width: 15%;
+	}
+	.column-liqprice {
+		width: 10%;
+	}
+	.column-close {
+
+	}
+
+	@media (max-width: 1200px) {
+		.pnl-percent {
+			display: none;
+		}
+	}
+
+	@media (max-width: 1000px) {
+		.column-liqprice {
+			display: none;
+		}
+		.column-product {
+			width: 15%;
+		}
+		.column-price {
+			width: 15%;
+		}
+		.column-size {
+			width: 15%;
+		}
+		.column-margin {
+			width: 15%;
+		}
+		.column-leverage {
+			width: 15%;
+		}
+		.column-pnl {
+			width: 15%;
+		}
+		.column-close {
+			
+		}
+	}
+
+	@media (max-width: 780px) {
+
+		.column-leverage, .column-margin {
+			display: none;
+		}
+
+		.column-product {
+			width: 30%;
+		}
+		.column-price {
+			width: 20%;
+		}
+		.column-size {
+			width: 20%;
+		}
+		.column-pnl {
+			width: 25%;
+		}
+		.column-close {
+			
+		}
+
 	}
 
 	.column-close {
@@ -161,27 +233,6 @@
 		text-align: center;
 	}
 
-	@media (max-width: 600px) {
-
-		.column-leverage, .column-margin {
-			display: none;
-		}
-
-		.column-product {
-			width: 30%;
-		}
-		.column-price {
-			width: 20%;
-		}
-		.column-size {
-			width: 15%;
-		}
-		.column-pnl {
-			width: 25%;
-		}
-
-	}
-
 </style>
 
 <div class='positions'>
@@ -194,6 +245,7 @@
 		<div class='column column-margin'>Margin</div>
 		<div class='column column-leverage'>Leverage</div>
 		<div class='column column-pnl'>P/L</div>
+		<div class='column column-liqprice'>Liq. Price</div>
 		<div class='column column-close'></div>
 
 	</div>
@@ -220,9 +272,11 @@
 						{formatToDisplay(position.leverage)}×
 					</div>
 					<div class={`column column-pnl ${upls[position.key] * 1 < 0 ? 'neg' : 'pos'}`}>
-						{formatPnl(upls[position.key]) || '-'}
+						{formatPnl(upls[position.key]) || '--'} {#if upls[position.key] != undefined}<span class='pnl-percent'>({formatPnl(100*upls[position.key]/position.margin, true)}%)</span>{/if}
 					</div>
-
+					<div class='column column-liqprice'>
+						{formatToDisplay(liqPrices[position.key]) || '--'}
+					</div>
 					<div class='column column-close'>
 
 						{#if position.isClosing || position.isSettling}

@@ -35,6 +35,9 @@ a {
   text-decoration: none;
   cursor: pointer;
 }
+a:hover {
+  color: var(--green-dim);
+}
 
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button {
     display: none;

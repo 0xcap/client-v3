@@ -20,44 +20,66 @@
 		align-items: center;
 	}
 
-	.left a {
-		color: var(--sonic-silver);
-		margin-right: var(--base-padding);
+	.link {
+		color: var(--silver-chalice);
+		margin-right: 14px;
+		font-weight: 500;
+		padding: 6px 12px;
+		border-radius: var(--base-radius);
 	}
 
-	.left a:hover {
-		color: var(--green);
+	.logo {
+		margin-right: 26px;
 	}
 
-	.left a.active {
+	@media (max-width: 600px) {
+		.logo {
+			margin-right: 12px;
+		}
+		.link {
+			margin-right: 0;
+		}
+	}
+
+	.link:hover {
+		color: #fff;
+		background-color: #242424;
+	}
+
+	.link.active {
 		color: var(--green);
-		font-weight: 700;
+		font-weight: 600;
+		background-color: #1B261B;
 	}
 
 	img {
-		height: 11px;
+		height: 12px;
 		filter: grayscale(1);
-		opacity: 0.5;
+		opacity: 0.65;
 	}
 
-	a:hover img, a.active img {
+	.logo:hover img {
+		filter: grayscale(1);
+		opacity: 1;
+	}
+
+	.logo.active img {
 		filter: grayscale(0);
 		opacity: 1;
 	}
 
 </style>
 
-
+{#if $currentPage != 'home'}
 <header>
 
 	<div class='left'>
-		<a class:active={$currentPage == 'home' || !$currentPage} href='/'>
-			<img src='/logos/CAP.svg' title='CAP logo' alt='CAP logo' />
+		<a class='logo' class:active={!$currentPage || $currentPage == 'home'} href='/'>
+			<img src='/logos/CAP.svg' title='CAP Home' alt='CAP Home' />
 		</a>
-		<a class:active={$currentPage == 'trade'} href='#/trade'>Trade</a>
-		<a class:active={$currentPage == 'pool'} href='#/pool'>Pool</a>
-		<a class:active={$currentPage == 'stake'} href='#/stake'>Stake</a>
-		<a href='https://docs.cap.finance' target='_blank'>Docs</a>
+		<a class='link' class:active={$currentPage == 'trade'} href='#/trade'>Trade</a>
+		<a class='link' class:active={$currentPage == 'pool'} href='#/pool'>Pool</a>
+		<a class='link' href='https://docs.cap.finance' target='_blank'>Docs</a>
 	</div>
 
 	<div class='right'>
@@ -65,3 +87,4 @@
 	</div>
 	
 </header>
+{/if}

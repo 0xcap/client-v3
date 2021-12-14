@@ -90,8 +90,6 @@ export function initChart() {
 			}
 		});
 
-		const resolution = get(chartResolution);
-
 		candlestickSeries = chart.addCandlestickSeries({
 			upColor: '#00C805',
 		    downColor: '#FF5000',
@@ -108,6 +106,8 @@ export function initChart() {
 	            // try to load additional historical data and prepend it to the series data
 	            // use setData with additional data prepended
 	            if (isLoadingCandles) return;
+	            const resolution = get(chartResolution);
+	            // console.log('load left resolution', resolution);
 	            // console.log('load additional data to the left');
 	            isLoadingCandles = true;
 	            await loadCandles(resolution, start - lookbacks[resolution], end - lookbacks[resolution], true);
@@ -163,12 +163,14 @@ export async function setResolution(_resolution) {
 
 export async function loadCandles(_resolution, _start, _end, prepend, productOverride) {
 
-	//console.log('called loadCandles', _resolution, _start, _end, prepend);
+	_resolution = get(chartResolution);
+
+	// console.log('called loadCandles', _resolution, _start, _end, prepend);
 
 	let _product = productOverride || get(product).symbol;
 
-	//console.log('candlestickSeries', candlestickSeries);
-	//console.log('_product', _product);
+	// console.log('candlestickSeries', Boolean(candlestickSeries));
+	// console.log('_product', _product);
 
 	if (!candlestickSeries || !_product) {
 		// try again
@@ -179,9 +181,7 @@ export async function loadCandles(_resolution, _start, _end, prepend, productOve
 		return;
 	}
 
-	if (!_resolution) {
-		_resolution = get(chartResolution);
-	}
+	_resolution = get(chartResolution);
 
 	//console.log('_product', _product);
 	//console.log('resolution', _resolution, lookbacks[_resolution]);
@@ -193,6 +193,8 @@ export async function loadCandles(_resolution, _start, _end, prepend, productOve
 
 	start = _start;
 	end = _end;
+
+	// console.log('start, end', start, end, new Date(start).toString(), new Date(end).toString());
 
 	const url_start = encodeURIComponent(new Date(start).toString());
 	const url_end = encodeURIComponent(new Date(end).toString());
