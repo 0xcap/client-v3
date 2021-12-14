@@ -14,7 +14,7 @@
 
 </style>
 
-<Modal title='Invalid Network' showHeader={true}>
+<Modal title='Invalid Network' showHeader={true} showCancel={true}>
 
 	<div class='note'>
 		Select Arbitrum as your wallet's network to trade or pool on CAP.

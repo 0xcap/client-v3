@@ -1,7 +1,10 @@
 <script>
 	import Volume from '../Volume.svelte'
 
-	import { EXTERNAL_ICON } from '../../lib/icons'
+	import { EXTERNAL_ICON, DISCORD_ICON, TWITTER_ICON, TELEGRAM_ICON, GITHUB_ICON, ARBITRUM_ICON } from '../../lib/icons'
+
+	import { quartOut } from 'svelte/easing';
+	import { blur } from 'svelte/transition';
 
 </script>
 <style>
@@ -20,7 +23,6 @@
 	.home {
 		margin: 0 auto;
 		max-width: 720px;
-		padding: 36px 0;
 	}
 
 	.hero {
@@ -28,8 +30,6 @@
 		align-items: center;
 		justify-content: center;
 		padding: 64px 0;
-		margin-bottom: 28px;
-		border-bottom: 2px dotted #293329;
 	}
 
 	.hero-inner {		
@@ -44,6 +44,11 @@
 
 	.main-title img {
 		height: 60px;
+	}
+
+	.tagline-wrapper {
+		height: 80px;
+		overflow: hidden;
 	}
 
 	.tagline {
@@ -70,7 +75,7 @@
 	}
 
 	.volume .label {
-		color: var(--dim-gray);
+		color: var(--sonic-silver);
 		margin-top: 8px;
 		font-size: 90%;
 	}
@@ -79,77 +84,69 @@
 		font-weight: 700;
 	}
 
-	.benefits-wrap {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		grid-auto-flow: column;
-		grid-gap: 36px;
-		padding: 36px 0;
-		border-bottom: 2px dotted var(--jet);
+	.chains {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
-	@media (max-width: 900px) {
-
-		.benefits-wrap {
-			grid-auto-flow: row;
-			grid-template-columns: unset;
-		}
-
+	.chains :global(svg) {
+		height: 22px;
+		margin-right: 4px;
+		margin-left: 8px;
 	}
 
-	.benefits {
-	}
-
-	.benefits-title {
-		color: var(--green);
-		font-weight: 700;
-		font-size: 120%;
-		margin-bottom: 10px;
-	}
-
-	.description {
-		line-height: 1.618;
-	}
-
-	.community {
-		padding: 36px 0 0;
-		text-align: center;
-		line-height: 1.618;
-		color: var(--sonic-silver);
-		max-width: 520px;
+	.sep {
+		height: 2px;
+		background-color: var(--onyx-dim);
+		width: 60px;
 		margin: 0 auto;
 	}
 
-	.community span {
-		display: block;
-	}
-
-	@media (max-width: 600px) {
-		.community span {
-			display: inline;
-		}
-	}
-
 	.links {
-		padding-top: 36px;
+		padding-top: 64px;
 		text-align: center;
 		line-height: 1.618;
 	}
-
+	.links.bt {
+		padding-top: 36px;
+	}
+	.links a {
+		margin: 0 8px;
+	}
 	.links :global(svg) {
 		height: 11px;
 		fill: currentColor;
 	}
 
-	.links a {
-		margin: 0 8px;
+	.description {
+		padding-top: 36px;
+		text-align: center;
+		line-height: 1.618;
+		color: var(--sonic-silver);
+	}
+
+	.community {
+		padding-top: 36px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.community a {
+		margin: 0 10px;
+	}
+
+	.community :global(svg) {
+		height: 22px;
+		fill: currentColor;
 	}
 
 </style>
 
 <div class='home-wrap'>
 
-	<div class='home'>
+	<div class='home' in:blur={{duration: 1000, easing: quartOut}}>
 
 		<div class='hero'>
 
@@ -158,8 +155,10 @@
 				<div class='main-title'>
 					<img src='/logos/CAP.svg' title='CAP logo' alt='CAP logo' />
 				</div>
-					
-				<div class='tagline'>Trade cryptos with up to 50× leverage directly from your wallet</div>
+				
+				<div class='tagline-wrapper'>
+					<div class='tagline'>Trade cryptos with up to 50× leverage directly from your wallet.</div>
+				</div>
 
 				<div class='button-wrap'>
 					<a class='button' href='#/trade'>Start Trading</a>
@@ -170,9 +169,13 @@
 					<div class='label'>Protocol Volume</div>
 				</div>
 
+				<div class='chains'>Available on {@html ARBITRUM_ICON} Arbitrum</div>
+
 			</div>
 
 		</div>
+
+		<div class='sep'></div>
 
 		<div class='links'>
 			<a href='#/trade'>Trade</a>
@@ -180,16 +183,21 @@
 			<a href='https://docs.cap.finance' target='_blank'>Docs</a>
 		</div>
 
-		<div class='community'>
-			<span>CAP is an open protocol to trade perpetuals.</span> <span>Join our community on <a href='https://discord.gg/zkdr8vnujz' target='_blank'>Discord</a>, <a href='https://t.me/capfin' target='_blank'>Telegram</a>, and <a href='https://twitter.com/CapDotFinance' target='_blank'>Twitter</a>.</span></div>
+		<div class='description'>CAP is an open protocol to trade perpetuals.</div>
 		
-		<div class='links'>
+		<div class='community'>
+			<a href='https://discord.gg/zkdr8vnujz' target='_blank' title='Discord'>{@html DISCORD_ICON}</a>
+			<a href='https://t.me/capfin' target='_blank' title='Telegram'>{@html TELEGRAM_ICON}</a>
+			<a href='https://twitter.com/CapDotFinance' target='_blank' title='Twitter'>{@html TWITTER_ICON}</a>
+			<a href='https://github.com/0xcap' target='_blank' title='Github'>{@html GITHUB_ICON}</a>
+		</div>
+
+		<div class='links bt'>
 			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal</a>
 			<a href='https://defillama.com/protocol/cap' target='_blank'>Defi Llama</a>
 			<a href='https://www.immunefi.com/bounty/cap' target='_blank'>Immunefi</a>
 			<a href='https://www.coingecko.com/en/coins/cap' target='_blank'>CoinGecko</a>
 			<a href='https://coinmarketcap.com/currencies/cap/' target='_blank'>CoinMarketCap</a>
-			<a href='https://github.com/0xcap' target='_blank'>Github</a>
 		</div>
 
 	</div>
