@@ -3,9 +3,6 @@
 
 	import { EXTERNAL_ICON, DISCORD_ICON, TWITTER_ICON, TELEGRAM_ICON, GITHUB_ICON, ARBITRUM_ICON } from '../../lib/icons'
 
-	import { quartOut } from 'svelte/easing';
-	import { blur } from 'svelte/transition';
-
 </script>
 <style>
 
@@ -127,7 +124,7 @@
 
 <div class='home-wrap'>
 
-	<div class='home' in:blur={{duration: 1000, easing: quartOut}}>
+	<div class='home'>
 
 		<div class='hero'>
 
