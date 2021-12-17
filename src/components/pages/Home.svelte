@@ -162,11 +162,11 @@
 		</div>
 
 		<div class='links'>
+			<a href='https://docs.cap.finance/#white-papers' target='_blank'>Whitepapers</a>
+			<a href='https://docs.cap.finance/' target='_blank'>Docs</a>
 			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal</a>
 			<a href='https://defillama.com/protocol/cap' target='_blank'>Defi Llama</a>
 			<a href='https://www.immunefi.com/bounty/cap' target='_blank'>Immunefi</a>
-			<a href='https://www.coingecko.com/en/coins/cap' target='_blank'>CoinGecko</a>
-			<a href='https://coinmarketcap.com/currencies/cap/' target='_blank'>CoinMarketCap</a>
 		</div>
 
 	</div>
