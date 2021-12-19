@@ -96,11 +96,11 @@
 		background-color: var(--green-dim);
 	}
 
-	.about {
+	.about, .coin-links {
 		max-width: 280px;
 		margin: 0 auto;
 		border-top: 1px solid var(--onyx-dim);
-		padding-top: 40px;
+		padding: 40px 0;
 	}
 
 	h4, p {
@@ -110,6 +110,9 @@
 
 	.item {
 		margin-bottom: 20px;
+	}
+	.item:last-child {
+		margin-bottom: 0;
 	}
 
 	h4 {
@@ -127,6 +130,14 @@
 	p {
 		line-height: 1.418;
 		color: var(--sonic-silver);
+	}
+
+	.coin-links {
+		text-align: center;
+	}
+
+	.coin-links a {
+		margin: 0 8px;
 	}
 
 	.links {
@@ -200,6 +211,11 @@
 				<p>Bound by a culture of holding</p>
 			</div>
 
+		</div>
+
+		<div class='coin-links'>
+			<a href='https://www.coingecko.com/en/coins/cap' target="_blank">CoinGecko</a>
+			<a href='https://coinmarketcap.com/currencies/cap/' target="_blank">CoinMarketCap</a>
 		</div>
 		
 		<div class='community'>
