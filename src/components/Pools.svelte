@@ -367,7 +367,7 @@
     	</div>
 
     	<div class='description'>
-    		Stake your CAP to receive a share of trading fees. There are no restrictions on deposits or withdrawals.
+    		Stake your CAP to receive a share of trading fees. There are no restrictions on deposits or withdrawals. <a href='#/buy'>Buy CAP</a>
     	</div>
 
     	<div class='apy'>

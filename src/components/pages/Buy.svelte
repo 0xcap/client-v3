@@ -1,8 +1,8 @@
 <script>
-	import Volume from '../Volume.svelte'
 
-	import { EXTERNAL_ICON, DISCORD_ICON, TWITTER_ICON, TELEGRAM_ICON, GITHUB_ICON, ARBITRUM_ICON } from '../../lib/icons'
+	import { CHECKMARK_ICON, DISCORD_ICON, TWITTER_ICON, TELEGRAM_ICON, GITHUB_ICON, ARBITRUM_ICON } from '../../lib/icons'
 
+	import { fade } from 'svelte/transition'
 </script>
 <style>
 
@@ -20,28 +20,42 @@
 	.home {
 		margin: 0 auto;
 		max-width: 720px;
-		padding: 36px 0;
+		padding: 12px 0;
 	}
 
 	.hero {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 64px 0;
+		padding: 40px 0;
 	}
 
 	.hero-inner {		
 		display: grid;
 		grid-auto-flow: row;
-		grid-gap: 36px;
+		grid-gap: 64px;
 		text-align: center;
 	}
 
-	.main-title {
+	.token-icon-wrap {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
-	.main-title img {
-		height: 60px;
+	.token-icon {
+		height: 200px;
+		width: 200px;
+		border-radius: 100%;
+		border: 3px solid var(--green-dim);
+		box-shadow: 0 0 250px 50px #153C15;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.token-icon img {
+		height: 42px;
 	}
 
 	.tagline {
@@ -58,6 +72,7 @@
 		justify-content: center;
 		font-size: 90%;
 		font-weight: 500;
+		margin-top: 16px;
 	}
 	.chains :global(svg) {
 		height: 22px;
@@ -81,25 +96,48 @@
 		background-color: var(--green-dim);
 	}
 
-	.button.hollow {
-		background-color: transparent;
-		color: var(--green);
-		border: 1px solid var(--green);
-		margin-left: 10px;
-		font-weight: 500;
-	}
-	.button.hollow:hover {
-		background-color: #152915;
+	.about, .coin-links {
+		max-width: 280px;
+		margin: 0 auto;
+		border-top: 1px solid var(--onyx-dim);
+		padding: 40px 0;
 	}
 
-	.volume .label {
+	h4, p {
+		padding: 0;
+		margin: 0;
+	}
+
+	.item {
+		margin-bottom: 20px;
+	}
+	.item:last-child {
+		margin-bottom: 0;
+	}
+
+	h4 {
+		margin-bottom: 6px;
+	}
+	h4 {
+		display: flex;
+		align-items: center;
+	}
+	h4 :global(svg) {
+		height: 16px;
+		fill: var(--green);
+		margin-right: 10px;
+	}
+	p {
+		line-height: 1.418;
 		color: var(--sonic-silver);
-		margin-top: 8px;
-		font-size: 90%;
 	}
 
-	.volume .value {
-		font-weight: 700;
+	.coin-links {
+		text-align: center;
+	}
+
+	.coin-links a {
+		margin: 0 8px;
 	}
 
 	.links {
@@ -141,26 +179,43 @@
 
 			<div class='hero-inner'>
 
-				<div class='main-title'>
-					<img src='/logos/CAP.svg' title='CAP logo' alt='CAP logo' />
+				<div class='token-icon-wrap'>
+					<div class='token-icon' in:fade={{ duration: 1500 }}>
+						<img src='/logos/CAP.svg' title='CAP logo' alt='CAP logo' />
+					</div>
 				</div>
-				
-				<div class='tagline'>Trade crypto perpetuals directly from your wallet</div>
-
-				<div class='chains'>Available on {@html ARBITRUM_ICON} Arbitrum</div>
 
 				<div class='button-wrap'>
-					<a class='button' href='#/trade'>Start Trading</a>
-					<a class='button hollow' href='#/buy'>Buy CAP</a>
-				</div>
-
-				<div class='volume'>
-					<div class='value'><Volume/></div>
-					<div class='label'>Protocol Volume</div>
+					<a class='button' href='https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x031d35296154279dc1984dcd93e392b1f946737b' target="_blank">Buy CAP on Uniswap</a>
+					<div class='chains'>Set your network to {@html ARBITRUM_ICON} Arbitrum</div>
 				</div>
 
 			</div>
 
+		</div>
+
+		<div class='about'>
+
+			<div class='item'>
+				<h4>{@html CHECKMARK_ICON} Revenue Producing</h4>
+				<p>Stake CAP to get a share of fees</p>
+			</div>
+
+			<div class='item'>
+				<h4>{@html CHECKMARK_ICON} No Inflation</h4>
+				<p>Token supply is fixed at 100,000</p>
+			</div>
+
+			<div class='item'>
+				<h4>{@html CHECKMARK_ICON} Strong Community</h4>
+				<p>Bound by a culture of holding</p>
+			</div>
+
+		</div>
+
+		<div class='coin-links'>
+			<a href='https://www.coingecko.com/en/coins/cap' target="_blank">CoinGecko</a>
+			<a href='https://coinmarketcap.com/currencies/cap/' target="_blank">CoinMarketCap</a>
 		</div>
 		
 		<div class='community'>
@@ -171,7 +226,7 @@
 		</div>
 
 		<div class='links'>
-			<a href='https://docs.cap.finance/#white-papers' target='_blank'>Whitepapers</a>
+			<a href='/'>Home</a>
 			<a href='https://docs.cap.finance/' target='_blank'>Docs</a>
 			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal</a>
 			<a href='https://defillama.com/protocol/cap' target='_blank'>Defi Llama</a>
