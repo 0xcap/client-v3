@@ -9,6 +9,7 @@ import { PRODUCTS } from './products'
 import Home from '../components/pages/Home.svelte'
 import Trade from '../components/pages/Trade.svelte'
 import Pool from '../components/pages/Pool.svelte'
+import Buy from '../components/pages/Buy.svelte'
 
 import { hydrateData } from './data'
 import { getProduct } from './methods'
@@ -173,6 +174,10 @@ export function loadRoute(path, isInitial) {
 		component.set(Pool);
 		currentPage.set('pool');
 		document.title = `Pool | CAP`;
+	} else if (path.includes('/buy')) {
+		component.set(Buy);
+		currentPage.set('buy');
+		document.title = `Buy CAP | CAP`;
 	}
 	hydrateData();
 }
