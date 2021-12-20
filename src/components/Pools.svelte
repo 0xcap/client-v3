@@ -299,10 +299,10 @@
 				This pool backs trader profits and receives trader losses + <strong>{formatToDisplay(poolInfo.poolShare)}%</strong> of {formatCurrency(_currencyLabel)} fees as rewards.
 			</div>
 
-			<div class='apy'>
+			<!-- <div class='apy'>
 				<div class='label'>Projected Yield (APY)</div>
 				<div class='value'>{getAPY(_currencyLabel, poolInfo, $poolStats)}</div>
-			</div>
+			</div> -->
 
 			<div class='stats'>
 				<div class='row'>
@@ -311,10 +311,10 @@
 						<span class='grayed'>(${formatToDisplay($prices['ETH-USD'] * poolInfo.tvl || 0)})</span>
 						{/if}</div>
 				</div>
-				<div class='row'>
+				<!-- <div class='row'>
 					<div class='label'>Return Since Inception ({getInceptionDate(_currencyLabel, poolInfo)})</div>
 					<div class='value pos'>+{getReturnSinceInception(_currencyLabel, poolInfo, $poolStats)} {formatCurrency(_currencyLabel)}</div>
-				</div>
+				</div> -->
 				<div class='row'>
 					<div class='label'>Open Interest</div>
 					<div class='value'>{formatToDisplay(poolInfo.openInterest)} {formatCurrency(_currencyLabel)}</div>
@@ -366,10 +366,10 @@
     		Stake your CAP to receive a share of trading fees. There are no restrictions on deposits or withdrawals. <a href='#/buy'>Buy CAP</a>
     	</div>
 
-    	<div class='apy'>
+    	<!-- <div class='apy'>
 			<div class='label'>Projected Yield (APY)</div>
 			<div class='value'>{getAPYCAP($capPool, $poolStats, $prices)}</div>
-		</div>
+		</div> -->
 
     	<div class='stats'>
     		<div class='row'>
@@ -398,8 +398,7 @@
 
 	    		<div class='row'>
 	    			<div class='label'>
-	    				<div class='top-label'>My {formatCurrency(_currencyLabel)} Rewards</div>
-	    				<div class='sub-label'>Receives <strong>{formatToDisplay($capPool.poolShares[_currencyLabel])}%</strong> of fees</div>
+	    				<div class='top-label'>My {formatCurrency(_currencyLabel)} Rewards (<strong>{formatToDisplay($capPool.poolShares[_currencyLabel])}%</strong> of fees)</div>
 	    				<a class:disabled={reward == 0} on:click={() => {collectCAPReward(_currencyLabel)}}>Collect</a>
 	    			</div>
 	    			<div class='value'>
