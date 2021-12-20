@@ -6,7 +6,9 @@ import { CHAINDATA } from './constants'
 import { showToast, hideModal } from './utils'
 import { chainId, signer, provider, address } from './stores'
 
-let _provider;
+let _provider = new ethers.providers.JsonRpcProvider('https://arb1.arbitrum.io/rpc');
+provider.set(_provider);
+chainId.set(42161);
 let _walletConnect;
 
 export async function checkMetamaskSession() {

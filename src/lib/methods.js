@@ -247,15 +247,14 @@ export async function getPoolInfo(currencyLabel, reloading) {
 
 	if (!dataCache[currencyLabel]) dataCache[currencyLabel] = {};
 
-	const contract = await getContract('pool', false, currencyLabel);
-
 	if (!reloading) {
 		Stores.pools.update((x) => {
 			x[currencyLabel] = info;
 			return x;
 		});
 	}
-	// console.log('contract', contract);
+	
+	const contract = await getContract('pool', false, currencyLabel);
 
 	if (!contract) return;
 
@@ -286,7 +285,11 @@ export async function getPoolInfo(currencyLabel, reloading) {
 			utilizationMultiplier
 		};
 
-	} catch(e) {}
+		// console.log('info', info);
+
+	} catch(e) {
+		// console.log('error', e);
+	}
 
 	Stores.pools.update((x) => {
 		x[currencyLabel] = info;
@@ -414,10 +417,10 @@ export async function collectPoolReward(currencyLabel, isOld) {
 export async function getUserCapBalance() {
 
 	const address = get(Stores.address);
-	if (!address) return;
+	if (!address) return 0;
 
 	const contract = await getContract('capPool');
-	if (!contract) return;
+	if (!contract) return 0;
 
 	return formatUnits(await contract.getBalance(address), 18);
 
@@ -442,7 +445,7 @@ export async function getCapPoolInfo() {
 	};
 
 	const currencies = getChainData('currencies');
-	if (!currencies || !get(Stores.address)) {
+	if (!currencies) {
 		Stores.capPool.set(info);
 		return;
 	}
@@ -515,6 +518,9 @@ export async function collectCAPReward(currencyLabel) {
 // Rewards
 
 export async function getClaimableReward(currencyLabel, forCAP, isOld) {
+
+	const address = get(Stores.address);
+	if (!address) return 0;
 	
 	let contractName = forCAP ? 'caprewards' : 'poolrewards';
 	if (forCAP) {
