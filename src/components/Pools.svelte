@@ -105,8 +105,8 @@
 		return formatToDisplay(timeScaler * 100 * (cumulativeUSDFees * 0.1) / capUSDSupply) + '%';
 	}
 
-	function getTVL(_currencyLabel, poolInfo, _address) {
-		if (!_address || !poolInfo || !poolInfo.tvl) return '';
+	function getTVL(_currencyLabel, poolInfo) {
+		if (!poolInfo || !poolInfo.tvl) return '';
 		return formatToDisplay(poolInfo.tvl);
 	}
 
@@ -285,12 +285,12 @@
 
 	{#each poolEntries as [_currencyLabel, poolInfo]}
 
-		<div class='pool' class:loading={poolIsLoading[_currencyLabel] || $address && !poolInfo.tvl}>
+		<div class='pool' class:loading={poolIsLoading[_currencyLabel] || !poolInfo.tvl}>
 
 			<div class='asset'>
 				<img src={CURRENCY_LOGOS[_currencyLabel]}>
 				{formatCurrency(_currencyLabel)} 
-				{#if $address && !poolInfo.tvl || poolIsLoading[_currencyLabel]}
+				{#if !poolInfo.tvl || poolIsLoading[_currencyLabel]}
 					<div class='loading-icon'>{@html SPINNER_ICON}</div>
 				{/if}
 			</div>
@@ -299,14 +299,10 @@
 				This pool backs trader profits and receives trader losses + <strong>{formatToDisplay(poolInfo.poolShare)}%</strong> of {formatCurrency(_currencyLabel)} fees as rewards.
 			</div>
 
-			<div class='apy'>
+			<!-- <div class='apy'>
 				<div class='label'>Projected Yield (APY)</div>
 				<div class='value'>{getAPY(_currencyLabel, poolInfo, $poolStats)}</div>
-			</div>
-
-			{#if !$address}
-			<div class='note'>Connect your wallet to see pool stats.</div>
-			{/if}
+			</div> -->
 
 			<div class='stats'>
 				<div class='row'>
@@ -315,10 +311,10 @@
 						<span class='grayed'>(${formatToDisplay($prices['ETH-USD'] * poolInfo.tvl || 0)})</span>
 						{/if}</div>
 				</div>
-				<div class='row'>
+				<!-- <div class='row'>
 					<div class='label'>Return Since Inception ({getInceptionDate(_currencyLabel, poolInfo)})</div>
 					<div class='value pos'>+{getReturnSinceInception(_currencyLabel, poolInfo, $poolStats)} {formatCurrency(_currencyLabel)}</div>
-				</div>
+				</div> -->
 				<div class='row'>
 					<div class='label'>Open Interest</div>
 					<div class='value'>{formatToDisplay(poolInfo.openInterest)} {formatCurrency(_currencyLabel)}</div>
@@ -356,12 +352,12 @@
 		</div>
     {/each}
 
-    <div class='pool cap-pool' class:loading={poolIsLoading['cap'] || $address && !$capPool.supply}>
+    <div class='pool cap-pool' class:loading={poolIsLoading['cap'] || !$capPool.supply}>
 
     	<div class='asset'>
     		<img src={CURRENCY_LOGOS['cap']}>
     		CAP
-    		{#if $address && !$capPool.supply || poolIsLoading['cap']}
+    		{#if !$capPool.supply || poolIsLoading['cap']}
     			<div class='loading-icon'>{@html SPINNER_ICON}</div>
     		{/if}
     	</div>
@@ -370,14 +366,10 @@
     		Stake your CAP to receive a share of trading fees. There are no restrictions on deposits or withdrawals. <a href='#/buy'>Buy CAP</a>
     	</div>
 
-    	<div class='apy'>
+    	<!-- <div class='apy'>
 			<div class='label'>Projected Yield (APY)</div>
 			<div class='value'>{getAPYCAP($capPool, $poolStats, $prices)}</div>
-		</div>
-
-    	{#if !$address}
-    	<div class='note'>Connect your wallet to see pool stats.</div>
-    	{/if}
+		</div> -->
 
     	<div class='stats'>
     		<div class='row'>
@@ -406,8 +398,7 @@
 
 	    		<div class='row'>
 	    			<div class='label'>
-	    				<div class='top-label'>My {formatCurrency(_currencyLabel)} Rewards</div>
-	    				<div class='sub-label'>Receives <strong>{formatToDisplay($capPool.poolShares[_currencyLabel])}%</strong> of fees</div>
+	    				<div class='top-label'>My {formatCurrency(_currencyLabel)} Rewards (<strong>{formatToDisplay($capPool.poolShares[_currencyLabel])}%</strong> of fees)</div>
 	    				<a class:disabled={reward == 0} on:click={() => {collectCAPReward(_currencyLabel)}}>Collect</a>
 	    			</div>
 	    			<div class='value'>
