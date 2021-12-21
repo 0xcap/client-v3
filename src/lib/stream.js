@@ -73,7 +73,51 @@ function subscribeToProducts() {
 
 let lastMessageReceived;
 let s;
+
+function getPrice(product_id) {
+
+	fetch('https://api.exchange.coinbase.com/products/' + product_id + '/ticker')
+	.then((res) => { return res.json() })
+	.then((json) => {
+
+		lastMessageReceived = Date.now();
+
+		const price = json.price;
+
+		prices.update((x) => {
+			x[product_id] = price * 1;
+			return x;
+		});
+
+		// update chart
+		onNewPrice(price, Date.now(), product_id);
+
+		if (product_id == get(productId)) {
+			setTitle(product_id, price);
+		}
+
+	});
+
+}
+
+let poller;
 export function initWebsocket() {
+
+	// Poll
+	clearInterval(poller);
+
+	for (const product_id of ['ETH-USD', 'BTC-USD']) {
+		getPrice(product_id);
+	}
+
+	// Poll for prices every 5 sec
+	poller = setInterval(() => {
+		for (const product_id of ['ETH-USD', 'BTC-USD']) {
+			getPrice(product_id);
+		}
+	}, 5000);
+
+	// Stream
 
 	// console.log('initWebsocket');
 
@@ -115,6 +159,7 @@ export function initWebsocket() {
 
 	ws.onmessage = (e) => {
 
+		// return;
 		// console.log('m', e);
 
 		lastMessageReceived = Date.now();
