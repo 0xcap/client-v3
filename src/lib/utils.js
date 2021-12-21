@@ -140,7 +140,10 @@ export function showToast(data, type, id) {
 	let message = parseErrorToString(data);
 	if (!type) type = 'error';
 	if (!message) return;
-	toast.set({message: message, type, id});
+	toast.set({message, type, id});
+	if (type == 'error') {
+		amplitude.getInstance().logEvent('Error', {message});
+	}
 	clearTimeout(timer);
 	timer = setTimeout(() => {hideToast()}, 7*1000);
 }

@@ -3,6 +3,8 @@
 
 	import { EXTERNAL_ICON, DISCORD_ICON, TWITTER_ICON, TELEGRAM_ICON, GITHUB_ICON, ARBITRUM_ICON } from '../../lib/icons'
 
+	amplitude.getInstance().logEvent('Home');
+
 </script>
 <style>
 

@@ -11,8 +11,6 @@ import * as Stores from './stores'
 
 let productCache = {};
 
-// TODO: errors and toasts
-
 export async function getProduct(productId) {
 	
 	if (productCache[productId]) return productCache[productId];
@@ -374,6 +372,7 @@ export async function deposit(currencyLabel, amount) {
 
 		monitorTx(tx.hash, 'pool-deposit', {currencyLabel});
 		hideModal();
+		amplitude.getInstance().logEvent('Pool Deposit', {currencyLabel, amount});
 	} catch(e) {
 		showToast(e);
 		return e;
@@ -390,6 +389,7 @@ export async function withdraw(currencyLabel, amount, isOld) {
 		let tx = await contract.withdraw(parseUnits(amount, 18));
 		monitorTx(tx.hash, isOld ? 'pool-withdraw-old' : 'pool-withdraw', {currencyLabel});
 		hideModal();
+		amplitude.getInstance().logEvent('Pool Withdraw', {currencyLabel, amount, isOld});
 	} catch(e) {
 		showToast(e);
 		return e;
@@ -405,6 +405,7 @@ export async function collectPoolReward(currencyLabel, isOld) {
 	try {
 		let tx = await contract.collectReward();
 		monitorTx(tx.hash, isOld ? 'pool-collect-old' : 'pool-collect', {currencyLabel});
+		amplitude.getInstance().logEvent('Pool Collect', {currencyLabel, isOld});
 	} catch(e) {
 		showToast(e);
 		return e;
@@ -477,6 +478,7 @@ export async function depositCAP(amount) {
 		let tx = await contract.deposit(parseUnits(amount, 18));
 		monitorTx(tx.hash, 'cap-deposit');
 		hideModal();
+		amplitude.getInstance().logEvent('Pool Deposit CAP', {amount});
 	} catch(e) {
 		showToast(e);
 		return e;
@@ -493,6 +495,7 @@ export async function withdrawCAP(amount) {
 		let tx = await contract.withdraw(parseUnits(amount, 18));
 		monitorTx(tx.hash, 'cap-withdraw');
 		hideModal();
+		amplitude.getInstance().logEvent('Pool Withdraw CAP', {amount});
 	} catch(e) {
 		showToast(e);
 		return e;
@@ -508,6 +511,7 @@ export async function collectCAPReward(currencyLabel) {
 	try {
 		let tx = await contract.collectReward();
 		monitorTx(tx.hash, 'cap-collect', {currencyLabel});
+		amplitude.getInstance().logEvent('Pool Collect CAP', {currencyLabel});
 	} catch(e) {
 		showToast(e);
 		return e;
@@ -586,6 +590,8 @@ export async function submitOrder(isLong) {
 
 		monitorTx(tx.hash, 'submit-new-position');
 
+		amplitude.getInstance().logEvent('Order Submit', {productId, currencyLabel, margin, size, leverage, isLong, marginEth});
+
 	} catch(e) {
 		showToast(e);
 		return e;
@@ -637,6 +643,8 @@ export async function submitCloseOrder(productId, currencyLabel, isLong, size) {
 
 		monitorTx(tx.hash, 'submit-close-order');
 		hideModal();
+
+		amplitude.getInstance().logEvent('Order Close', {productId, currencyLabel, size, isLong});
 		
 	} catch(e) {
 		showToast(e);
@@ -660,6 +668,8 @@ export async function cancelOrder(productId, currencyLabel, isLong) {
 		const tx = await contract.cancelOrder(toBytes32(productId), currency, isLong);
 		monitorTx(tx.hash, 'cancel-order');
 		hideModal();
+
+		amplitude.getInstance().logEvent('Order Cancel', {productId, currencyLabel, isLong});
 
 	} catch(e) {
 
