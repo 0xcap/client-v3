@@ -133,6 +133,7 @@
 	.pools {
 		padding: var(--base-padding);
 		display: flex;
+		justify-content: center;
 	}
 
 	.pool {

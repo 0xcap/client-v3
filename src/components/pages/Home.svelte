@@ -10,7 +10,7 @@
 
 	.home-wrap {
 		padding: var(--base-padding);
-		background-color: #1A201A;
+		background-color: #1A261A;
 		position: absolute;
 		top: 0;
 		bottom: 0;
