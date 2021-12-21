@@ -68,7 +68,9 @@
 		const timeSinceInception = Date.now() - inceptionDate;
 		const timeInAYear = 365 * 24 * 3600 * 1000;
 		const timeScaler = timeInAYear / timeSinceInception;
-		return formatToDisplay(timeScaler * 100 * (_poolStats[_currencyLabel].cumulativeFees * poolInfo.poolShare / 100 - 1 * _poolStats[_currencyLabel].cumulativePnl) / poolInfo.tvl) + '%';
+		let apy = timeScaler * 100 * (_poolStats[_currencyLabel].cumulativeFees * poolInfo.poolShare / 100 - 1 * _poolStats[_currencyLabel].cumulativePnl) / poolInfo.tvl;
+		if (apy < 10) apy = 10; // threshold APY
+		return formatToDisplay(apy) + '%';
 	}
 
 	function getAPYCAP(_capPool, _poolStats) {
@@ -299,10 +301,10 @@
 				This pool backs trader profits and receives trader losses + <strong>{formatToDisplay(poolInfo.poolShare)}%</strong> of {formatCurrency(_currencyLabel)} fees as rewards.
 			</div>
 
-			<!-- <div class='apy'>
+			<div class='apy'>
 				<div class='label'>Projected Yield (APY)</div>
 				<div class='value'>{getAPY(_currencyLabel, poolInfo, $poolStats)}</div>
-			</div> -->
+			</div>
 
 			<div class='stats'>
 				<div class='row'>
@@ -366,10 +368,10 @@
     		Stake your CAP to receive a share of trading fees. There are no restrictions on deposits or withdrawals. <a href='#/buy'>Buy CAP</a>
     	</div>
 
-    	<!-- <div class='apy'>
+    	<div class='apy'>
 			<div class='label'>Projected Yield (APY)</div>
 			<div class='value'>{getAPYCAP($capPool, $poolStats, $prices)}</div>
-		</div> -->
+		</div>
 
     	<div class='stats'>
     		<div class='row'>

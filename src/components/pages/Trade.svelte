@@ -13,6 +13,8 @@
 		panel = _panel;
 	}
 
+	amplitude.getInstance().logEvent('Trade');
+
 </script>
 
 <style>

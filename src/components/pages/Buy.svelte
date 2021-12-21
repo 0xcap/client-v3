@@ -3,6 +3,9 @@
 	import { CHECKMARK_ICON, DISCORD_ICON, TWITTER_ICON, TELEGRAM_ICON, GITHUB_ICON, ARBITRUM_ICON } from '../../lib/icons'
 
 	import { fade } from 'svelte/transition'
+
+	amplitude.getInstance().logEvent('Buy');
+
 </script>
 <style>
 

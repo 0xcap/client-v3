@@ -5,7 +5,7 @@
 
 	import { CIRCLE_ICON } from '../lib/icons'
 
-	import { checkMetamaskSession } from '../lib/wallet'
+	import { checkMetamaskSession, switchChains } from '../lib/wallet'
 
 	import { address, wrongNetwork, currentPage } from '../lib/stores'
 
@@ -42,6 +42,7 @@
 		color: var(--orange);
 		padding-right: var(--base-padding);
 		white-space: nowrap;
+		cursor: pointer;
 	}
 
 	@media (max-width: 600px) {
@@ -55,7 +56,7 @@
 <div class='wallet'>
 
 	{#if $address && $wrongNetwork}
-	<div class='wrong-network'>Switch to Arbitrum</div>
+	<div class='wrong-network' on:click={() => {switchChains()}}>Switch to Arbitrum</div>
 	{/if}
 
 	{#if $address}

@@ -146,7 +146,9 @@ export async function switchChains() {
 async function handleAccountsChanged() {
 	const _signer = _provider.getSigner();
 	signer.set(_signer);
-	address.set(await _signer.getAddress());
+	const _address = await _signer.getAddress();
+	address.set(_address);
+	amplitude.getInstance().setUserId(_address);
 	hydrateData();
 	initEventListeners();
 }
