@@ -19,17 +19,10 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 		contractName += _currencyLabel;
 	}
 
-	if (contracts[contractName]) {
-		if (withSigner) {
-			return contracts[contractName].connect(_signer);
-		}
-		return contracts[contractName];
-	}
-
 	const _chainId = get(Stores.chainId);
 	const _provider = get(Stores.provider);
 
-	// console.log('_chainId', _chainId, _provider, CHAINDATA[_chainId]);
+	// console.log('_chainId', _chainId, _provider, ack_network, CHAINDATA[_chainId]);
 
 	if (!_chainId || !_provider) return;
 
@@ -37,13 +30,20 @@ export async function getContract(contractName, withSigner, _currencyLabel) {
 		Stores.wrongNetwork.set(true);
 		if (!ack_network) {
 			showModal('Network');
-			ack_network = true;
+			// ack_network = true;
 		}
 		return;
 	}
 	
-	hideModal();
+	// hideModal();
 	Stores.wrongNetwork.set(false);
+
+	if (contracts[contractName]) {
+		if (withSigner) {
+			return contracts[contractName].connect(_signer);
+		}
+		return contracts[contractName];
+	}
 
 	if (!router) {
 		const routerAddress = CHAINDATA[_chainId].router;

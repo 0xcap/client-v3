@@ -302,10 +302,10 @@
 				This pool backs trader profits and receives trader losses + <strong>{formatToDisplay(poolInfo.poolShare)}%</strong> of {formatCurrency(_currencyLabel)} fees as rewards.
 			</div>
 
-			<!-- <div class='apy'>
+			<div class='apy'>
 				<div class='label'>Projected Yield (APY)</div>
 				<div class='value'>{getAPY(_currencyLabel, poolInfo, $poolStats)}</div>
-			</div> -->
+			</div>
 
 			<div class='stats'>
 				<div class='row'>
@@ -369,10 +369,10 @@
     		Stake your CAP to receive a share of trading fees. There are no restrictions on deposits or withdrawals. <a href='#/buy'>Buy CAP</a>
     	</div>
 
-    	<!-- <div class='apy'>
+    	<div class='apy'>
 			<div class='label'>Projected Yield (APY)</div>
 			<div class='value'>{getAPYCAP($capPool, $poolStats, $prices)}</div>
-		</div> -->
+		</div>
 
     	<div class='stats'>
     		<div class='row'>
