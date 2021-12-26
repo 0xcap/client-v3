@@ -359,7 +359,7 @@ export async function getOldPoolInfo(currencyLabel) {
 export async function deposit(currencyLabel, amount) {
 	
 	const contract = await getContract('pool', true, currencyLabel);
-	if (!contract) return;
+	if (!contract) throw 'No contract available.';
 
 	try {
 		let tx;
@@ -383,7 +383,7 @@ export async function deposit(currencyLabel, amount) {
 export async function withdraw(currencyLabel, amount, isOld) {
 	
 	const contract = await getContract(isOld ? 'oldpool' : 'pool', true, currencyLabel);
-	if (!contract) return;
+	if (!contract) throw 'No contract available.';
 
 	try {
 		let tx = await contract.withdraw(parseUnits(amount, 18));
@@ -400,7 +400,7 @@ export async function withdraw(currencyLabel, amount, isOld) {
 export async function collectPoolReward(currencyLabel, isOld) {
 	
 	const contract = await getContract(isOld ? 'oldpoolrewards' : 'poolrewards', true, currencyLabel);
-	if (!contract) return;
+	if (!contract) throw 'No contract available.';
 
 	try {
 		let tx = await contract.collectReward();
@@ -472,7 +472,7 @@ export async function getCapPoolInfo() {
 export async function depositCAP(amount) {
 	
 	const contract = await getContract('capPool', true);
-	if (!contract) return;
+	if (!contract) throw 'No contract available.';
 
 	try {
 		let tx = await contract.deposit(parseUnits(amount, 18));
@@ -489,7 +489,7 @@ export async function depositCAP(amount) {
 export async function withdrawCAP(amount) {
 	
 	const contract = await getContract('capPool', true);
-	if (!contract) return;
+	if (!contract) throw 'No contract available.';
 
 	try {
 		let tx = await contract.withdraw(parseUnits(amount, 18));
@@ -506,7 +506,7 @@ export async function withdrawCAP(amount) {
 export async function collectCAPReward(currencyLabel) {
 	
 	const contract = await getContract('caprewards', true, currencyLabel);
-	if (!contract) return;
+	if (!contract) throw 'No contract available.';
 
 	try {
 		let tx = await contract.collectReward();
@@ -548,7 +548,8 @@ export async function getClaimableReward(currencyLabel, forCAP, isOld) {
 export async function submitOrder(isLong) {
 
 	const contract = await getContract('trading', true);
-	if (!contract) return;
+	console.log('contract', contract);
+	if (!contract) throw 'No contract available.';
 
 	const currencyLabel = get(Stores.currencyLabel);
 	const currency = get(Stores.currency);
@@ -604,7 +605,7 @@ export async function submitCloseOrder(productId, currencyLabel, isLong, size) {
 	//console.log('sco', positionId, productId, size, currencyLabel);
 
 	const contract = await getContract('trading', true);
-	if (!contract) return;
+	if (!contract) throw 'No contract available.';
 
 	const currencies = getChainData('currencies');
 	if (!currencies) return;
@@ -656,7 +657,7 @@ export async function submitCloseOrder(productId, currencyLabel, isLong, size) {
 export async function cancelOrder(productId, currencyLabel, isLong) {
 
 	const contract = await getContract('trading', true);
-	if (!contract) return;
+	if (!contract) throw 'No contract available.';
 
 	const currencies = getChainData('currencies');
 	if (!currencies) return;
