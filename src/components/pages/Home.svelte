@@ -1,7 +1,7 @@
 <script>
 	import Volume from '../Volume.svelte'
 
-	import { EXTERNAL_ICON, DISCORD_ICON, TWITTER_ICON, TELEGRAM_ICON, GITHUB_ICON, ARBITRUM_ICON } from '../../lib/icons'
+	import { EXTERNAL_ICON, DISCORD_ICON, TWITTER_ICON, TELEGRAM_ICON, GITHUB_ICON, ARBITRUM_ICON, CHECKMARK_ICON } from '../../lib/icons'
 
 	amplitude.getInstance().logEvent('Home');
 
@@ -10,7 +10,7 @@
 
 	.home-wrap {
 		padding: var(--base-padding);
-		background-color: #1A261A;
+		background-color: var(--eerie-black);
 		position: absolute;
 		top: 0;
 		bottom: 0;
@@ -48,10 +48,20 @@
 
 	.tagline {
 		line-height: 1.618;
-		font-size: 200%;
-		font-weight: 600;
-		max-width: 420px;
+		font-size: 160%;
+		font-weight: 700;
+		max-width: 500px;
 		margin: 0 auto;
+	}
+
+	.subhead {
+		line-height: 1.518;
+		font-size: 120%;
+		font-weight: 400;
+		max-width: 360px;
+		margin: 0 auto;
+		color: var(--sonic-silver);
+		margin-top: 12px;
 	}
 
 	.chains {
@@ -71,7 +81,7 @@
 	}
 
 	.button {
-		padding: 14px 24px;
+		padding: 16px 26px;
 		border-radius: var(--base-radius);
 		font-weight: 700;
 		font-size: 120%;
@@ -81,17 +91,6 @@
 	}
 	.button:hover {
 		background-color: var(--green-dim);
-	}
-
-	.button.hollow {
-		background-color: transparent;
-		color: var(--green);
-		border: 1px solid var(--green);
-		margin-left: 10px;
-		font-weight: 500;
-	}
-	.button.hollow:hover {
-		background-color: #152915;
 	}
 
 	.volume .label {
@@ -104,6 +103,43 @@
 		font-weight: 700;
 	}
 
+	.about {
+		max-width: 250px;
+		margin: 0 auto;
+		border-top: 1px solid var(--onyx-dim);
+		border-bottom: 1px solid var(--onyx-dim);
+		padding: 40px 0;
+	}
+
+	h4, p {
+		padding: 0;
+		margin: 0;
+	}
+
+	.item {
+		margin-bottom: 20px;
+	}
+	.item:last-child {
+		margin-bottom: 0;
+	}
+
+	h4 {
+		margin-bottom: 6px;
+	}
+	h4 {
+		display: flex;
+		align-items: center;
+	}
+	h4 :global(svg) {
+		height: 16px;
+		fill: var(--green);
+		margin-right: 10px;
+	}
+	p {
+		line-height: 1.418;
+		color: var(--sonic-silver);
+	}
+
 	.links {
 		padding-top: 18px;
 		text-align: center;
@@ -112,13 +148,13 @@
 	.links a {
 		margin: 0 8px;
 		color: var(--sonic-silver);
-		font-size: 80%;
+		font-size: 90%;
 	}
 	.links a:hover {
 		color: var(--green);
 	}
 	.community {
-		padding-top: 64px;
+		padding-top: 36px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -147,13 +183,14 @@
 					<img src='/logos/CAP.svg' title='CAP logo' alt='CAP logo' />
 				</div>
 				
-				<div class='tagline'>Trade crypto perpetuals directly from your wallet</div>
+				<div>
+					<div class='tagline'>Decentralized Perpetual Exchange</div>
 
-				<div class='chains'>Available on {@html ARBITRUM_ICON} Arbitrum</div>
+					<div class='subhead'>Trade cryptos up to 50× leverage directly from your wallet</div>
+				</div>
 
 				<div class='button-wrap'>
-					<a class='button' href='#/trade'>Start Trading</a>
-					<a class='button hollow' href='#/buy'>Buy CAP</a>
+					<a class='button' href='#/trade'>Trade →</a>
 				</div>
 
 				<div class='volume'>
@@ -173,6 +210,7 @@
 		</div>
 
 		<div class='links'>
+			<a href='#/buy'>Buy CAP</a>
 			<a href='https://docs.cap.finance/#white-papers' target='_blank'>Whitepapers</a>
 			<a href='https://docs.cap.finance/' target='_blank'>Docs</a>
 			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal</a>
