@@ -311,21 +311,21 @@
 				<div class='row'>
 					<div class='label'>TVL</div>
 					<div class='value'>{getTVL(_currencyLabel, poolInfo, $address)} {formatCurrency(_currencyLabel)} {#if _currencyLabel == 'weth' && poolInfo && poolInfo.tvl && $prices['ETH-USD']}
-						<span class='grayed'>(${formatToDisplay($prices['ETH-USD'] * poolInfo.tvl || 0)})</span>
+						<!-- <span class='grayed'>(${formatToDisplay($prices['ETH-USD'] * poolInfo.tvl || 0)})</span> -->
 						{/if}</div>
 				</div>
 				<!-- <div class='row'>
 					<div class='label'>Return Since Inception ({getInceptionDate(_currencyLabel, poolInfo)})</div>
 					<div class='value pos'>+{getReturnSinceInception(_currencyLabel, poolInfo, $poolStats)} {formatCurrency(_currencyLabel)}</div>
 				</div> -->
-				<div class='row'>
+				<!-- <div class='row'>
 					<div class='label'>Open Interest</div>
 					<div class='value'>{formatToDisplay(poolInfo.openInterest)} {formatCurrency(_currencyLabel)}</div>
 				</div>
 				<div class='row'>
 					<div class='label'>Utilization</div>
 					<div class='value'>{formatToDisplay(poolInfo.utilization)}%</div>
-				</div>
+				</div> -->
 			</div>
 
 			<div class='stats my-stats'>
