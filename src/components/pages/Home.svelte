@@ -124,11 +124,11 @@
 	}
 
 	.community a {
-		margin: 0 10px;
+		margin: 0 12px;
 	}
 
 	.community :global(svg) {
-		height: 18px;
+		height: 22px;
 		fill: currentColor;
 	}
 
