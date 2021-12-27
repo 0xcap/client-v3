@@ -103,43 +103,6 @@
 		font-weight: 700;
 	}
 
-	.about {
-		max-width: 250px;
-		margin: 0 auto;
-		border-top: 1px solid var(--onyx-dim);
-		border-bottom: 1px solid var(--onyx-dim);
-		padding: 40px 0;
-	}
-
-	h4, p {
-		padding: 0;
-		margin: 0;
-	}
-
-	.item {
-		margin-bottom: 20px;
-	}
-	.item:last-child {
-		margin-bottom: 0;
-	}
-
-	h4 {
-		margin-bottom: 6px;
-	}
-	h4 {
-		display: flex;
-		align-items: center;
-	}
-	h4 :global(svg) {
-		height: 16px;
-		fill: var(--green);
-		margin-right: 10px;
-	}
-	p {
-		line-height: 1.418;
-		color: var(--sonic-silver);
-	}
-
 	.links {
 		padding-top: 18px;
 		text-align: center;
