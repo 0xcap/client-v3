@@ -37,7 +37,7 @@ export async function selectProduct(productId) {
 	// console.log('product', product);
 
 	if (!product.symbol) {
-		product = formatProduct('ETH-USD', {symbol: 'ETH-USD', productId: 'ETH-USD', maxLeverage: 50 * 10**8, fee: 1000});
+		product = formatProduct('ETH-USD', {symbol: 'ETH-USD', productId: 'ETH-USD', maxLeverage: 50 * 10**8, fee: 0});
 	}
 
 	// console.log('product2', product);

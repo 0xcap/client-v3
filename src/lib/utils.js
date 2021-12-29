@@ -168,7 +168,7 @@ export function loadRoute(path, isInitial) {
 	if (!path || path == '/' || path.includes('/home')) {
 		component.set(Home);
 		currentPage.set('home');
-		document.title = `Decentralized Perpetual Exchange | CAP`;
+		document.title = `Free Decentralized Perpetual Exchange | CAP`;
 	} else if (path.includes('/trade')) {
 		component.set(Trade);
 		currentPage.set('trade');

@@ -401,7 +401,7 @@
 
 	    		<div class='row'>
 	    			<div class='label'>
-	    				<div class='top-label'>My {formatCurrency(_currencyLabel)} Rewards (<strong>{formatToDisplay($capPool.poolShares[_currencyLabel])}%</strong> of fees)</div>
+	    				<div class='top-label'>My {formatCurrency(_currencyLabel)} Rewards <!-- (<strong>{formatToDisplay($capPool.poolShares[_currencyLabel])}%</strong> of fees) --></div>
 	    				<a class:disabled={reward == 0} on:click={() => {collectCAPReward(_currencyLabel)}}>Collect</a>
 	    			</div>
 	    			<div class='value'>
