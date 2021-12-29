@@ -299,7 +299,7 @@
 			</div>
 
 			<div class='description'>
-				This pool backs trader profits and receives trader losses + <strong>{formatToDisplay(poolInfo.poolShare)}%</strong> of {formatCurrency(_currencyLabel)} fees as rewards.
+				This pool backs trader profits and receives trader losses<!--  + <strong>{formatToDisplay(poolInfo.poolShare)}%</strong> of {formatCurrency(_currencyLabel)} fees as rewards -->.
 			</div>
 
 			<div class='apy'>
@@ -366,7 +366,7 @@
     	</div>
 
     	<div class='description'>
-    		Stake your CAP to receive a share of trading fees. There are no restrictions on deposits or withdrawals. <a href='#/buy'>Buy CAP</a>
+    		Stake your CAP to receive a share of revenue. There are no restrictions on deposits or withdrawals. <a href='#/buy'>Buy CAP</a>
     	</div>
 
     	<div class='apy'>

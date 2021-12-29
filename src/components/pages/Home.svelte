@@ -58,10 +58,20 @@
 		line-height: 1.518;
 		font-size: 120%;
 		font-weight: 400;
-		max-width: 360px;
+		max-width: 330px;
 		margin: 0 auto;
-		color: var(--sonic-silver);
 		margin-top: 12px;
+	}
+
+	.pill {
+		font-size: 110%;
+		padding: 8px 14px;
+		border-radius: 6px;
+		font-weight: 600;
+		display: inline-block;
+		margin: 20px 6px 0;
+		background-color: #003301;
+		color: var(--green);
 	}
 
 	.chains {
@@ -81,7 +91,7 @@
 	}
 
 	.button {
-		padding: 16px 26px;
+		padding: 15px 24px;
 		border-radius: var(--base-radius);
 		font-weight: 700;
 		font-size: 120%;
@@ -95,18 +105,18 @@
 
 	.volume .label {
 		color: var(--sonic-silver);
-		margin-top: 8px;
-		font-size: 90%;
+		margin-top: 10px;
 	}
 
 	.volume .value {
 		font-weight: 700;
+		font-size: 110%;
 	}
 
 	.links {
 		padding-top: 18px;
 		text-align: center;
-		line-height: 1.618;
+		line-height: 2;
 	}
 	.links a {
 		margin: 0 8px;
@@ -117,7 +127,7 @@
 		color: var(--green);
 	}
 	.community {
-		padding-top: 36px;
+		padding-top: 48px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -128,8 +138,15 @@
 	}
 
 	.community :global(svg) {
-		height: 22px;
+		height: 24px;
 		fill: currentColor;
+	}
+
+	.sep {
+		width: 40px;
+		height: 2px;
+		background-color: var(--jet);
+		margin: 0 auto;
 	}
 
 </style>
@@ -149,11 +166,13 @@
 				<div>
 					<div class='tagline'>Decentralized Perpetual Exchange</div>
 
-					<div class='subhead'>Trade cryptos up to 50× leverage directly from your wallet</div>
+					<div class="pill">0% Fees</div>
+					<div class="pill">50× Leverage</div>
+					
 				</div>
 
 				<div class='button-wrap'>
-					<a class='button' href='#/trade'>Trade →</a>
+					<a class='button' href='#/trade'>Trade</a>
 				</div>
 
 				<div class='volume'>
@@ -164,6 +183,8 @@
 			</div>
 
 		</div>
+
+		<div class='sep'>&nbsp;</div>
 		
 		<div class='community'>
 			<a href='https://discord.gg/zkdr8vnujz' target='_blank' title='Discord'>{@html DISCORD_ICON}</a>
@@ -175,7 +196,7 @@
 		<div class='links'>
 			<a href='#/buy'>Buy CAP</a>
 			<a href='https://docs.cap.finance/#white-papers' target='_blank'>Whitepapers</a>
-			<a href='https://docs.cap.finance/' target='_blank'>Docs</a>
+			<a href='https://docs.cap.finance/' target='_blank'>Docs</a><br/>
 			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal</a>
 			<a href='https://defillama.com/protocol/cap' target='_blank'>Defi Llama</a>
 			<a href='https://www.immunefi.com/bounty/cap' target='_blank'>Immunefi</a>

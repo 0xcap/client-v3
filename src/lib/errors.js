@@ -46,8 +46,8 @@ export function parseErrorToString(e) {
 	} else {
 		return DEFAULT_ERROR;
 	}
+	error_string = error_string.toLowerCase();
 	for (const key in ERROR_STRINGS) {
-		error_string = error_string.toLowerCase();
 		if (error_string.includes(key)) return ERROR_STRINGS[key];
 	}
 	console.error(e);
