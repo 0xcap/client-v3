@@ -47,18 +47,18 @@
 	}
 
 	.token-icon {
-		height: 200px;
-		width: 200px;
+		height: 20px;
+		width: 20px;
+		margin: 100px 0;
 		border-radius: 100%;
-		border: 3px solid var(--green-dim);
-		box-shadow: 0 0 250px 50px #153C15;
+		box-shadow: 0 0 250px 100px #153C15;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
 	.token-icon img {
-		height: 42px;
+		height: 72px;
 	}
 
 	.tagline {
@@ -184,7 +184,7 @@
 
 				<div class='token-icon-wrap'>
 					<div class='token-icon' in:fade={{ duration: 1500 }}>
-						<img src='/logos/CAP.svg' title='CAP logo' alt='CAP logo' />
+						<img src='/cap-3d.png' title='CAP logo' alt='CAP logo' />
 					</div>
 				</div>
 
