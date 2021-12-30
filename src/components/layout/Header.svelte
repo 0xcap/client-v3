@@ -7,12 +7,20 @@
 <style>
 
 	header {
-		padding: 0 var(--base-padding);
-		height: var(--header-height);
 		background-color: var(--eerie-black);
+	}
+
+	.inner {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		padding: 0 var(--base-padding);
+		height: var(--header-height);
+	}
+
+	.home {
+		max-width: 960px;
+		margin: 0 auto;
 	}
 
 	.left {
@@ -70,21 +78,23 @@
 
 </style>
 
-{#if $currentPage != 'home'}
 <header>
 
-	<div class='left'>
-		<a class='logo' class:active={!$currentPage || $currentPage == 'home'} href='/'>
-			<img src='/logos/CAP.svg' title='CAP Home' alt='CAP Home' />
-		</a>
-		<a class='link' class:active={$currentPage == 'trade'} href='#/trade'>Trade</a>
-		<a class='link' class:active={$currentPage == 'pool'} href='#/pool'>Pool</a>
-		<a class='link' href='https://docs.cap.finance' target='_blank'>Docs</a>
-	</div>
+	<div class='inner' class:home={!$currentPage || $currentPage == 'home'}>
 
-	<div class='right'>
-		<Wallet />
+		<div class='left'>
+			<a class='logo' class:active={!$currentPage || $currentPage == 'home'} href='/'>
+				<img src='/logos/CAP.svg' title='CAP Home' alt='CAP Home' />
+			</a>
+			<a class='link' class:active={$currentPage == 'trade'} href='#/trade'>Trade</a>
+			<a class='link' class:active={$currentPage == 'pool'} href='#/pool'>Pool</a>
+			<a class='link' href='https://docs.cap.finance' target='_blank'>Docs</a>
+		</div>
+
+		<div class='right'>
+			<Wallet />
+		</div>
+
 	</div>
 	
 </header>
-{/if}

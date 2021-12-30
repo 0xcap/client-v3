@@ -3,123 +3,162 @@
 
 	import { EXTERNAL_ICON, DISCORD_ICON, TWITTER_ICON, TELEGRAM_ICON, GITHUB_ICON, ARBITRUM_ICON, CHECKMARK_ICON } from '../../lib/icons'
 
+	import { CURRENCY_LOGOS } from '../../lib/constants'
+	import { PRODUCTS } from '../../lib/products'
+	import { getChainData, formatCurrency } from '../../lib/utils'
+
+	let currencies = getChainData('currencies');
+
 	amplitude.getInstance().logEvent('Home');
 
 </script>
 <style>
 
 	.home-wrap {
-		padding: var(--base-padding);
 		background-color: var(--eerie-black);
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		overflow-y: scroll;
 	}
 
 	.home {
 		margin: 0 auto;
-		max-width: 720px;
-		padding: 36px 0;
+		max-width: 960px;
+		padding: var(--base-padding);
+		padding-bottom: 36px;
 	}
 
 	.hero {
 		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 64px 0;
+		padding: 48px 0;
 	}
 
-	.hero-inner {		
-		display: grid;
-		grid-auto-flow: row;
-		grid-gap: 36px;
-		text-align: center;
+	@media (max-width: 800px) {
+		.hero {
+			flex-direction: column;
+		}
 	}
 
-	.main-title {
+		.hero-inner {		
+			display: grid;
+			grid-auto-flow: row;
+			grid-gap: 36px;
+		}
+
+		.main-title {
+		}
+
+		.main-title img {
+			height: 60px;
+		}
+
+		.tagline {
+			line-height: 1.418;
+			font-size: 260%;
+			font-weight: 700;
+			max-width: 500px;
+		}
+
+		.subhead {
+			line-height: 1.518;
+			font-size: 120%;
+			font-weight: 400;
+			max-width: 330px;
+			margin: 0 auto;
+			margin-top: 12px;
+		}
+
+		.pill {
+			font-size: 110%;
+			padding: 8px 14px;
+			border-radius: 6px;
+			font-weight: 600;
+			display: inline-block;
+			margin-top: 20px;
+			margin-right: 12px;
+			background-color: var(--jet);
+			color: #fff;
+		}
+
+		.chains {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 90%;
+			font-weight: 500;
+		}
+		.chains :global(svg) {
+			height: 22px;
+			margin-right: 4px;
+			margin-left: 8px;
+		}
+
+		.button-wrap {
+		}
+
+		.button {
+			padding: 16px 26px;
+			border-radius: var(--base-radius);
+			font-weight: 650;
+			font-size: 120%;
+			color: var(--green-dark);
+			background-color: var(--green);
+			display: inline-block;
+		}
+		.button:hover {
+			background-color: var(--green-dim);
+		}
+
+		.volume .label {
+			color: var(--sonic-silver);
+			margin-top: 10px;
+		}
+
+		.volume .value {
+			font-weight: 700;
+			font-size: 110%;
+		}
+
+	.supported {
+		padding: 12px 36px;
+		padding-right: 0;
+		text-align: right;
+		flex: 1;
 	}
 
-	.main-title img {
-		height: 60px;
+	@media (max-width: 800px) {
+		.supported {
+			text-align: left;
+			padding: 36px 0 0;
+		}
 	}
 
-	.tagline {
-		line-height: 1.618;
-		font-size: 160%;
-		font-weight: 700;
-		max-width: 500px;
-		margin: 0 auto;
-	}
+		.title {
+			margin-top: 10px;
+			color: var(--sonic-silver);
+			margin-bottom: 36px;
+		}
 
-	.subhead {
-		line-height: 1.518;
-		font-size: 120%;
-		font-weight: 400;
-		max-width: 330px;
-		margin: 0 auto;
-		margin-top: 12px;
-	}
+		.title:last-child {
+			margin-bottom: 0;
+		}
 
-	.pill {
-		font-size: 110%;
-		padding: 8px 14px;
-		border-radius: 6px;
-		font-weight: 600;
-		display: inline-block;
-		margin: 20px 6px 0;
-		background-color: #003301;
-		color: var(--green);
-	}
+		.content img, .content :global(svg) {
+			width: 42px;
+			margin-left: 16px;
+		}
 
-	.chains {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 90%;
-		font-weight: 500;
-	}
-	.chains :global(svg) {
-		height: 22px;
-		margin-right: 4px;
-		margin-left: 8px;
-	}
+		@media (max-width: 800px) {
+			.content img, .content :global(svg) {
+				margin-left: 0;
+				margin-right: 16px;
+			}
+		}
 
-	.button-wrap {
-	}
-
-	.button {
-		padding: 15px 24px;
-		border-radius: var(--base-radius);
-		font-weight: 700;
-		font-size: 120%;
-		color: var(--green-dark);
-		background-color: var(--green);
-		display: inline-block;
-	}
-	.button:hover {
-		background-color: var(--green-dim);
-	}
-
-	.volume .label {
-		color: var(--sonic-silver);
-		margin-top: 10px;
-	}
-
-	.volume .value {
-		font-weight: 700;
-		font-size: 110%;
-	}
 
 	.links {
 		padding-top: 18px;
-		text-align: center;
 		line-height: 2;
 	}
 	.links a {
-		margin: 0 8px;
+		margin-right: 16px;
 		color: var(--sonic-silver);
 		font-size: 90%;
 	}
@@ -130,11 +169,10 @@
 		padding-top: 48px;
 		display: flex;
 		align-items: center;
-		justify-content: center;
 	}
 
 	.community a {
-		margin: 0 12px;
+		margin-right: 24px;
 	}
 
 	.community :global(svg) {
@@ -145,8 +183,15 @@
 	.sep {
 		width: 40px;
 		height: 2px;
-		background-color: var(--jet);
-		margin: 0 auto;
+		background-color: var(--onyx);
+	}
+
+	.mountains {
+		width: 100%;
+	}
+
+	.mountains img {
+		max-width: 100%;
 	}
 
 </style>
@@ -158,10 +203,6 @@
 		<div class='hero'>
 
 			<div class='hero-inner'>
-
-				<div class='main-title'>
-					<img src='/logos/CAP.svg' title='CAP logo' alt='CAP logo' />
-				</div>
 				
 				<div>
 					<div class='tagline'>Decentralized Perpetual Exchange</div>
@@ -182,6 +223,29 @@
 
 			</div>
 
+			<div class='supported'>
+
+				<div class='content'>
+					{#each Object.entries(PRODUCTS) as [_productId, info]}
+						<img src={info.logo} title={`${_productId}`}>
+					{/each}
+				</div>
+				<div class='title'>Supported Products</div>
+
+				<div class='content'>
+					{#each Object.entries(currencies) as [_currencyLabel, info]}
+						<img src={CURRENCY_LOGOS[_currencyLabel]} title={`${formatCurrency(_currencyLabel)}`}>
+					{/each}
+				</div>
+				<div class='title'>Supported Collateral</div>
+
+				<div class='content'>
+					<span title='Arbitrum'>{@html ARBITRUM_ICON}</span>
+				</div>
+				<div class='title'>Supported Networks</div>
+
+			</div>
+
 		</div>
 
 		<div class='sep'>&nbsp;</div>
@@ -196,12 +260,16 @@
 		<div class='links'>
 			<a href='#/buy'>Buy CAP</a>
 			<a href='https://docs.cap.finance/#white-papers' target='_blank'>Whitepapers</a>
-			<a href='https://docs.cap.finance/' target='_blank'>Docs</a><br/>
+			<a href='https://docs.cap.finance/' target='_blank'>Docs</a>
 			<a href='https://www.tokenterminal.com/terminal/projects/cap' target='_blank'>Token Terminal</a>
 			<a href='https://defillama.com/protocol/cap' target='_blank'>Defi Llama</a>
 			<a href='https://www.immunefi.com/bounty/cap' target='_blank'>Immunefi</a>
 		</div>
 
+	</div>
+
+	<div class='mountains'>
+		<img src='/mountains1.svg'>
 	</div>
 
 </div>
