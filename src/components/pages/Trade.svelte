@@ -37,16 +37,16 @@
 		display: grid;
 		grid-gap: var(--grid-gap);
 		grid-auto-flow: column;
-		grid-template-columns: 300px auto;
+		grid-template-columns: auto 300px;
 	}
 
 	.core .sidebar {
-		order: 1;
+		order: 2;
 		background-color: var(--eerie-black);
 	}
 
 	.core .data {
-		order: 2;
+		order: 1;
 		display: grid;
 		grid-gap: var(--grid-gap);
 		grid-auto-flow: row;
