@@ -63,7 +63,7 @@
 
 </style>
 
-<Modal title='Select Currency' showHeader={true}>
+<Modal title='Select Collateral' showHeader={true}>
 
 	{#each Object.entries(currencies || {}) as [_currencyLabel, _address]}
 
