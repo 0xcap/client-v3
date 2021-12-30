@@ -187,6 +187,7 @@
 	}
 
 	.mountains {
+		opacity: 0.75;
 		width: 100%;
 	}
 
@@ -205,7 +206,7 @@
 			<div class='hero-inner'>
 				
 				<div>
-					<div class='tagline'>Decentralized Perpetual Exchange</div>
+					<div class='tagline'>Free Decentralized Perpetual Exchange</div>
 
 					<div class="pill">0% Fees</div>
 					<div class="pill">50× Leverage</div>
