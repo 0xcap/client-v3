@@ -100,7 +100,7 @@
 	}
 
 	.about, .coin-links {
-		max-width: 280px;
+		max-width: 290px;
 		margin: 0 auto;
 		border-top: 1px solid var(--onyx-dim);
 		padding: 40px 0;
@@ -201,7 +201,7 @@
 
 			<div class='item'>
 				<h4>{@html CHECKMARK_ICON} Revenue Producing</h4>
-				<p>Stake CAP to get a share of fees</p>
+				<p>Stake CAP to get a share of income</p>
 			</div>
 
 			<div class='item'>
