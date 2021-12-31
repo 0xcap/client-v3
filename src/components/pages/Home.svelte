@@ -50,7 +50,7 @@
 		}
 
 		.tagline {
-			line-height: 1.418;
+			line-height: 1.348;
 			font-size: 260%;
 			font-weight: 700;
 			max-width: 500px;
@@ -161,6 +161,7 @@
 		margin-right: 16px;
 		color: var(--sonic-silver);
 		font-size: 90%;
+		white-space: nowrap;
 	}
 	.links a:hover {
 		color: var(--green);
