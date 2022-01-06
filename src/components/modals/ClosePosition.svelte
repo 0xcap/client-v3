@@ -123,7 +123,7 @@
 			}
 		];
 
-		if (Math.abs(priceImpact * 1) > product.fee * 1) {
+		if (Math.abs(priceImpact * 1) > 0.1) {
 			rows.push({
 				label: 'Price Impact',
 				value: `${formatToDisplay(priceImpact)}%`
