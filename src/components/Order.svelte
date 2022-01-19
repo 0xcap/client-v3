@@ -107,7 +107,10 @@
 </script>
 
 <style>
-
+	.grayed {
+		color: var(--sonic-silver);
+	}
+	
 	.order {
 	}
 
@@ -257,6 +260,13 @@
 			<div class='row'>
 				<div class='detail-label'>Margin Used</div>
 				<div class='detail-value'>{formatToDisplay($margin || 0)} {formatCurrency($currencyLabel)}</div>
+				{#if $currencyLabel == "weth" && $prices["ETH-USD"]}
+					<span class="grayed"
+						>(${formatToDisplay(
+							$prices["ETH-USD"] * $margin || 0
+						)})</span
+					>
+				{/if}
 			</div>
 			{#if sizeInUSD}
 			<div class='row'>
