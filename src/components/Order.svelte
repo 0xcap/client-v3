@@ -244,13 +244,15 @@
 
 	</div>
 
-	<div class='buttons'>
+	<!-- <div class='buttons'>
 		{#if $currencyLabel != 'weth' && $allowances[$currencyLabel] && $allowances[$currencyLabel]['trading'] * 1 == 0}
 		<Button label={`Approve ${formatCurrency($currencyLabel)}`} onClick={() => {_approveCurrency()}} />
 		{:else}
 		<Button isRed={true} isLoading={$isSubmittingShort} label='Short' onClick={() => {_submitNewPosition(false)}} /> <Button isLoading={$isSubmittingLong} label='Long' onClick={() => {_submitNewPosition(true)}} />
 		{/if}
-	</div>
+	</div> -->
+
+	<div class='buttons'>New trades are temporarily disabled.</div>
 
 	<div class='details'>
 		{#if $margin * 1 > 0}
