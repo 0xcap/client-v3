@@ -70,7 +70,8 @@
 		const timeScaler = timeInAYear / timeSinceInception;
 		let apy = timeScaler * 100 * (_poolStats[_currencyLabel].cumulativeFees * poolInfo.poolShare / 100 - 1 * _poolStats[_currencyLabel].cumulativePnl) / poolInfo.tvl;
 		if (apy < 10) apy = 10; // threshold APY
-		return formatToDisplay(apy) + '%';
+		//return formatToDisplay(apy) + '%';
+		return "100%+"; // until enough trades come in to display actual stats from previous versions
 	}
 
 	function getAPYCAP(_capPool, _poolStats) {
