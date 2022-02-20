@@ -74,7 +74,6 @@
 </style>
 
 <Modal>
-	<div>Pool deposits are temporarily disabled.</div>
-	<!-- <DataList data={rows} bind:value={amount} onSubmit={_submit} />
-	<Button wrap={true} isLoading={!amount || submitIsPending} onClick={_submit} label={`Deposit into ${formatCurrency(data.currencyLabel)} pool`} /> -->
+	<DataList data={rows} bind:value={amount} onSubmit={_submit} />
+	<Button wrap={true} isLoading={!amount || submitIsPending} onClick={_submit} label={`Deposit into ${formatCurrency(data.currencyLabel)} pool`} />
 </Modal>
