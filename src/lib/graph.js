@@ -38,7 +38,7 @@ export async function getVolume() {
   	
   	// console.log('datas', datas);
   	
-	let volumeETH = 110000;
+	let volumeETH = 420000; // cumulative previous versions of CAP
 	let volumeUSD = 0; // v2 + v1
 	for (const d of datas) {
 		// console.log('d', d);
