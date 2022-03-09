@@ -39,6 +39,10 @@
 		submitIsPending = false;
 	}
 
+	if (!isNaN(+data.userBalance)) {
+		amount = +data.userBalance;
+	}
+	
 	onMount(async () => {
 
 	});
