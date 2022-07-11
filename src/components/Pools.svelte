@@ -304,13 +304,13 @@
 			</div>
 
 			<div class='apy'>
-				<div class='label'>Projected Yield (APY)</div>
+				<div class='label'>Historical Yield (APY)</div>
 				<div class='value'>{getAPY(_currencyLabel, poolInfo, $poolStats)}</div>
 			</div>
 
 			<div class='stats'>
 				<div class='row'>
-					<div class='label'>TVL</div>
+					<div class='label'>Pool Size</div>
 					<div class='value'>{getTVL(_currencyLabel, poolInfo, $address)} {formatCurrency(_currencyLabel)} {#if _currencyLabel == 'weth' && poolInfo && poolInfo.tvl && $prices['ETH-USD']}
 						<!-- <span class='grayed'>(${formatToDisplay($prices['ETH-USD'] * poolInfo.tvl || 0)})</span> -->
 						{/if}</div>
@@ -371,13 +371,13 @@
     	</div>
 
     	<div class='apy'>
-			<div class='label'>Projected Yield (APY)</div>
+			<div class='label'>Historical Yield (APY)</div>
 			<div class='value'>{getAPYCAP($capPool, $poolStats, $prices)}</div>
 		</div>
 
     	<div class='stats'>
     		<div class='row'>
-    			<div class='label'>TVL</div>
+    			<div class='label'>Pool Size</div>
     			<div class='value'>{formatToDisplay($capPool.supply)}</div>
     		</div>
     	</div>
