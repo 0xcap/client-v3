@@ -354,7 +354,7 @@ export async function getUPL(position, latestPrice) {
 		}
 		// Add interest
 		let interest = await getInterest(position);
-		upl -= interest;
+		upl += interest;
 	}
 	return upl;
 }
