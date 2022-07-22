@@ -1,5 +1,6 @@
 <script>
 
+	import { onMount } from 'svelte'
 	import { CURRENCY_LOGOS } from '../lib/constants'
 
 	import { SPINNER_ICON } from '../lib/icons'
@@ -9,6 +10,12 @@
 	import { getAllowance, collectPoolReward, approveCurrency, getPoolInfo, getOldPoolInfo, collectCAPReward } from '../lib/methods'
 
 	import { showModal, formatCurrency, formatToDisplay, getChainData } from '../lib/utils'
+	import { getCapPrice } from '../lib/graph';
+
+	let capPrice = 30;
+	onMount(async () => {
+		capPrice = await getCapPrice();
+	})
 
 	async function _approveCurrency(_currencyLabel) {
 		if (_currencyLabel == 'cap') {
@@ -89,7 +96,7 @@
 		// console.log('currencyLabels', currencyLabels);
 
 		let cumulativeUSDFees = 0;
-		let capUSDSupply = 30 * _capPool.supply; // assuming CAP price of 30
+		let capUSDSupply = capPrice  * _capPool.supply;
 
 		// console.log('capUSDSupply', capUSDSupply);
 		for (const _currencyLabel of currencyLabels) {
