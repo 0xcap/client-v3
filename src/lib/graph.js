@@ -1,14 +1,15 @@
 // Subgraph interaction
 import { get } from 'svelte/store'
 
-import { ADDRESS_ZERO, HISTORY_COUNT } from './constants'
+import { ADDRESS_ZERO, HISTORY_COUNT, CHAINDATA } from './constants'
 import { getContract } from './contracts'
 import { getOrders, getPositions } from './methods'
 
 import { formatUnits, formatTrades, formatOrders, formatPositions, setActiveProducts, getChainData } from './utils'
-import { history, orders, positions, address, poolStats } from './stores'
+import { history, orders, positions, address, poolStats, chainId } from './stores'
 
 const graph_url = 'https://api.thegraph.com/subgraphs/name/0xcap/cap3';
+const uniswap_arbitrum_url = 'https://api.thegraph.com/subgraphs/name/ianlapham/arbitrum-dev';
 
 export async function getVolume() {
 
@@ -371,4 +372,33 @@ export async function getPoolStats(currencyLabel) {
 		};
 		return x;
 	})
+}
+
+export async function getCapPrice() {
+	try {
+		const _chainId = get(chainId);
+		const tokenId = `"${CHAINDATA[_chainId].cap.toLowerCase()}"`;
+		const response = await fetch(uniswap_arbitrum_url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				query: `
+				query MyQuery {
+					token(id: ${tokenId}) {
+						tokenDayData(first: 1, orderBy: date, orderDirection: desc) {
+							close
+						}
+					}
+				}
+				`
+			})
+		});
+		const json = await response.json();
+		const price = json?.data?.token?.tokenDayData?.[0]?.close || 30;
+		return price;
+	} catch (err) {
+		return 30; // fallback price value in case there's an error
+	}
 }
