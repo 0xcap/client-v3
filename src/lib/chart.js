@@ -196,8 +196,8 @@ export async function loadCandles(_resolution, _start, _end, prepend, productOve
 
 	// console.log('start, end', start, end, new Date(start).toString(), new Date(end).toString());
 
-	const url_start = encodeURIComponent(new Date(start).toString());
-	const url_end = encodeURIComponent(new Date(end).toString());
+	const url_start = encodeURIComponent(new Date(start).toUTCString());
+	const url_end = encodeURIComponent(new Date(end).toUTCString());
 
 	const response = await fetch(`https://api.exchange.coinbase.com/products/${_product}/candles?granularity=${_resolution}&start=${url_start}&end=${url_end}`);
 	const json = await response.json();
