@@ -31,10 +31,19 @@
 		max-width: 42px;
 		margin-right: 20px;
 	}
+	
+	.note {
+		line-height: 1.3;
+		padding: var(--base-padding);
+		border-bottom: 1px solid var(--jet-dim);
+		font-size: 90%;
+	}
 
 </style>
 
 <Modal>
+	
+	<div class='note'><strong>Important:</strong> By connecting your wallet to this community built user interface to access the CAP smart contracts, you explicitly agree to CAP's <a href='https://docs.cap.finance/terms-of-use' target='_blank'>Terms of Use</a>. In particular, you certify that you are not a resident or citizen of Canada, the United States of America, or any other jurisdictions mentioned in the Terms.</div>
 
 	<div class='row' on:click={() => {connectMetamask()}} data-intercept="true">
 		<img src='https://raw.githubusercontent.com/MetaMask/brand-resources/master/SVG/metamask-fox.svg'>
