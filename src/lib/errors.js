@@ -11,7 +11,7 @@ const ERROR_STRINGS = {
 	'!position': 'Position not found.',
 	'!size': "Trade size is too low.",
 	'!currency': "Currency is not supported.",
-	'!order': "Your order is still settling. Try again later.",
+	'!order': "Your order is still settling. Please try again later.",
 	'!exists': "This order does not exist.",
 	'!margin': "Margin is too low.",
 	'!min-margin': "Margin is too low (min: 0.001 ETH).",
@@ -24,14 +24,14 @@ const ERROR_STRINGS = {
 	'!opening': "Position is still settling. Please try again later.",
 	'!closing': "Position is still closing. Please try again later.",
 	'!low-leverage': "Leverage would be too low. Try adding less margin.",
-	'!cooldown': "You have to wait at least 1 hour after depositing before withdrawing.",
+	'!cooldown': "You have to wait a few hours after depositing before withdrawing.",
 	'!empty': "The pool is empty.",
 	'!utilization': "Pool utilization ratio is too high. Please try again later or with a smaller position size.",
 	'!available-balance': "Not enough non-utilized balance is available in the pool. Please try again later or with a smaller amount.",
 	'!max-cap': "Maximum pool cap has been reached.",
 	'!clp-amount': "Minted amount is too low.",
 	'gas': "Insufficient funds or gas. Deposit more funds into your wallet or try adjusting the gas limit.",
-	'nonce': 'Invalid transaction nonce. Try resetting your Metamask account.',
+	'nonce': 'Invalid transaction nonce. Please try again or try resetting your Metamask account.',
 	'InsufficientTxFunds': "You don't have enough funds to complete this transaction."
 };
 
