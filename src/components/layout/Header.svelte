@@ -88,6 +88,7 @@
 			</a>
 			<a class='link' class:active={$currentPage == 'trade'} href='#/trade'>Trade</a>
 			<a class='link' class:active={$currentPage == 'pool'} href='#/pool'>Pool</a>
+			<a class='link' href='https://dash-0xdarkcap.vercel.app/' target='_blank'>Stats</a>
 			<a class='link' href='https://docs.cap.finance' target='_blank'>Docs</a>
 		</div>
 
