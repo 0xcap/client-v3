@@ -203,6 +203,12 @@
 	.row:last-child {
 		padding-bottom: 0;
 	}
+	
+	.liq-warning {
+		font-size: 80%;
+		padding-bottom: 12px;
+		color: var(--orange);
+	}
 
 	.detail-label {
 		color: #858585;
@@ -269,11 +275,14 @@
 				<div class='detail-value'>0%</div>
 			</div>
 			{#if $address}
-	      		{#if Math.abs(priceImpact * 1) > 0.1}
+	      			{#if Math.abs(priceImpact * 1) > 0.05}
 				<div class='row'>
 					<div class='detail-label'>Price Impact</div>
 					<div class='detail-value'>{formatToDisplay(priceImpact)}%</div>
 				</div>
+				{#if Math.abs(priceImpact * 1) > 0.2}
+					<div class='liq-warning'>Can result in faster liquidation.</div>
+				{/if}
 				{/if}
 			{/if}
 			<div class='sep'></div>
