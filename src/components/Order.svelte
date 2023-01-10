@@ -272,19 +272,8 @@
 			{/if}
 			<div class='row'>
 				<div class='detail-label'>Fee</div>
-				<div class='detail-value'>0%</div>
+				<div class='detail-value'>{$product?.fee || 0}%</div>
 			</div>
-			{#if $address}
-	      			{#if Math.abs(priceImpact * 1) > 0.05}
-				<div class='row'>
-					<div class='detail-label'>Price Impact</div>
-					<div class='detail-value'>{formatToDisplay(priceImpact)}%</div>
-				</div>
-				{#if Math.abs(priceImpact * 1) > 0.2}
-					<div class='liq-warning'>Can result in faster liquidation.</div>
-				{/if}
-				{/if}
-			{/if}
 			<div class='sep'></div>
 		{/if}
 		<div class='row'>
@@ -299,7 +288,7 @@
 	</div>
 
 	{#if !$address}
-	<div class='note'>CAP is an open protocol to trade crypto perpetuals with 0 fees. <a data-intercept="true" on:click={() => {showModal('Connect')}}>Connect your wallet</a> on Arbitrum to get started.</div>
+	<div class='note'>CAP is an open protocol to trade crypto perpetuals with low fees. <a data-intercept="true" on:click={() => {showModal('Connect')}}>Connect your wallet</a> on Arbitrum to get started.</div>
 	{:else if $address && balance * 1 == 0}
 	<div class='note'><a href='https://docs.cap.finance/setting-up-your-wallet' target='_blank'>Bridge funds</a> to Arbitrum to start trading.</div>
 	{/if}
