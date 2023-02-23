@@ -102,7 +102,21 @@
 		color: var(--red);
 	}
 
+	.notice {
+		padding: 12px;
+		text-align: center;
+		background: gold;
+		color: #111;
+		font-weight: 500;
+	}
+	.notice a {
+		color: inherit;
+		text-decoration: underline;
+	}
+
 </style>
+
+<div class='notice'>A new version of CAP is now available. Check it out <a href='https://cap.io'>here</a>.</div>
 
 <Modals />
 <Toasts />
