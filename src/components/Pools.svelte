@@ -312,7 +312,8 @@
 
 			<div class='apy'>
 				<div class='label'>Historical Yield (APY)</div>
-				<div class='value'>{getAPY(_currencyLabel, poolInfo, $poolStats)}</div>
+				<div class='value'>~20%</div>
+				<!-- <div class='value'>{getAPY(_currencyLabel, poolInfo, $poolStats)}</div> -->
 			</div>
 
 			<div class='stats'>
@@ -379,7 +380,8 @@
 
     	<div class='apy'>
 			<div class='label'>Historical Yield (APY)</div>
-			<div class='value'>{getAPYCAP($capPool, $poolStats, $prices)}</div>
+			<div class='value'>~10%</div>
+			<!-- <div class='value'>{getAPYCAP($capPool, $poolStats, $prices)}</div> -->
 		</div>
 
     	<div class='stats'>
