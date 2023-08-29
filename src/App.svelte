@@ -116,7 +116,7 @@
 
 </style>
 
-<div class='notice'>A new version of CAP is now available. Check it out <a href='https://cap.io'>here</a>.</div>
+<div class='notice'>PLEASE DO NOT USE THIS WEBSITE. A new version of CAP is now available. Check it out <a href='https://cap.io'>here</a>.</div>
 
 <Modals />
 <Toasts />
